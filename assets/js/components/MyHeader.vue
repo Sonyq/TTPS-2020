@@ -5,7 +5,12 @@
       dark
     >
 
-      <v-toolbar-title>SegCo</v-toolbar-title>
+      <v-toolbar-title>
+        <v-btn text
+          tile
+          to="/"
+          active-class="no-active">SegCo</v-btn>
+      </v-toolbar-title>
 
       <v-spacer></v-spacer>
 
