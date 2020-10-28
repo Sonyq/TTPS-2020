@@ -1,21 +1,35 @@
 <template>
+  <div> 
     <v-app-bar
-      color="deep-purple accent-4"
-      dense
+      color="blue accent-4"
       dark
     >
-      <v-app-bar-nav-icon></v-app-bar-nav-icon>
 
-      <v-toolbar-title>TTPS-2020-G6</v-toolbar-title>
+      <v-toolbar-title>SegCo</v-toolbar-title>
 
       <v-spacer></v-spacer>
 
-      
-        <v-btn to="/app/login" active-class="no-active" icon >
-          <v-icon>mdi-account-arrow-left</v-icon>
-        </v-btn>
+      <div v-if="authenticated_user">
 
-      <v-menu
+        <!-- <p>{{ loggedUser.first_name }} {{ loggedUser.last_name }}</p> -->
+
+        <v-btn text active-class="no-active" @click="logout">
+          Salir         
+        </v-btn>
+        <v-icon>mdi-account-arrow-right</v-icon>
+        
+      </div>
+
+      <div v-else>
+
+        <v-btn text to="/app/login" active-class="no-active">
+          Iniciar sesión
+        </v-btn>
+        <v-icon>mdi-account-arrow-right</v-icon>
+
+      </div>
+
+      <!-- <v-menu
         left
         bottom
       >
@@ -29,17 +43,11 @@
           </v-btn>
         </template>
 
-        <v-list>
-          <v-list-item
-            v-for="n in 5"
-            :key="n"
-            @click="() => {}"
-          >
-            <v-list-item-title>Option {{ n }}</v-list-item-title>
-          </v-list-item>
-        </v-list>
-      </v-menu>
+      </v-menu> -->
+
+
     </v-app-bar>
+  </div>
 </template>
 
 <script>
@@ -47,17 +55,12 @@
 export default {
   data() {
     return {
-      mantenimiento: false,
-      loading_config: true,
       authenticated_user: false,
       base_url: window.location.host
     }
   },
   mounted() {
-    events.$on('loading_config:finish', () => this.loading_config = false)
     events.$on('loading_user:finish', () => this.authenticated_user = true)
-    events.$on('mantenimiento:active',() => this.mantenimiento = true)
-    events.$on('mantenimiento:inactive',() => this.mantenimiento = false)
     events.$on('user:logout', () => this.logout(true))
   },
   methods: {
@@ -65,13 +68,13 @@ export default {
       if(!recursive){
         events.$emit('user:logout')
       }
-        this.authenticated_user = false
-        axios.defaults.headers.common['Authorization'] = null
-        localStorage.removeItem('token')
-        this.$root.$data.store_token = ''
-        this.jwtToken.clear
-        this.loggedUser.clear
-        this.$router.replace("/")
+      this.authenticated_user = false
+      axios.defaults.headers.common['Authorization'] = null
+      localStorage.removeItem('token')
+      this.$root.$data.store_token = ''
+      this.jwtToken.clear
+      this.loggedUser.clear
+      this.$router.replace("/")
     }
   }
 }

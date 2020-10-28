@@ -1,32 +1,39 @@
 import 'babel-polyfill';
 import './font-awesome.js';
 import 'vue-good-table/dist/vue-good-table.css';
-import { messages as esOriginalMessages } from 'vee-validate/dist/locale/es.js';
-
+import { messages as esOriginalMessages } from 'vee-validate/dist/locale/es.json';
 
 import Vue from 'vue';
 import axios from 'axios';
 import VueRouter from 'vue-router';
 import VueSweetalert2 from 'vue-sweetalert2';
 import VueGoodTable from 'vue-good-table';
-import VeeValidate from 'vee-validate';
+// import VeeValidate from 'vee-validate';
 import VTooltip from 'v-tooltip';
 import vuetify from '../plugins/vuetify';
+import { required } from 'vee-validate/dist/rules'
+import { extend, setInteractionMode } from 'vee-validate'
 
+setInteractionMode('eager')
+
+extend('required', {
+  ...required,
+  message: '{_field_} no puede estar vacío',
+})
 
 window.axios = axios;
 window.events = new Vue();
 Vue.use(VueSweetalert2);
 Vue.use(VueGoodTable);
 Vue.use(VTooltip);
-Vue.use(VeeValidate, {
-  locale: 'es',
-  dictionary: {
-    es: {
-      messages: { ...esOriginalMessages }
-    }
-  }
-});
+// Vue.use(VeeValidate, {
+//   locale: 'es',
+//   dictionary: {
+//     es: {
+//       messages: { ...esOriginalMessages }
+//     }
+//   }
+// });
 
 
 /*importo los componentes*/

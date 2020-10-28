@@ -1,6 +1,6 @@
 <template>
 
-        <p>home test</p>
+    <p>home test</p>
 
 </template>
 
