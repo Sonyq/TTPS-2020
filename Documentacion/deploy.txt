@@ -1,17 +1,17 @@
 1- Instalar yarn https://yarnpkg.com/lang/en/
 2- Instalar Node.js https://nodejs.org/es/ ( v 10.15.3 LTS )
-3- Abrir la consola en la carpeta y ejecutar los siguientes comandos:
-
-    composer install
+3- Abrir la consola en la carpeta y ejecutar los siguiente comando:
     yarn install
 
 4- Configurar la BD:
     4.1 Renombrar el archivo config\packages\doctrine.yaml.local a doctrine.yaml
+    
+5- Ejecutar composer install
 
-5- Crear la BD
+6- Crear la BD
     5.1 abrir el archivo .env y colocar las credenciales de la bd en DATABASE_URL
 
-6- Para comenzar a utilizar la página abrir dos consolas en la carpeta y ejecutar los siguientes comandos (uno solo en cada una):
+7- Para comenzar a utilizar la página abrir dos consolas en la carpeta y ejecutar los siguientes comandos (uno solo en cada una):
 
     php bin/console server:run
 
