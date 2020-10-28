@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hospital!{% endblock %}
+
+{% block body %}
+
+<v-app>
+  {# <v-navigation-drawer app>
+    <!-- -->
+  </v-navigation-drawer> #}
+
+    <my-header></my-header>
+    <Alertas></Alertas>
+
+
+  <!-- Sizes your content based upon application components -->
+  <v-main>
+
+    <!-- Provides the application the proper gutter -->
+    <v-container fluid>
+
+      <!-- If using vue-router -->
+      <router-view></router-view>
+    </v-container>
+  </v-main>
+
+  <v-footer app>
+    <my-footer></my-footer>
+  </v-footer>
+</v-app>
+       
+{% endblock %}
+
+{% block javascripts %}
+<link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css" rel="stylesheet">
+{% endblock %}
