@@ -10,8 +10,12 @@ class AuthenticationSuccessListener
 /**
  * @param AuthenticationSuccessEvent $event
  */
+
 public function onAuthenticationSuccessResponse(AuthenticationSuccessEvent $event)
-{   /*
+{   
+    
+    
+    /*
     * Esto es por si quiero agregar datos de forma publica cuando el usuario se logea
     $data = $event->getData();
     $user = $event->getUser();

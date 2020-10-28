@@ -160,9 +160,9 @@ class ApiController extends FOSRestController
     public function sessionRetriver(Request $request) {
         $serializer = $this->get('jms_serializer');
 
-        $this->denyAccessUnlessGranted('ROLE_USER');
+        //$this->denyAccessUnlessGranted('ROLE_USER');
         $user = $this->getUser();
-        $this->getPermisos($user);
+        //$this->getPermisos($user);
 
         return new Response($serializer->serialize($user, "json"));
     }
