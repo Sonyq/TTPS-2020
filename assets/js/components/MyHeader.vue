@@ -11,7 +11,7 @@
 
       <div v-if="authenticated_user">
 
-        <!-- <p>{{ loggedUser.first_name }} {{ loggedUser.last_name }}</p> -->
+        <p>{{ loggedUser.first_name }} {{ loggedUser.last_name }}</p>
 
         <v-btn text active-class="no-active" @click="logout">
           Salir         

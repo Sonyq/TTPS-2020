@@ -101,7 +101,6 @@ export default {
       .post(this.burl('/api/login_check'), credentials) //mando el post
       .then((response) => {
         if (response.status === 200) {
-
           this.jwtToken = response.data['token']; //seteo el token
           this.$router.push('/'); // con esto me cambio de vista
         }        
