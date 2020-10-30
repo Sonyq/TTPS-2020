@@ -7,22 +7,27 @@
 
       <v-toolbar-title>
         <v-btn text
-          tile
           to="/"
-          active-class="no-active">SegCo</v-btn>
+          active-class="no-active">SegCo
+        </v-btn>
       </v-toolbar-title>
 
       <v-spacer></v-spacer>
 
       <div v-if="authenticated_user">
 
-        <p>{{ loggedUser.first_name }} {{ loggedUser.last_name }}</p>
+        <v-row no-gutters>
 
-        <v-btn text active-class="no-active" @click="logout">
-          Salir         
-        </v-btn>
-        <v-icon>mdi-account-arrow-right</v-icon>
-        
+            <p class="font-weight-medium">
+              {{ loggedUser.first_name }} {{ loggedUser.last_name }}
+            </p>
+
+            <v-btn text active-class="no-active" @click="logout">
+              <v-icon>mdi-account-arrow-right</v-icon>
+            </v-btn>
+
+        </v-row>
+          
       </div>
 
       <div v-else>
@@ -34,24 +39,8 @@
 
       </div>
 
-      <!-- <v-menu
-        left
-        bottom
-      >
-        <template v-slot:activator="{ on, attrs }">
-          <v-btn
-            icon
-            v-bind="attrs"
-            v-on="on"
-          >
-            <v-icon>mdi-dots-vertical</v-icon>
-          </v-btn>
-        </template>
-
-      </v-menu> -->
-
-
     </v-app-bar>
+
   </div>
 </template>
 
@@ -60,8 +49,8 @@
 export default {
   data() {
     return {
-      authenticated_user: false,
-      base_url: window.location.host
+      authenticated_user: true,
+      base_url: window.location.host,
     }
   },
   mounted() {

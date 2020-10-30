@@ -38,8 +38,8 @@ export default {
         { title: 'Título 2', flex: 4 },
         { title: 'Título 3', flex: 4 },
         { title: 'Título 4', flex: 4 },
-        { title: 'Título 4', flex: 4 },
-        { title: 'Título 4', flex: 4 },
+        { title: 'Título 5', flex: 4 },
+        { title: 'Título 6', flex: 4 },
       ],
     }
   },
