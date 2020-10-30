@@ -21,13 +21,13 @@ class InternacionCama
      * @ORM\ManyToOne(targetEntity=Internacion::class, inversedBy="internacionCamas")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $internacion_id;
+    private $internacion;
 
     /**
      * @ORM\ManyToOne(targetEntity=Cama::class, inversedBy="internacionCamas")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $cama_id;
+    private $cama;
 
     /**
      * @ORM\Column(type="datetime")
@@ -44,26 +44,26 @@ class InternacionCama
         return $this->id;
     }
 
-    public function getInternacionId(): ?Internacion
+    public function getInternacion(): ?Internacion
     {
-        return $this->internacion_id;
+        return $this->internacion;
     }
 
-    public function setInternacionId(?Internacion $internacion_id): self
+    public function setInternacion(?Internacion $internacion): self
     {
-        $this->internacion_id = $internacion_id;
+        $this->internacion = $internacion;
 
         return $this;
     }
 
-    public function getCamaId(): ?Cama
+    public function getCama(): ?Cama
     {
-        return $this->cama_id;
+        return $this->cama;
     }
 
-    public function setCamaId(?Cama $cama_id): self
+    public function setCama(?Cama $cama): self
     {
-        $this->cama_id = $cama_id;
+        $this->cama = $cama;
 
         return $this;
     }

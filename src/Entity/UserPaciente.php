@@ -21,13 +21,13 @@ class UserPaciente
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="userPacientes")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $user_id;
+    private $user;
 
     /**
      * @ORM\ManyToOne(targetEntity=Paciente::class, inversedBy="userPacientes")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $paciente_id;
+    private $paciente;
 
     /**
      * @ORM\Column(type="datetime")
@@ -44,26 +44,26 @@ class UserPaciente
         return $this->id;
     }
 
-    public function getUserId(): ?User
+    public function getUser(): ?User
     {
-        return $this->user_id;
+        return $this->user;
     }
 
-    public function setUserId(?User $user_id): self
+    public function setUser(?User $user): self
     {
-        $this->user_id = $user_id;
+        $this->user = $user;
 
         return $this;
     }
 
-    public function getPacienteId(): ?Paciente
+    public function getPaciente(): ?Paciente
     {
-        return $this->paciente_id;
+        return $this->paciente;
     }
 
-    public function setPacienteId(?Paciente $paciente_id): self
+    public function setPaciente(?Paciente $paciente): self
     {
-        $this->paciente_id = $paciente_id;
+        $this->paciente = $paciente;
 
         return $this;
     }

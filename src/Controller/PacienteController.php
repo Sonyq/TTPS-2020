@@ -2,9 +2,13 @@
 
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+// use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use FOS\RestBundle\Controller\FOSRestController;
+
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Paciente;
+use App\Entity\User;
+
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\Annotations\RequestParam;
 use FOS\RestBundle\Request\ParamFetcher;
@@ -20,19 +24,19 @@ use Swagger\Annotations as SWG;
  *
  * @Route("/api/paciente")
  */
-class PacienteController extends AbstractController
+class PacienteController extends FOSRestController
 {
 
     /**
-     *@Route("/index", name="paciente_index", methods={"GET"})
+     * @Route("/index", name="paciente_index", methods={"GET"})
      * @SWG\Response(response=200, description="Listado de Pacientes")
      * @SWG\Tag(name="Paciente")
      */
     public function index(Request $request)
     {
-        $serializer = $this->get('jms_serializer');
-        $patients = $this->getDoctrine()->getRepository(Paciente::class)->findAll();
-        return new Response($serializer->serialize($patients, "json"));
+        $sistema = $this->getDoctrine()->getRepository(User::class)->findSistemaActual($this->getUser()->getId());        
+        $pacientes = $this->getDoctrine()->getRepository(Paciente::class)->findAllPacientesBySistema($sistema["nombre"]);        
+        return new JsonResponse($pacientes, 200);
     }
 
     /**
@@ -47,19 +51,25 @@ class PacienteController extends AbstractController
      * @RequestParam(name="email", strict=true, nullable=false, allowBlank=false, description="Email")
      * @RequestParam(name="fecha_nacimiento", strict=true, nullable=false, allowBlank=false, description="Fecha de nacimiento.")
      * @RequestParam(name="obra_social", strict=true, nullable=true, allowBlank=true, description="Obra Social")
-     * @RequestParam(name="contacto_nombre", description="Nombre de algún contacto")
-     * @RequestParam(name="contacto_apellido", description="Apellido de algún contacto")
-     * @RequestParam(name="contacto_telefono", description="Teléfono de algún contacto")
-     * @RequestParam(name="contacto_parentesco", description="Parentesco del contacto")
+     * @RequestParam(name="contacto_nombre", strict=false, description="Nombre de algún contacto")
+     * @RequestParam(name="contacto_apellido", strict=false, description="Apellido de algún contacto")
+     * @RequestParam(name="contacto_telefono", strict=false, description="Teléfono de algún contacto")
+     * @RequestParam(name="contacto_parentesco", strict=false, description="Parentesco del contacto")
      * 
      * @param ParamFetcher $pf
      */
     public function new(Request $request, ParamFetcher $pf): Response
     {
       $entityManager = $this->getDoctrine()->getManager();
+
+      $dni = (int)$pf->get('dni');
+
+      if ($this->getDoctrine()->getRepository(Paciente::class)->findBy(["dni" => $dni])) {
+        return new Response('El paciente con dni: '.$dni.' ya se encuentra en el sistema', 400);
+      }
       
       $paciente= new Paciente();
-      $paciente->setDni((int)$pf->get('dni'));
+      $paciente->setDni($dni);
       $paciente->setApellido($pf->get('apellido'));
       $paciente->setNombre($pf->get('nombre'));
       $paciente->setDireccion($pf->get('direccion'));
@@ -67,6 +77,10 @@ class PacienteController extends AbstractController
       $paciente->setEmail($pf->get('email'));
       $paciente->setFechaNacimiento(date_create($pf->get('fecha_nacimiento')));
       $paciente->setObraSocial($pf->get('obra_social'));
+      $paciente->setContactoNombre($pf->get('contacto_nombre') ? $pf->get('contacto_nombre') : null);
+      $paciente->setContactoApellido($pf->get('contacto_apellido') ? $pf->get('contacto_apellido') : null);
+      $paciente->setContactoTelefono($pf->get('contacto_telefono') ? $pf->get('contacto_telefono') : null);
+      $paciente->setContactoParentesco($pf->get('contacto_parentesco') ? $pf->get('contacto_parentesco') : null);
       $entityManager->persist($paciente);
       $entityManager->flush();
 

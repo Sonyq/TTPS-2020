@@ -45,12 +45,12 @@ class Sistema
     private $camas_ocupadas;
 
     /**
-     * @ORM\OneToMany(targetEntity=Sala::class, mappedBy="sistema_id")
+     * @ORM\OneToMany(targetEntity=Sala::class, mappedBy="sistema")
      */
     private $salas;
 
     /**
-     * @ORM\OneToMany(targetEntity=UserSistema::class, mappedBy="sistema_id")
+     * @ORM\OneToMany(targetEntity=UserSistema::class, mappedBy="sistema")
      */
     private $userSistemas;
 

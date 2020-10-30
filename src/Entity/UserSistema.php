@@ -21,13 +21,13 @@ class UserSistema
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="userSistemas")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $user_id;
+    private $user;
 
     /**
      * @ORM\ManyToOne(targetEntity=Sistema::class, inversedBy="userSistemas")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $sistema_id;
+    private $sistema;
 
     /**
      * @ORM\Column(type="datetime")
@@ -44,26 +44,26 @@ class UserSistema
         return $this->id;
     }
 
-    public function getUserId(): ?User
+    public function getUser(): ?User
     {
-        return $this->user_id;
+        return $this->user;
     }
 
-    public function setUserId(?User $user_id): self
+    public function setUser(?User $user): self
     {
-        $this->user_id = $user_id;
+        $this->user = $user;
 
         return $this;
     }
 
-    public function getSistemaId(): ?Sistema
+    public function getSistema(): ?Sistema
     {
-        return $this->sistema_id;
+        return $this->sistema;
     }
 
-    public function setSistemaId(?Sistema $sistema_id): self
+    public function setSistema(?Sistema $sistema): self
     {
-        $this->sistema_id = $sistema_id;
+        $this->sistema = $sistema;
 
         return $this;
     }

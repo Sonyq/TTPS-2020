@@ -22,7 +22,7 @@ class Cama
     /**
      * @ORM\ManyToOne(targetEntity=Sala::class, inversedBy="camas")
      */
-    private $sala_id;
+    private $sala;
 
     /**
      * @ORM\Column(type="integer")
@@ -30,7 +30,7 @@ class Cama
     private $numero;
 
     /**
-     * @ORM\OneToMany(targetEntity=InternacionCama::class, mappedBy="cama_id")
+     * @ORM\OneToMany(targetEntity=InternacionCama::class, mappedBy="cama")
      */
     private $internacionCamas;
 
@@ -44,14 +44,14 @@ class Cama
         return $this->id;
     }
 
-    public function getSalaId(): ?Sala
+    public function getSala(): ?Sala
     {
-        return $this->sala_id;
+        return $this->sala;
     }
 
-    public function setSalaId(?Sala $sala_id): self
+    public function setSala(?Sala $sala): self
     {
-        $this->sala_id = $sala_id;
+        $this->sala = $sala;
 
         return $this;
     }

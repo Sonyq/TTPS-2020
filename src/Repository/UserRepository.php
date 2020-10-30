@@ -19,22 +19,19 @@ class UserRepository extends ServiceEntityRepository
         parent::__construct($registry, User::class);
     }
 
-    // /**
-    //  * @return User[] Returns an array of User objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public function findSistemaActual($userId)
     {
         return $this->createQueryBuilder('u')
-            ->andWhere('u.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('u.id', 'ASC')
-            ->setMaxResults(10)
+            ->select('s.nombre, s.descrip')
+            ->innerJoin('App:UserSistema', 'us', 'WITH', 'us.user = u.id')
+            ->innerJoin('App:Sistema', 's', 'WITH', 's.id = us.sistema')
+            ->where('u.id = :userId')
+            ->andWhere('us.fecha_hasta IS NULL')
+            ->setParameter('userId', $userId)
             ->getQuery()
-            ->getResult()
+            ->getOneOrNullResult()
         ;
     }
-    */
 
     /*
     public function findOneBySomeField($value): ?User

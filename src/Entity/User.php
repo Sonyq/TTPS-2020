@@ -81,20 +81,22 @@ class User implements UserInterface
      */
     private $activo = 1;
 
-    /**
-     * @ORM\OneToMany(targetEntity=UserSistema::class, mappedBy="user_id")
-     */
-    private $userSistemas;
+    // /**
+    //  * @ORM\OneToMany(targetEntity=UserSistema::class, mappedBy="user")
+    //  */
+    // private $userSistemas;
 
-    /**
-     * @ORM\OneToMany(targetEntity=UserPaciente::class, mappedBy="user_id")
-     */
-    private $userPacientes;
+    // /**
+    //  * @ORM\OneToMany(targetEntity=UserPaciente::class, mappedBy="user")
+    //  */
+    // private $userPacientes;
+
+    private $sistemaActual;
 
     public function __construct()
     {
-        $this->userSistemas = new ArrayCollection();
-        $this->userPacientes = new ArrayCollection();
+        // $this->userSistemas = new ArrayCollection();
+        // $this->userPacientes = new ArrayCollection();
     }
 
     /**
@@ -324,65 +326,65 @@ class User implements UserInterface
         return $ok;
     }
 
-    /**
-     * @return Collection|UserSistema[]
-     */
-    public function getUserSistemas(): Collection
-    {
-        return $this->userSistemas;
-    }
+    // /**
+    //  * @return Collection|UserSistema[]
+    //  */
+    // public function getUserSistemas(): Collection
+    // {
+    //     return $this->userSistemas;
+    // }
 
-    public function addUserSistema(UserSistema $userSistema): self
-    {
-        if (!$this->userSistemas->contains($userSistema)) {
-            $this->userSistemas[] = $userSistema;
-            $userSistema->setUserId($this);
-        }
+    // public function addUserSistema(UserSistema $userSistema): self
+    // {
+    //     if (!$this->userSistemas->contains($userSistema)) {
+    //         $this->userSistemas[] = $userSistema;
+    //         $userSistema->setUser($this);
+    //     }
 
-        return $this;
-    }
+    //     return $this;
+    // }
 
-    public function removeUserSistema(UserSistema $userSistema): self
-    {
-        if ($this->userSistemas->removeElement($userSistema)) {
-            // set the owning side to null (unless already changed)
-            if ($userSistema->getUserId() === $this) {
-                $userSistema->setUserId(null);
-            }
-        }
+    // public function removeUserSistema(UserSistema $userSistema): self
+    // {
+    //     if ($this->userSistemas->removeElement($userSistema)) {
+    //         // set the owning side to null (unless already changed)
+    //         if ($userSistema->getUser() === $this) {
+    //             $userSistema->setUser(null);
+    //         }
+    //     }
 
-        return $this;
-    }
+    //     return $this;
+    // }
 
-    /**
-     * @return Collection|UserPaciente[]
-     */
-    public function getUserPacientes(): Collection
-    {
-        return $this->userPacientes;
-    }
+    // /**
+    //  * @return Collection|UserPaciente[]
+    //  */
+    // public function getUserPacientes(): Collection
+    // {
+    //     return $this->userPacientes;
+    // }
 
-    public function addUserPaciente(UserPaciente $userPaciente): self
-    {
-        if (!$this->userPacientes->contains($userPaciente)) {
-            $this->userPacientes[] = $userPaciente;
-            $userPaciente->setUserId($this);
-        }
+    // public function addUserPaciente(UserPaciente $userPaciente): self
+    // {
+    //     if (!$this->userPacientes->contains($userPaciente)) {
+    //         $this->userPacientes[] = $userPaciente;
+    //         $userPaciente->setUser($this);
+    //     }
 
-        return $this;
-    }
+    //     return $this;
+    // }
 
-    public function removeUserPaciente(UserPaciente $userPaciente): self
-    {
-        if ($this->userPacientes->removeElement($userPaciente)) {
-            // set the owning side to null (unless already changed)
-            if ($userPaciente->getUserId() === $this) {
-                $userPaciente->setUserId(null);
-            }
-        }
+    // public function removeUserPaciente(UserPaciente $userPaciente): self
+    // {
+    //     if ($this->userPacientes->removeElement($userPaciente)) {
+    //         // set the owning side to null (unless already changed)
+    //         if ($userPaciente->getUser() === $this) {
+    //             $userPaciente->setUser(null);
+    //         }
+    //     }
 
-        return $this;
-    }
+    //     return $this;
+    // }
 
 
 }

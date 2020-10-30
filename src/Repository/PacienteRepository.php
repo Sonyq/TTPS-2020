@@ -3,6 +3,11 @@
 namespace App\Repository;
 
 use App\Entity\Paciente;
+use App\Entity\Internacion;
+use App\Entity\InternacionCama;
+use App\Entity\Cama;
+use App\Entity\Sala;
+use App\Entity\Sistema;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
@@ -19,32 +24,21 @@ class PacienteRepository extends ServiceEntityRepository
         parent::__construct($registry, Paciente::class);
     }
 
-    // /**
-    //  * @return Paciente[] Returns an array of Paciente objects
-    //  */
-    /*
-    public function findByExampleField($value)
-    {
+    public function findAllPacientesBySistema($sistema)
+    {    
         return $this->createQueryBuilder('p')
-            ->andWhere('p.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('p.id', 'ASC')
-            ->setMaxResults(10)
+            ->select('p.dni, p.apellido, p.nombre, sist.descrip as sistema, s.nombre as sala, c.numero as cama')
+            ->innerJoin('App:Internacion', 'i', 'WITH', 'i.paciente = p.id')
+            ->innerJoin('App:InternacionCama', 'ic', 'WITH', 'i.id = ic.internacion')
+            ->innerJoin('App:Cama', 'c', 'WITH', 'c.id = ic.cama')
+            ->innerJoin('App:Sala', 's', 'WITH', 's.id = c.sala')
+            ->innerJoin('App:Sistema', 'sist', 'WITH', 'sist.id = s.sistema')
+            ->where('ic.fecha_hasta IS NULL')
+            ->andWhere('sist.nombre = :sistema')
+            ->setParameter('sistema', $sistema)
+            ->orderBy('p.apellido', 'ASC')
             ->getQuery()
-            ->getResult()
-        ;
+            ->getResult();
     }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?Paciente
-    {
-        return $this->createQueryBuilder('p')
-            ->andWhere('p.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
+    
 }
