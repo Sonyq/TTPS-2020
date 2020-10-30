@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use DateTime;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -80,9 +81,20 @@ class User implements UserInterface
      */
     private $activo = 1;
 
+    /**
+     * @ORM\OneToMany(targetEntity=UserSistema::class, mappedBy="user_id")
+     */
+    private $userSistemas;
+
+    /**
+     * @ORM\OneToMany(targetEntity=UserPaciente::class, mappedBy="user_id")
+     */
+    private $userPacientes;
+
     public function __construct()
     {
-        //$this->boards = new ArrayCollection();
+        $this->userSistemas = new ArrayCollection();
+        $this->userPacientes = new ArrayCollection();
     }
 
     /**
@@ -310,6 +322,66 @@ class User implements UserInterface
         }
 
         return $ok;
+    }
+
+    /**
+     * @return Collection|UserSistema[]
+     */
+    public function getUserSistemas(): Collection
+    {
+        return $this->userSistemas;
+    }
+
+    public function addUserSistema(UserSistema $userSistema): self
+    {
+        if (!$this->userSistemas->contains($userSistema)) {
+            $this->userSistemas[] = $userSistema;
+            $userSistema->setUserId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUserSistema(UserSistema $userSistema): self
+    {
+        if ($this->userSistemas->removeElement($userSistema)) {
+            // set the owning side to null (unless already changed)
+            if ($userSistema->getUserId() === $this) {
+                $userSistema->setUserId(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|UserPaciente[]
+     */
+    public function getUserPacientes(): Collection
+    {
+        return $this->userPacientes;
+    }
+
+    public function addUserPaciente(UserPaciente $userPaciente): self
+    {
+        if (!$this->userPacientes->contains($userPaciente)) {
+            $this->userPacientes[] = $userPaciente;
+            $userPaciente->setUserId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUserPaciente(UserPaciente $userPaciente): self
+    {
+        if ($this->userPacientes->removeElement($userPaciente)) {
+            // set the owning side to null (unless already changed)
+            if ($userPaciente->getUserId() === $this) {
+                $userPaciente->setUserId(null);
+            }
+        }
+
+        return $this;
     }
 
 

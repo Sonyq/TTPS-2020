@@ -94,6 +94,7 @@ Vue.mixin({
           },
           loggedUser : {
             set: function(data){
+              console.log(data)
               this.$root.$data.store_user['id'] = data.id;
               this.$root.$data.store_user['email'] = data.email;
               this.$root.$data.store_user['username'] = data.username;
