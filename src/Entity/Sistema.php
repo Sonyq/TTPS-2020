@@ -50,14 +50,14 @@ class Sistema
     private $salas;
 
     /**
-     * @ORM\OneToMany(targetEntity=UserSistema::class, mappedBy="sistema")
+     * @ORM\OneToMany(targetEntity=Sistema::class, mappedBy="sistema")
      */
-    private $userSistemas;
+    private $users;
 
     public function __construct()
     {
         $this->salas = new ArrayCollection();
-        $this->userSistemas = new ArrayCollection();
+        $this->users = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -156,29 +156,29 @@ class Sistema
     }
 
     /**
-     * @return Collection|UserSistema[]
+     * @return Collection|User[]
      */
-    public function getUserSistemas(): Collection
+    public function getUsers(): Collection
     {
-        return $this->userSistemas;
+        return $this->users;
     }
 
-    public function addUserSistema(UserSistema $userSistema): self
+    public function addUser(User $user): self
     {
-        if (!$this->userSistemas->contains($userSistema)) {
-            $this->userSistemas[] = $userSistema;
-            $userSistema->setSistemaId($this);
+        if (!$this->users->contains($user)) {
+            $this->users[] = $user;
+            $user->setSistema($this);
         }
 
         return $this;
     }
 
-    public function removeUserSistema(UserSistema $userSistema): self
+    public function removeUser(User $user): self
     {
-        if ($this->userSistemas->removeElement($userSistema)) {
+        if ($this->users->removeElement($user)) {
             // set the owning side to null (unless already changed)
-            if ($userSistema->getSistemaId() === $this) {
-                $userSistema->setSistemaId(null);
+            if ($user->getSistema() === $this) {
+                $user->setSistema(null);
             }
         }
 

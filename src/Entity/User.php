@@ -82,20 +82,17 @@ class User implements UserInterface
     private $activo = 1;
 
     // /**
-    //  * @ORM\OneToMany(targetEntity=UserSistema::class, mappedBy="user")
-    //  */
-    // private $userSistemas;
-
-    // /**
     //  * @ORM\OneToMany(targetEntity=UserPaciente::class, mappedBy="user")
     //  */
     // private $userPacientes;
-
-    private $sistemaActual;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity=Sistema::class, inversedBy="users", fetch="EAGER")
+     */
+    private $sistema;
 
     public function __construct()
     {
-        // $this->userSistemas = new ArrayCollection();
         // $this->userPacientes = new ArrayCollection();
     }
 
@@ -326,35 +323,19 @@ class User implements UserInterface
         return $ok;
     }
 
-    // /**
-    //  * @return Collection|UserSistema[]
-    //  */
-    // public function getUserSistemas(): Collection
-    // {
-    //     return $this->userSistemas;
-    // }
+    /**
+     * @return Sistema
+    */
+    public function getSistema(): ?Sistema
+    {
+        return $this->sistema;
+    }
 
-    // public function addUserSistema(UserSistema $userSistema): self
-    // {
-    //     if (!$this->userSistemas->contains($userSistema)) {
-    //         $this->userSistemas[] = $userSistema;
-    //         $userSistema->setUser($this);
-    //     }
-
-    //     return $this;
-    // }
-
-    // public function removeUserSistema(UserSistema $userSistema): self
-    // {
-    //     if ($this->userSistemas->removeElement($userSistema)) {
-    //         // set the owning side to null (unless already changed)
-    //         if ($userSistema->getUser() === $this) {
-    //             $userSistema->setUser(null);
-    //         }
-    //     }
-
-    //     return $this;
-    // }
+    public function setSistema(Sistema $sistema): self
+    {
+        $this->sistema = $sistema;
+        return $this;
+    }
 
     // /**
     //  * @return Collection|UserPaciente[]

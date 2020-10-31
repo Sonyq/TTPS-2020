@@ -18,21 +18,7 @@ class UserRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, User::class);
     }
-
-    public function findSistemaActual($userId)
-    {
-        return $this->createQueryBuilder('u')
-            ->select('s.nombre, s.descrip')
-            ->innerJoin('App:UserSistema', 'us', 'WITH', 'us.user = u.id')
-            ->innerJoin('App:Sistema', 's', 'WITH', 's.id = us.sistema')
-            ->where('u.id = :userId')
-            ->andWhere('us.fecha_hasta IS NULL')
-            ->setParameter('userId', $userId)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-
+    
     /*
     public function findOneBySomeField($value): ?User
     {

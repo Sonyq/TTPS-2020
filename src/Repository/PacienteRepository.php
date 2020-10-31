@@ -24,7 +24,7 @@ class PacienteRepository extends ServiceEntityRepository
         parent::__construct($registry, Paciente::class);
     }
 
-    public function findAllPacientesBySistema($sistema)
+    public function findAllPacientes($sistemaId)
     {    
         return $this->createQueryBuilder('p')
             ->select('p.dni, p.apellido, p.nombre, sist.descrip as sistema, s.nombre as sala, c.numero as cama')
@@ -34,8 +34,8 @@ class PacienteRepository extends ServiceEntityRepository
             ->innerJoin('App:Sala', 's', 'WITH', 's.id = c.sala')
             ->innerJoin('App:Sistema', 'sist', 'WITH', 'sist.id = s.sistema')
             ->where('ic.fecha_hasta IS NULL')
-            ->andWhere('sist.nombre = :sistema')
-            ->setParameter('sistema', $sistema)
+            ->andWhere('sist.id = :sistemaId')
+            ->setParameter('sistemaId', $sistemaId)
             ->orderBy('p.apellido', 'ASC')
             ->getQuery()
             ->getResult();

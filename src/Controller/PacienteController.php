@@ -2,15 +2,13 @@
 
 namespace App\Controller;
 
-// use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use FOS\RestBundle\Controller\FOSRestController;
-
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Paciente;
-use App\Entity\User;
-
+use App\Entity\Sistema;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\Annotations\RequestParam;
+use FOS\RestBundle\Controller\Annotations\QueryParam;
 use FOS\RestBundle\Request\ParamFetcher;
 use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -31,11 +29,17 @@ class PacienteController extends FOSRestController
      * @Route("/index", name="paciente_index", methods={"GET"})
      * @SWG\Response(response=200, description="Listado de Pacientes")
      * @SWG\Tag(name="Paciente")
+     * @QueryParam(name="sistemaId", strict=false, nullable=true, allowBlank=false, description="Sistema Id")
+     *      
+     * @param ParamFetcher $pf
      */
-    public function index(Request $request)
+    public function index(Request $request, ParamFetcher $pf): Response
     {
-        $sistema = $this->getDoctrine()->getRepository(User::class)->findSistemaActual($this->getUser()->getId());        
-        $pacientes = $this->getDoctrine()->getRepository(Paciente::class)->findAllPacientesBySistema($sistema["nombre"]);        
+        //si se recibe un sistemaId como parámetro se utiliza ese, 
+        //sinó se utiliza el id del sistema al que pertenece el usuario.
+        $sistema = $pf->get('sistemaId') ? $pf->get('sistemaId') : $this->getUser()->getSistema()->getId();
+        
+        $pacientes = $this->getDoctrine()->getRepository(Paciente::class)->findAllPacientes($sistema);        
         return new JsonResponse($pacientes, 200);
     }
 

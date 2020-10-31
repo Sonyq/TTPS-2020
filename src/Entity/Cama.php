@@ -30,6 +30,11 @@ class Cama
     private $numero;
 
     /**
+     * @ORM\Column(type="string")
+     */
+    private $estado;
+
+    /**
      * @ORM\OneToMany(targetEntity=InternacionCama::class, mappedBy="cama")
      */
     private $internacionCamas;
@@ -67,6 +72,19 @@ class Cama
 
         return $this;
     }
+
+    public function getEstado(): ?string
+    {
+        return $this->estado;
+    }
+
+    public function setEstado(string $estado): self
+    {
+        $this->estado = $estado;
+
+        return $this;
+    }
+
 
     /**
      * @return Collection|InternacionCama[]

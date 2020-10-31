@@ -18,33 +18,20 @@ class CamaRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Cama::class);
     }
-
-    // /**
-    //  * @return Cama[] Returns an array of Cama objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    
+    public function findPrimerCamaLibre($sistemaId)
     {
         return $this->createQueryBuilder('c')
-            ->andWhere('c.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('c.id', 'ASC')
-            ->setMaxResults(10)
+            ->innerJoin('App:Sala', 's', 'WITH', 's.id = c.sala')
+            ->innerJoin('App:Sistema', 'sist', 'WITH', 'sist.id = s.sistema')
+            ->where('c.estado = :estado')
+            ->andWhere('sist.id = :sistemaId')
+            ->setParameter('estado', 'libre')
+            ->setParameter('sistemaId', $sistemaId)
+            ->orderBy('c.numero', 'ASC')
+            ->setMaxResults(1)
             ->getQuery()
-            ->getResult()
-        ;
+            ->getOneOrNullResult();
     }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?Cama
-    {
-        return $this->createQueryBuilder('c')
-            ->andWhere('c.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
+    
 }
