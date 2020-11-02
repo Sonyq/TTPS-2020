@@ -15,7 +15,7 @@
 
     php bin/console server:run
 
-    yarn run encore dev --watch
+    yarn dev
 
 La página debería estar corriendo en http://localhost:8000/ , para ver la documentación de la página entrar a http://localhost:8000/api/doc
 Cada cambio que se haga en la vista se va auto compilar, para que esto surta efecto hay que apretar Ctrl+F5 en el navegador.
