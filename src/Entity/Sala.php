@@ -22,7 +22,7 @@ class Sala
     /**
      * @ORM\ManyToOne(targetEntity=Sistema::class, inversedBy="salas")
      */
-    private $sistema_id;
+    private $sistema;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -30,7 +30,7 @@ class Sala
     private $nombre;
 
     /**
-     * @ORM\OneToMany(targetEntity=Cama::class, mappedBy="sala_id")
+     * @ORM\OneToMany(targetEntity=Cama::class, mappedBy="sala")
      */
     private $camas;
 
@@ -44,14 +44,14 @@ class Sala
         return $this->id;
     }
 
-    public function getSistemaId(): ?Sistema
+    public function getSistema(): ?Sistema
     {
-        return $this->sistema_id;
+        return $this->sistema;
     }
 
-    public function setSistemaId(?Sistema $sistema_id): self
+    public function setSistema(?Sistema $sistema): self
     {
-        $this->sistema_id = $sistema_id;
+        $this->sistema = $sistema;
 
         return $this;
     }

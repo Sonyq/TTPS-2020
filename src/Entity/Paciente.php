@@ -85,12 +85,12 @@ class Paciente
     private $contacto_parentesco;
 
     /**
-     * @ORM\OneToMany(targetEntity=Internacion::class, mappedBy="paciente_id")
+     * @ORM\OneToMany(targetEntity=Internacion::class, mappedBy="paciente")
      */
     private $internaciones;
 
     /**
-     * @ORM\OneToMany(targetEntity=UserPaciente::class, mappedBy="paciente_id")
+     * @ORM\OneToMany(targetEntity=UserPaciente::class, mappedBy="paciente")
      */
     private $userPacientes;
 

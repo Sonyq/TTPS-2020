@@ -23,7 +23,7 @@ class Internacion
      * @ORM\ManyToOne(targetEntity=Paciente::class, inversedBy="internaciones")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $paciente_id;
+    private $paciente;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -56,7 +56,7 @@ class Internacion
     private $fecha_obito;
 
     /**
-     * @ORM\OneToMany(targetEntity=InternacionCama::class, mappedBy="internacion_id")
+     * @ORM\OneToMany(targetEntity=InternacionCama::class, mappedBy="internacion")
      */
     private $internacionCamas;
 
@@ -70,14 +70,14 @@ class Internacion
         return $this->id;
     }
 
-    public function getPacienteId(): ?Paciente
+    public function getPaciente(): ?Paciente
     {
-        return $this->paciente_id;
+        return $this->paciente;
     }
 
-    public function setPacienteId(?Paciente $paciente_id): self
+    public function setPaciente(?Paciente $paciente): self
     {
-        $this->paciente_id = $paciente_id;
+        $this->paciente = $paciente;
 
         return $this;
     }
