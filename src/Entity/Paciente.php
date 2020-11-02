@@ -12,6 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Paciente
 {
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -94,10 +95,38 @@ class Paciente
      */
     private $userPacientes;
 
-    public function __construct()
+    public function __construct($dni, 
+                                $apellido, 
+                                $nombre, 
+                                $direccion, 
+                                $telefono, 
+                                $email, 
+                                $fecha_nacimiento,
+                                $obra_social,
+                                $antecedentes,
+                                $contacto_apellido,
+                                $contacto_nombre,
+                                $contacto_telefono,
+                                $contacto_parentesco)
+
     {
+
+        $this->dni = $dni;
+        $this->apellido = $apellido;
+        $this->nombre = $nombre;
+        $this->direccion = $direccion;
+        $this->telefono = $telefono;
+        $this->email = $email;
+        $this->fecha_nacimiento = $fecha_nacimiento;
+        $this->obra_social = $obra_social;
+        $this->antecedentes = $antecedentes;
+        $this->contacto_nombre = $contacto_nombre;
+        $this->contacto_apellido = $contacto_apellido;
+        $this->contacto_telefono = $contacto_telefono;
+        $this->contacto_parentesco = $contacto_parentesco;
         $this->internaciones = new ArrayCollection();
         $this->userPacientes = new ArrayCollection();
+
     }
 
     public function getId(): ?int

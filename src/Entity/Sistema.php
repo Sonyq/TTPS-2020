@@ -50,7 +50,7 @@ class Sistema
     private $salas;
 
     /**
-     * @ORM\OneToMany(targetEntity=Sistema::class, mappedBy="sistema")
+     * @ORM\OneToMany(targetEntity=User::class, mappedBy="sistema")
      */
     private $users;
 

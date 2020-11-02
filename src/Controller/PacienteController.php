@@ -55,6 +55,7 @@ class PacienteController extends FOSRestController
      * @RequestParam(name="email", strict=true, nullable=false, allowBlank=false, description="Email")
      * @RequestParam(name="fecha_nacimiento", strict=true, nullable=false, allowBlank=false, description="Fecha de nacimiento.")
      * @RequestParam(name="obra_social", strict=true, nullable=true, allowBlank=true, description="Obra Social")
+     * @RequestParam(name="antecedentes", strict=true, nullable=true, allowBlank=true, description="Antecedentes")
      * @RequestParam(name="contacto_nombre", strict=false, description="Nombre de algún contacto")
      * @RequestParam(name="contacto_apellido", strict=false, description="Apellido de algún contacto")
      * @RequestParam(name="contacto_telefono", strict=false, description="Teléfono de algún contacto")
@@ -72,19 +73,20 @@ class PacienteController extends FOSRestController
         return new Response('El paciente con dni: '.$dni.' ya se encuentra en el sistema', 400);
       }
       
-      $paciente= new Paciente();
-      $paciente->setDni($dni);
-      $paciente->setApellido($pf->get('apellido'));
-      $paciente->setNombre($pf->get('nombre'));
-      $paciente->setDireccion($pf->get('direccion'));
-      $paciente->setTelefono((int)$pf->get('telefono'));
-      $paciente->setEmail($pf->get('email'));
-      $paciente->setFechaNacimiento(date_create($pf->get('fecha_nacimiento')));
-      $paciente->setObraSocial($pf->get('obra_social'));
-      $paciente->setContactoNombre($pf->get('contacto_nombre') ? $pf->get('contacto_nombre') : null);
-      $paciente->setContactoApellido($pf->get('contacto_apellido') ? $pf->get('contacto_apellido') : null);
-      $paciente->setContactoTelefono($pf->get('contacto_telefono') ? $pf->get('contacto_telefono') : null);
-      $paciente->setContactoParentesco($pf->get('contacto_parentesco') ? $pf->get('contacto_parentesco') : null);
+      $paciente= new Paciente($dni,
+                              $pf->get('apellido'),
+                              $pf->get('nombre'),
+                              $pf->get('direccion'),
+                              $pf->get('telefono'),
+                              $pf->get('email'),
+                              date_create($pf->get('fecha_nacimiento')),
+                              $pf->get('obra_social'),
+                              $pf->get('antecedentes'),
+                              $pf->get('contacto_nombre') ? $pf->get('contacto_nombre') : null,
+                              $pf->get('contacto_apellido') ? $pf->get('contacto_apellido') : null,
+                              $pf->get('contacto_telefono') ? $pf->get('contacto_telefono') : null,
+                              $pf->get('contacto_parentesco') ? $pf->get('contacto_parentesco') : null);
+      
       $entityManager->persist($paciente);
       $entityManager->flush();
 

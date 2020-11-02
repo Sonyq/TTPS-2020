@@ -8,6 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 use DateTime;
 use Symfony\Component\Security\Core\User\UserInterface;
 use JMS\Serializer\Annotation as Serializer;
+use JMS\Serializer\Annotation\MaxDepth;
 use App\Entity\Permiso;
 
 /**
@@ -81,13 +82,14 @@ class User implements UserInterface
      */
     private $activo = 1;
 
-    // /**
-    //  * @ORM\OneToMany(targetEntity=UserPaciente::class, mappedBy="user")
-    //  */
-    // private $userPacientes;
+    /**
+     * @ORM\OneToMany(targetEntity=UserPaciente::class, mappedBy="user")
+     */
+    private $userPacientes;
     
     /**
      * @ORM\ManyToOne(targetEntity=Sistema::class, inversedBy="users", fetch="EAGER")
+     * @MaxDepth(1)
      */
     private $sistema;
 
@@ -324,7 +326,7 @@ class User implements UserInterface
     }
 
     /**
-     * @return Sistema
+    * @return Sistema
     */
     public function getSistema(): ?Sistema
     {

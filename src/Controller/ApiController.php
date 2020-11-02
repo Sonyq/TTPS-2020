@@ -15,7 +15,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use Swagger\Annotations as SWG;
-
+use JMS\Serializer\SerializationContext;
 use FOS\RestBundle\Controller\Annotations\RequestParam;
 use FOS\RestBundle\Request\ParamFetcher;
 
@@ -164,7 +164,7 @@ class ApiController extends FOSRestController
         $user = $this->getUser();
         //$this->getPermisos($user);
 
-        return new Response($serializer->serialize($user, "json"));
+        return new Response($serializer->serialize($user, "json", SerializationContext::create()->enableMaxDepthChecks()));
     }
 
 
