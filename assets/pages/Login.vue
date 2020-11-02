@@ -1,14 +1,29 @@
 <template>
- 
+  <div class="content">
+    <div class="md-layout">
+      <div
+        class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-33"
+      >
+        <md-field>
+          <label>Nombre de usuario</label>
+          <md-input v-model="username"></md-input>
+        </md-field>
+
+        <md-field>
+          <label>Contraseña</label>
+          <md-input v-model="password"></md-input>
+        </md-field>
+
+        <md-button class="md-info" @click="login">Aceptar</md-button>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
 
-import { ValidationProvider } from 'vee-validate'
-
 export default {
   components: {
-      ValidationProvider,
   },
   data() {
     return {

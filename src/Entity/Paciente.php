@@ -269,22 +269,22 @@ class Paciente
         return $this->internaciones;
     }
 
-    public function addInternacione(Internacion $internacione): self
+    public function addInternacion(Internacion $internacion): self
     {
-        if (!$this->internaciones->contains($internacione)) {
-            $this->internaciones[] = $internacione;
-            $internacione->setPacienteId($this);
+        if (!$this->internaciones->contains($internacion)) {
+            $this->internaciones[] = $internacion;
+            $internacion->setPaciente($this);
         }
 
         return $this;
     }
 
-    public function removeInternacione(Internacion $internacione): self
+    public function removeInternacion(Internacion $internacion): self
     {
-        if ($this->internaciones->removeElement($internacione)) {
+        if ($this->internaciones->removeElement($internacion)) {
             // set the owning side to null (unless already changed)
-            if ($internacione->getPacienteId() === $this) {
-                $internacione->setPacienteId(null);
+            if ($internacion->getPaciente() === $this) {
+                $internacion->setPaciente(null);
             }
         }
 
@@ -303,7 +303,7 @@ class Paciente
     {
         if (!$this->userPacientes->contains($userPaciente)) {
             $this->userPacientes[] = $userPaciente;
-            $userPaciente->setPacienteId($this);
+            $userPaciente->setPaciente($this);
         }
 
         return $this;
@@ -313,8 +313,8 @@ class Paciente
     {
         if ($this->userPacientes->removeElement($userPaciente)) {
             // set the owning side to null (unless already changed)
-            if ($userPaciente->getPacienteId() === $this) {
-                $userPaciente->setPacienteId(null);
+            if ($userPaciente->getPaciente() === $this) {
+                $userPaciente->setPaciente(null);
             }
         }
 

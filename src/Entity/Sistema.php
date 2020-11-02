@@ -137,7 +137,7 @@ class Sistema
     {
         if (!$this->salas->contains($sala)) {
             $this->salas[] = $sala;
-            $sala->setSistemaId($this);
+            $sala->setSistema($this);
         }
 
         return $this;
@@ -147,8 +147,8 @@ class Sistema
     {
         if ($this->salas->removeElement($sala)) {
             // set the owning side to null (unless already changed)
-            if ($sala->getSistemaId() === $this) {
-                $sala->setSistemaId(null);
+            if ($sala->getSistema() === $this) {
+                $sala->setSistema(null);
             }
         }
 

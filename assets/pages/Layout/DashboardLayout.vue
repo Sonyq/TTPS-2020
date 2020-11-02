@@ -4,7 +4,6 @@
 
     <side-bar
       :sidebar-item-color="sidebarBackground"
-      :sidebar-background-image="sidebarBackgroundImage"
     >
       <mobile-menu slot="content"></mobile-menu>
       <sidebar-link to="/dashboard">
@@ -17,7 +16,11 @@
       </sidebar-link>
       <sidebar-link to="/login">
         <md-icon>person</md-icon>
-        <p>Iniciar sesion</p>
+        <p>Iniciar sesión</p>
+      </sidebar-link>
+      <sidebar-link to="/pacientes">
+        <md-icon>person</md-icon>
+        <p>Pacientes</p>
       </sidebar-link>
     </side-bar>
 

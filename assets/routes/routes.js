@@ -3,6 +3,7 @@ import DashboardLayout from "@/pages/Layout/DashboardLayout.vue";
 import Dashboard from "@/pages/Dashboard.vue";
 import Home from "@/pages/Home.vue";
 import Login from "@/pages/Login.vue"
+import Pacientes from "@/pages/Pacientes/Pacientes.vue"
 /*
 Si no quiero agregar el footer poner la opcion   hideFooter: true ejemplo: 
 {
@@ -32,8 +33,13 @@ const routes = [
       },
       {
         path: "login",
-        name: "Iniciar sesion",
+        name: "Iniciar sesión",
         component: Login
+      },
+      {
+        path: "pacientes",
+        name: "Pacientes",
+        component: Pacientes
       },
     ]
   }
