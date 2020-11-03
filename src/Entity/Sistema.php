@@ -6,6 +6,8 @@ use App\Repository\SistemaRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation\MaxDepth;
+
 
 /**
  * @ORM\Entity(repositoryClass=SistemaRepository::class)
@@ -46,11 +48,13 @@ class Sistema
 
     /**
      * @ORM\OneToMany(targetEntity=Sala::class, mappedBy="sistema")
+     * @MaxDepth(1)
      */
     private $salas;
 
     /**
      * @ORM\OneToMany(targetEntity=User::class, mappedBy="sistema")
+     * @MaxDepth(1)
      */
     private $users;
 

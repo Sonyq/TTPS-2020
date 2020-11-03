@@ -131,7 +131,8 @@ export default {
   },
   methods: {
     async getPacientes() {
-      const pacientes = await axios.get(this.burl('/api/paciente/index'))
+      let sistema = this.$route.params.id ? '?sistema=' + this.$route.params.id : ''
+      const pacientes = await axios.get(this.burl('/api/paciente/index' + sistema))
       this.pacientes = pacientes.data
       this.isLoading = false
     },

@@ -10,10 +10,6 @@
         <md-icon>dashboard</md-icon>
         <p>Dashboard</p>
       </sidebar-link>
-      <sidebar-link to="/home">
-        <md-icon>house</md-icon>
-        <p>Home</p>
-      </sidebar-link>
       <sidebar-link to="/login">
         <md-icon>person</md-icon>
         <p>Iniciar sesión</p>

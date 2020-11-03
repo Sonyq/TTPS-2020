@@ -9,82 +9,30 @@
     <div class="content">
       <div class="md-layout">
 
-        <div class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-33">
-          <stats-card data-background-color="green">
-            <template slot="header">
-              <md-icon>local_hospital</md-icon>
-            </template>
+          <div v-for="sistema in sistemas" :key="sistema.id" class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-33">
+            
+            <router-link :to="`pacientes/${sistema.id}`">
+            <stats-card :data-background-color="sistema.nombre == 'UTI' ? 'red' : 'green'">
+              <template slot="header">
+                <md-icon v-if="sistema.nombre == 'GUARDIA'">local_hospital</md-icon>
+                <md-icon v-if="sistema.nombre == 'PISOCOVID'">healing</md-icon>
+                <md-icon v-if="sistema.nombre == 'UTI'">add_alert</md-icon>
+                <md-icon v-if="sistema.nombre == 'HOTEL'">hotel</md-icon>
+                <md-icon v-if="sistema.nombre == 'DOMICILIO'">home</md-icon>
+              </template>
 
-            <template slot="content">
-              <h3 class="title">Guardia</h3>
-              <p class="category">Camas totales: 50</p>
-              <p class="category">Camas ocupadas: 25</p>
-              <p class="category">Camas disponibles: 25</p>
-            </template>
+              <template slot="content">
+                <h3 class="title">{{ sistema.descrip }}</h3>
+                <div v-if="sistema.nombre != 'DOMICILIO'">
+                  <p class="category">Camas totales:{{ sistema.camas_total }}</p>
+                  <p class="category">Camas ocupadas: {{ sistema.camas_disponibles }}</p>
+                  <p class="category">Camas disponibles: {{ sistema.camas_ocupadas }}</p>
+                </div>
+              </template>
 
-          </stats-card>
-        </div>
-
-        <div class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-33">
-          <stats-card data-background-color="green">
-            <template slot="header">
-              <md-icon>healing</md-icon>
-            </template>
-
-            <template slot="content">
-              <h3 class="title">Piso Covid</h3>
-              <p class="category">Camas totales: 50</p>
-              <p class="category">Camas ocupadas: 25</p>
-              <p class="category">Camas disponibles: 25</p>
-            </template>
-
-          </stats-card>
-        </div>
-
-        <div class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-33">
-          <stats-card data-background-color="red">
-            <template slot="header">
-              <md-icon>add_alert</md-icon>
-            </template>
-
-            <template slot="content">
-              <h3 class="title">UTI</h3>
-              <p class="category">Camas totales: 50</p>
-              <p class="category">Camas ocupadas: 25</p>
-              <p class="category">Camas disponibles: 25</p>
-            </template>
-
-          </stats-card>
-        </div>
-
-        <div class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-33">
-          <stats-card data-background-color="green">
-            <template slot="header">
-              <md-icon>hotel</md-icon>
-            </template>
-
-            <template slot="content">
-              <h3 class="title">Hotel</h3>
-              <p class="category">Camas totales: 50</p>
-              <p class="category">Camas ocupadas: 25</p>
-              <p class="category">Camas disponibles: 25</p>
-            </template>
-
-          </stats-card>
-        </div>
-
-        <div class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-33">
-          <stats-card data-background-color="green">
-            <template slot="header">
-              <md-icon>home</md-icon>
-            </template>
-
-            <template slot="content">
-              <h3 class="title">Domicilio</h3>
-            </template>
-
-          </stats-card>
-        </div>
+            </stats-card>
+            </router-link>
+          </div>
 
       </div>
     </div>
@@ -104,12 +52,12 @@ export default {
   },
   data() {
     return {
-      isLoading: false,
+      isLoading: true,
       sistemas: []
     }
   },
   created() {
-    // this.getSistemas()
+    this.getSistemas()
   },
   methods: {
     async getSistemas() {
