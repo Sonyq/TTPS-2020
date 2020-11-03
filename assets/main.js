@@ -86,6 +86,7 @@ Vue.mixin({
         this.$root.$data.store_user["username"] = data.username;
         this.$root.$data.store_user["roles"] = [];
         this.$root.$data.store_user["permisos"] = [];
+        this.$root.$data.store_user["sistema"] = { nombre: data.sistema.descrip, id: data.sistema.id };
         data.roles.forEach(r => {
           this.$root.$data.store_user["roles"].push(r.nombre);
           r.permisos.forEach(p => {

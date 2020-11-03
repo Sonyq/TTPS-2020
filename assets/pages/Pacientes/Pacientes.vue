@@ -7,6 +7,8 @@
     </loading>
 
     <div class="content">
+
+      <div class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-100">
       
       <div>
 
@@ -14,7 +16,7 @@
           <md-button class="md-info">Agregar Paciente</md-button>
         </router-link>
 
-      </div>
+      </div>      
 
       <vue-good-table
         :columns="columnas"
@@ -36,15 +38,17 @@
             ofLabel: 'de',
           }"
         :search-options="{ enabled: true, placeholder: 'Buscar' }"
-        styleClass="vgt-table bordered">
+        styleClass="vgt-table">
         <div slot="emptystate" class="has-text-centered">
-          <h3 class="h3">No hay pacientes cargados en el sistema</h3>
+          <h3 class="h3">No hay pacientes para mostrar</h3>
         </div>
         <!-- <div slot="table-actions">
           <md-button class="md-info" @click="showAddPatientModal(null, 'Agregar Paciente')">Agregar Paciente</md-button>
         </div> -->
         <template slot="table-row" slot-scope="props">
           <span v-if="props.column.field == 'acciones'">
+
+
             <!-- <button v-if="loggedUser.permisos.includes('paciente_update')" type="button" class="button is-info is-small button-is-spaced" title="Editar" @click="showAddPatientModal(props.row, 'Editar Paciente')">Editar</button>
             <button v-if="loggedUser.permisos.includes('paciente_show')" type="button" class="button is-info is-small button-is-spaced" title="Ver" @click="showViewPatientModal(props.row)">Ver</button>
             <button v-if="loggedUser.permisos.includes('paciente_destroy')" class="button_delete button is-danger is-small button-is-spaced" title="Eliminar" @click="deletePatient(props.row.id)">Eliminar</button> -->
@@ -60,6 +64,7 @@
         </template>
       </vue-good-table>
     </div>
+    </div>     
   </div>   
 </template>
 
@@ -83,7 +88,9 @@ export default {
         {
           label: 'Dni',
           field: this.getDni,
-          filterable: true
+          type: 'number',
+          filterable: true,
+          width: '80px'
         },
         {
           label: 'Apellido',
@@ -103,11 +110,14 @@ export default {
         },
         {
           label: 'Cama',
-          field: this.getCama
+          field: this.getCama,
+          type: 'number',
+          width: '80px'
         },
         {
           label: 'Estado',
-          field: this.getEstado
+          field: this.getEstado,
+          width: '80px'
         },
         {
           label: 'Acciones',
@@ -163,8 +173,46 @@ export default {
   width: 50%;
 }
 
+.vgt-global-search, .vgt-table thead th, .vgt-table th.line-numbers, .vgt-table th.vgt-checkbox-col {
+  background: linear-gradient(#EEEEEE,#EEEEEE);
+  color: #4BA64F;
+  border-right: none;
+  border-bottom: 1px solid #EEEEEE;
+}
+
+table.vgt-table {
+    font-size: 14px;
+    border-collapse: collapse;
+    background-color: #fff;
+    table-layout: auto;
+    border: 1px solid #EEEEEE;
+}
+
 .vgt-global-search {
   padding: 10px 0;
+  border: 1px solid #EEEEEE;
+}
+
+.vgt-wrap__footer {
+  color: #EEEEEE;
+  padding: 1em;
+  border: 1px solid #EEEEEE;
+  background: linear-gradient(#EEEEEE,#EEEEEE);
+}
+
+.vgt-wrap__footer .footer__navigation__page-btn {
+  text-decoration: none;
+  color: #606266;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.vgt-table thead th.sorting-asc:after {
+    border-bottom: 5px solid #4BA64F;
+}
+
+.vgt-table thead th.sorting-desc:before {
+    border-top: 5px solid #4BA64F;
 }
   
 </style>

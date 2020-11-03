@@ -47,7 +47,7 @@ export default {
   props: {
     title: {
       type: String,
-      default: "TTPS 2020"
+      default: "SegCo"
     },
     sidebarBackgroundImage: {
       type: String,
