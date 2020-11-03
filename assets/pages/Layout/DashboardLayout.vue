@@ -18,6 +18,10 @@
         <md-icon>person</md-icon>
         <p>Iniciar sesión</p>
       </sidebar-link>
+      <sidebar-link to="/sistemas">
+        <md-icon>person</md-icon>
+        <p>Sistemas</p>
+      </sidebar-link>
       <sidebar-link to="/pacientes">
         <md-icon>person</md-icon>
         <p>Pacientes</p>
