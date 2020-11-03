@@ -27,7 +27,7 @@ class PacienteRepository extends ServiceEntityRepository
     public function findAllPacientes($sistemaId)
     {    
         return $this->createQueryBuilder('p')
-            ->select('p.dni, p.apellido, p.nombre, sist.descrip as sistema, s.nombre as sala, c.numero as cama')
+            ->select('p.id, p.dni, p.apellido, p.nombre, sist.descrip as sistema, s.nombre as sala, c.numero as cama, i.fecha_egreso, i.fecha_obito')
             ->innerJoin('App:Internacion', 'i', 'WITH', 'i.paciente = p.id')
             ->innerJoin('App:InternacionCama', 'ic', 'WITH', 'i.id = ic.internacion')
             ->innerJoin('App:Cama', 'c', 'WITH', 'c.id = ic.cama')

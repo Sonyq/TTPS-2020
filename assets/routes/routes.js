@@ -4,6 +4,8 @@ import Dashboard from "@/pages/Dashboard.vue";
 import Home from "@/pages/Home.vue";
 import Login from "@/pages/Login.vue"
 import Pacientes from "@/pages/Pacientes/Pacientes.vue"
+import NuevoPaciente from "@/pages/Pacientes/NuevoPaciente.vue"
+
 /*
 Si no quiero agregar el footer poner la opcion   hideFooter: true ejemplo: 
 {
@@ -40,6 +42,11 @@ const routes = [
         path: "pacientes",
         name: "Pacientes",
         component: Pacientes
+      },
+      {
+        path: "pacientes/nuevo",
+        name: "Agregar Paciente",
+        component: NuevoPaciente
       },
     ]
   }
