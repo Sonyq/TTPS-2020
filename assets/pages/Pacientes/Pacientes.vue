@@ -1,11 +1,6 @@
 <template>
   <div>
 
-    <loading :active.sync="isLoading"
-              :is-full-page="true"
-              color='#4CAF50'>
-    </loading>
-
     <div class="content">
 
       <div class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-100">
@@ -47,8 +42,6 @@
         </div> -->
         <template slot="table-row" slot-scope="props">
           <span v-if="props.column.field == 'acciones'">
-
-
             <!-- <button v-if="loggedUser.permisos.includes('paciente_update')" type="button" class="button is-info is-small button-is-spaced" title="Editar" @click="showAddPatientModal(props.row, 'Editar Paciente')">Editar</button>
             <button v-if="loggedUser.permisos.includes('paciente_show')" type="button" class="button is-info is-small button-is-spaced" title="Ver" @click="showViewPatientModal(props.row)">Ver</button>
             <button v-if="loggedUser.permisos.includes('paciente_destroy')" class="button_delete button is-danger is-small button-is-spaced" title="Eliminar" @click="deletePatient(props.row.id)">Eliminar</button> -->
@@ -72,17 +65,13 @@
 
 import 'vue-good-table/dist/vue-good-table.css'
 import { VueGoodTable } from 'vue-good-table';
-import Loading from 'vue-loading-overlay';
-import 'vue-loading-overlay/dist/vue-loading.css';
 
 export default {
   components: {
     VueGoodTable,
-    Loading
   },
   data() {
     return {
-      isLoading: true,
       pacientes: [],
       columnas: [
         {
@@ -131,10 +120,11 @@ export default {
   },
   methods: {
     async getPacientes() {
+      let loader = this.$loading.show()
       let sistema = this.$route.params.id ? '?sistema=' + this.$route.params.id : ''
       const pacientes = await axios.get(this.burl('/api/paciente/index' + sistema))
       this.pacientes = pacientes.data
-      this.isLoading = false
+      loader.hide();
     },
     getDni(paciente) {
       return paciente.dni

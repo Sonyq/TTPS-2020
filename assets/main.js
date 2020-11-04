@@ -29,6 +29,10 @@ import MaterialDashboard from "./material-dashboard";
 
 import Chartist from "chartist";
 
+//vue-loading with styles
+import Loading from 'vue-loading-overlay';
+import 'vue-loading-overlay/dist/vue-loading.css';
+
 // configure router
 const router = new VueRouter({
   routes, // short for routes: routes
@@ -46,6 +50,9 @@ Vue.use(GlobalComponents);
 Vue.use(GlobalDirectives);
 Vue.use(Notifications);
 Vue.use(VueSweetalert2);
+Vue.use(Loading, {
+  color: '#4CAF50'
+})
 
 /**************************************************************** */
 
