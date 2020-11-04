@@ -2,11 +2,13 @@
   <div>
 
     <div class="content">
+      
       <div class="md-layout">
 
           <div v-for="sistema in sistemas" :key="sistema.id" class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-33">
             
-            <router-link :to="`pacientes/${sistema.id}`">
+            <router-link :to="{ name: 'Pacientes', params: { sistemaNombre: sistema.descrip, sistemaId : sistema.id } }">
+
               <stats-card :data-background-color="sistema.nombre == 'UTI' ? 'red' : 'green'">
                 <template slot="header">
                   <md-icon v-if="sistema.nombre == 'GUARDIA'">local_hospital</md-icon>

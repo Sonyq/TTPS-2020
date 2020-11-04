@@ -14,7 +14,7 @@
           <md-input v-model="password"></md-input>
         </md-field>
 
-        <md-button class="md-info" @click="login">Aceptar</md-button>
+        <md-button class="md-success" @click="login">Aceptar</md-button>
       </div>
     </div>
   </div>
