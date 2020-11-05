@@ -60,9 +60,15 @@ class Internacion
      */
     private $internacionCamas;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Evolucion::class, mappedBy="internacion")
+     */
+    private $evoluciones;
+
     public function __construct()
     {
         $this->internacionCamas = new ArrayCollection();
+        $this->evoluciones = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -178,6 +184,36 @@ class Internacion
             // set the owning side to null (unless already changed)
             if ($internacionCama->getInternacionId() === $this) {
                 $internacionCama->setInternacionId(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Evolucion[]
+     */
+    public function getEvoluciones(): Collection
+    {
+        return $this->evoluciones;
+    }
+
+    public function addEvolucion(Evolucion $evolucion): self
+    {
+        if (!$this->evoluciones->contains($evolucion)) {
+            $this->evoluciones[] = $evolucion;
+            $evolucion->setInternacion($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEvolucion(Evolucion $evolucion): self
+    {
+        if ($this->evoluciones->removeElement($evolucion)) {
+            // set the owning side to null (unless already changed)
+            if ($evolucion->getInternacion() === $this) {
+                $evolucion->setInternacion(null);
             }
         }
 

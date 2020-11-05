@@ -4,6 +4,7 @@ import Dashboard from "@/pages/Dashboard.vue";
 import Login from "@/pages/Login.vue"
 import Pacientes from "@/pages/Pacientes/Pacientes.vue"
 import NuevoPaciente from "@/pages/Pacientes/NuevoPaciente.vue"
+import NuevaEvolucion from "@/pages/Evoluciones/NuevaEvolucion.vue"
 import Sistemas from "@/pages/Sistemas/Sistemas.vue"
 
 /*
@@ -48,6 +49,12 @@ const routes = [
         path: "pacientes/nuevo",
         name: "Agregar Paciente",
         component: NuevoPaciente
+      },
+      {
+        path: "evoluciones/nueva",
+        name: "Nueva Evolución",
+        component: NuevaEvolucion,
+        props: true
       }
     ]
   }
