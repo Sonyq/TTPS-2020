@@ -79,15 +79,35 @@
                                 <!-- esto se muestra si requiereO2 es true -->
                                 <div class="md-layout-item md-small-size-100 md-size-100" v-show="requiereO2">
 
-                                    <div class="md-layout-item md-small-size-50 md-size-50" >
-                                        <md-field>
-                                            <label for="tipoAdministracionO2">Tipo Administración O2</label>
-                                            <md-select v-model="tipoAdministracionO2" name="tipoAdministracionO2">              
-                                                <md-option value="Cánula nasal">Cánula nasal de oxígeno</md-option>
-                                                <md-option value="Mascara con reservorio">Máscara con reservorio</md-option>
-                                            </md-select>
-                                        </md-field>
-                                    </div>
+                                    <div class="md-layout">
+                                        <div class="md-layout-item md-small-size-50 md-size-50" >
+                                            <md-field>
+                                                <label for="tipoAdministracionO2">Tipo Administración O2</label>
+                                                <md-select v-model="tipoAdministracionO2" name="tipoAdministracionO2">
+                                                    <md-option :value="false">Ninguna</md-option>             
+                                                    <md-option value="Cánula nasal">Cánula nasal de oxígeno</md-option>
+                                                    <md-option value="Máscara con reservorio">Máscara con reservorio</md-option>
+                                                </md-select>
+                                            </md-field>
+                                        </div>
+
+                                        <!-- esto se muestra si se setea tipo de administración O2 es true -->
+                                        <div class="md-layout-item md-small-size-50 md-size-50" >
+                                            <md-field v-if="tipoAdministracionO2 == 'Cánula nasal'">
+                                                <label>Valor cánula nasal</label>
+                                                <md-input v-model="canulaNasalValor" type="number"></md-input>
+                                            </md-field>
+
+                                            <md-field v-if="tipoAdministracionO2 == 'Máscara con reservorio'">
+                                                <label>Valor máscara con reservorio</label>
+                                                <md-input v-model="mascaraReservorioValor" type="number"></md-input>
+                                            </md-field>
+                                        </div>
+
+
+                                        <!-- hasta acá si se setea tipo de administración O2 -->
+                                    </div>  
+
 
                                     <div class="md-layout-item md-small-size-40 md-size-40">
                                         <md-field>
@@ -132,8 +152,8 @@
 
                                     <div class="md-layout-item md-small-size-40 md-size-40" >
                                         <label for="estabilidadDesaparicion">Estabilidad/desaparición de síntomas respiratorios</label>
-                                        <md-radio class="md-success" v-model="estabilidadDesaparicion" :value="false">Sí</md-radio>
-                                        <md-radio v-model="estabilidadDesaparicion" :value="true">No</md-radio>
+                                        <md-radio class="md-primary" v-model="estabilidadDesaparicion" :value="true">Sí</md-radio>
+                                        <md-radio class="md-primary" v-model="estabilidadDesaparicion" :value="false">No</md-radio>
                                     </div>                                    
 
                                 </div>
@@ -146,24 +166,24 @@
                             <div class="md-layout-item md-small-size-100 md-size-100">
                                 <label for="somnolencia">Somnolencia</label>
                                 <div class="md-layout">
-                                    <md-radio v-model="somnolencia" :value="false">Sí</md-radio>
-                                    <md-radio v-model="somnolencia" :true="true">No</md-radio>
+                                    <md-radio class="md-primary" v-model="somnolencia" :value="true">Sí</md-radio>
+                                    <md-radio class="md-primary" v-model="somnolencia" :value="false">No</md-radio>
                                 </div>
                             </div>
 
                             <div class="md-layout-item md-small-size-100 md-size-100">
-                                <label for="disgeusia">Anosmia</label>
+                                <label for="anosmia">Anosmia</label>
                                 <div class="md-layout">
-                                    <md-radio v-model="anosmia" :value="false">Sí</md-radio>
-                                    <md-radio v-model="anosmia" :true="true">No</md-radio>
+                                    <md-radio class="md-primary" v-model="anosmia" :value="true">Sí</md-radio>
+                                    <md-radio class="md-primary" v-model="anosmia" :value="false">No</md-radio>
                                 </div>
                             </div>
 
                             <div class="md-layout-item md-small-size-100 md-size-100">
                                 <label for="disgeusia">Disgeusia</label>
                                 <div class="md-layout">
-                                    <md-radio v-model="disgeusia" :value="false">Sí</md-radio>
-                                    <md-radio v-model="disgeusia" :true="true">No</md-radio>
+                                    <md-radio class="md-primary" v-model="disgeusia" :value="true">Sí</md-radio>
+                                    <md-radio class="md-primary" v-model="disgeusia" :value="false">No</md-radio>
                                 </div>
                             </div>
 
@@ -171,108 +191,108 @@
 
                     <div class="md-layout-item md-small-size-100 md-size-50">
 
-                        <h4>Estudios realizados</h4>
+											<h4>Estudios realizados</h4>
 
-                        <div class="md-layout-item md-small-size-40 md-size-40" >
-                            <md-switch class="md-primary" v-model="rxTx">Rx Tx</md-switch>
-                        </div>
-                            
-                        <!-- esto se muestra si rxTx es true -->
-                        <div class="md-layout-item md-small-size-100 md-size-100" v-show="rxTx">
-    
-                            <div class="md-layout">
-                                <md-radio v-model="rxTxTipo" value="normal">Normal</md-radio>
-                                <md-radio v-model="rxTxTipo" value="patológico">Patológico</md-radio>
-                            </div>
+											<div class="md-layout-item md-small-size-40 md-size-40" >
+												<md-switch class="md-primary" v-model="rxTx">Rx Tx</md-switch>
+											</div>
+													
+											<!-- esto se muestra si rxTx es true -->
+											<div class="md-layout-item md-small-size-100 md-size-100" v-show="rxTx">
+	
+												<div class="md-layout">
+													<md-radio class="md-primary" v-model="rxTxTipo" value="normal">Normal</md-radio>
+													<md-radio class="md-primary" v-model="rxTxTipo" value="patológico">Patológico</md-radio>
+												</div>
 
-                            <div class="md-layout-item md-small-size-50 md-size-90" >
-                                <label for="rxTxDescrip">Descripción</label>
-                                <md-field maxlength="2">
-                                    <md-textarea v-model="rxTxDescrip"></md-textarea>
-                                </md-field>
-                            </div>
+												<div v-show="rxTxTipo == 'patológico'" class="md-layout-item md-small-size-50 md-size-90" >
+													<label for="rxTxDescrip">Descripción</label>
+													<md-field maxlength="2">
+														<md-textarea v-model="rxTxDescrip"></md-textarea>
+													</md-field>
+												</div>
 
-                        </div>
-                        <!-- hasta acá si rxTx es true -->
+											</div>
+											<!-- hasta acá si rxTx es true -->
 
-                        <div class="md-layout-item md-small-size-40 md-size-40" >
-                            <md-switch class="md-primary" v-model="tacTorax">TAC de tórax</md-switch>
-                        </div>
+											<div class="md-layout-item md-small-size-40 md-size-40" >
+												<md-switch class="md-primary" v-model="tacTorax">TAC de tórax</md-switch>
+											</div>
 
-                        <!-- esto se muestra si tacTorax es true -->
-                        <div class="md-layout-item md-small-size-100 md-size-100" v-show="tacTorax">
-    
-                            <div class="md-layout">
-                                <md-radio v-model="tacToraxTipo" value="normal">Normal</md-radio>
-                                <md-radio v-model="tacToraxTipo" value="patológico">Patológico</md-radio>
-                            </div>
+											<!-- esto se muestra si tacTorax es true -->
+											<div class="md-layout-item md-small-size-100 md-size-100" v-show="tacTorax">
+	
+												<div class="md-layout">
+													<md-radio class="md-primary" v-model="tacToraxTipo" value="normal">Normal</md-radio>
+													<md-radio class="md-primary" v-model="tacToraxTipo" value="patológico">Patológico</md-radio>
+												</div>
 
-                            <div class="md-layout-item md-small-size-50 md-size-90" >
-                                <label for="tacToraxDescrip">Descripción</label>
-                                <md-field maxlength="2">
-                                    <md-textarea v-model="tacToraxDescrip"></md-textarea>
-                                </md-field>
-                            </div>
+												<div v-show="tacToraxTipo == 'patológico'" class="md-layout-item md-small-size-50 md-size-90" >
+													<label for="tacToraxDescrip">Descripción</label>
+													<md-field maxlength="2">
+														<md-textarea v-model="tacToraxDescrip"></md-textarea>
+													</md-field>
+												</div>
 
-                        </div>
-                        <!-- hasta acá si tacTorax es true -->
+											</div>
+											<!-- hasta acá si tacTorax es true -->
 
-                        <div class="md-layout-item md-small-size-40 md-size-40" >
-                            <md-switch class="md-primary" v-model="ecg">ECG</md-switch>
-                        </div>
+											<div class="md-layout-item md-small-size-40 md-size-40" >
+												<md-switch class="md-primary" v-model="ecg">ECG</md-switch>
+											</div>
 
-                        <!-- esto se muestra si ecg es true -->
-                        <div class="md-layout-item md-small-size-100 md-size-100" v-show="ecg">
-    
-                            <div class="md-layout">
-                                <md-radio v-model="ecgTipo" value="normal">Normal</md-radio>
-                                <md-radio v-model="ecgTipo" value="patológico">Patológico</md-radio>
-                            </div>
+											<!-- esto se muestra si ecg es true -->
+											<div class="md-layout-item md-small-size-100 md-size-100" v-show="ecg">
+	
+												<div class="md-layout">
+													<md-radio class="md-primary" v-model="ecgTipo" value="normal">Normal</md-radio>
+													<md-radio class="md-primary" v-model="ecgTipo" value="patológico">Patológico</md-radio>
+												</div>
 
-                            <div class="md-layout-item md-small-size-50 md-size-90" >
-                                <label for="ecgDescrip">Descripción</label>
-                                <md-field maxlength="2">
-                                    <md-textarea v-model="ecgDescrip"></md-textarea>
-                                </md-field>
-                            </div>
+												<div v-show="ecgTipo == 'patológico'" class="md-layout-item md-small-size-50 md-size-90" >
+													<label for="ecgDescrip">Descripción</label>
+													<md-field maxlength="2">
+														<md-textarea v-model="ecgDescrip"></md-textarea>
+													</md-field>
+												</div>
 
-                        </div>
-                        <!-- hasta acá si ecg es true -->
+											</div>
+											<!-- hasta acá si ecg es true -->
 
-                        <div class="md-layout-item md-small-size-40 md-size-40" >
-                            <md-switch class="md-primary" v-model="pcrCovid">PCR Covid</md-switch>
-                        </div>
+											<div class="md-layout-item md-small-size-40 md-size-40" >
+												<md-switch class="md-primary" v-model="pcrCovid">PCR Covid</md-switch>
+											</div>
 
                         <!-- esto se muestra si pcrCovid es true -->
-                        <div class="md-layout-item md-small-size-100 md-size-100" v-show="pcrCovid">
-    
-                            <div class="md-layout">
-                                <md-radio v-model="pcrCovidTipo" value="normal">Normal</md-radio>
-                                <md-radio v-model="pcrCovidTipo" value="patológico">Patológico</md-radio>
-                            </div>
+											<div class="md-layout-item md-small-size-100 md-size-100" v-show="pcrCovid">
+	
+												<div class="md-layout">
+													<md-radio class="md-primary" v-model="pcrCovidTipo" value="normal">Normal</md-radio>
+													<md-radio class="md-primary" v-model="pcrCovidTipo" value="patológico">Patológico</md-radio>
+												</div>
 
-                            <div class="md-layout-item md-small-size-50 md-size-90" >
-                                <label for="pcrCovidDescrip">Descripción</label>
-                                <md-field maxlength="2">
-                                    <md-textarea v-model="pcrCovidDescrip"></md-textarea>
-                                </md-field>
-                            </div>
+												<div v-show="pcrCovidTipo == 'patológico'" class="md-layout-item md-small-size-50 md-size-90" >
+													<label for="pcrCovidDescrip">Descripción</label>
+													<md-field maxlength="2">
+														<md-textarea v-model="pcrCovidDescrip"></md-textarea>
+													</md-field>
+												</div>
 
-                        </div>
-                        <!-- hasta acá si tacTorax es true -->
+											</div>
+											<!-- hasta acá si tacTorax es true -->
 
-                        <h4>Observaciones</h4>
+											<h4>Observaciones</h4>
 
-                        <div class="md-layout-item md-small-size-90 md-size-90" >
-                            <md-field maxlength="5">
-                                <md-textarea v-model="observaciones" name="observaciones"></md-textarea>
-                            </md-field>
-                        </div>
+											<div class="md-layout-item md-small-size-90 md-size-90" >
+												<md-field maxlength="5">
+													<md-textarea v-model="observaciones" name="observaciones"></md-textarea>
+												</md-field>
+											</div>
         
                     </div>
                 
                 <div class="md-layout-item md-size-100 text-right">
-                    <md-button class="md-raised md-success">Guardar</md-button>
+                    <md-button class="md-raised md-success" @click="submit()">Guardar</md-button>
                 </div>
                 </div>
             </md-card-content>
@@ -284,44 +304,152 @@
 
 <script>
 export default {
-    data() {
-        return {
-            temperatura: null,
-            taSistolica: null,
-            taDiastolica: null,
-            frecuenciaCardiaca: null,
-            frecuenciaRespiratoria: null,
-            mecanicaVentilatoria: null,
-            requiereO2: false,
-            tipoAdministracionO2: null,
-            satO2: null,
-            pafi: false,
-            valorPafi: null,
-            pronoVigil: false,
-            tos: false,
-            disnea: null,
-            estabilidadDesaparicion: false,
-            somnolencia: false,
-            anosmia: false,
-            disgeusia: false,
-            rxTx: false,
-            tacTorax: false,
-            ecg: false,
-            pcrCovid: false,
-            rxTxTipo: false,
-            rxTxDescrip: null,
-            tacToraxTipo: false,
-            tacToraxDescrip: null,  
-            ecgTipo: false, 
-            ecgDescrip: null, 
-            pcrCovidTipo: false, 
-            pcrCovidDescrip: null,
-            observaciones: null
-        }
-    },
-    methods: {
-
-    }
+	data() {
+		return {
+			temperatura: null,
+			taSistolica: null,
+			taDiastolica: null,
+			frecuenciaCardiaca: null,
+			frecuenciaRespiratoria: null,
+			mecanicaVentilatoria: null,
+			requiereO2: false,
+			tipoAdministracionO2: null,
+			canulaNasalValor: null,
+			mascaraReservorioValor: null,
+			satO2: null,
+			pafi: false,
+			valorPafi: null,
+			pronoVigil: false,
+			tos: false,
+			disnea: null,
+			estabilidadDesaparicion: false,
+			somnolencia: false,
+			anosmia: false,
+			disgeusia: false,
+			rxTx: false,
+			tacTorax: false,
+			ecg: false,
+			pcrCovid: false,
+			rxTxTipo: null,
+			rxTxDescrip: null,
+			tacToraxTipo: null,
+			tacToraxDescrip: null,  
+			ecgTipo: null, 
+			ecgDescrip: null, 
+			pcrCovidTipo: null, 
+			pcrCovidDescrip: null,
+			observaciones: null
+		}
+	},
+	methods: {
+		async submit() {
+			console.log(this.temperatura)
+			let loader = this.$loading.show()
+			let form = {
+				internacion_id: 13,
+				temperatura: this.temperatura,
+				ta_sistolica: this.taSistolica,
+				ta_diastolica: this.taDiastolica,
+				frecuencia_cardiaca: this.frecuenciaCardiaca,
+				frecuencia_respiratoria: this.frecuenciaRespiratoria,
+				mecanica_ventilatoria: this.mecanicaVentilatoria,
+				canula_nasal_valor: this.canulaNasalValor,
+				mascara_reservorio_valor: this.mascaraReservorioValor,
+				saturacion_oxigeno: this.satO2,
+				pafi: this.valorPafi,
+				prono_vigil: this.pronoVigil,
+				tos: this.tos,
+				disnea: this.disnea,
+				estabilidad_sintomas_respiratorios: this.estabilidadDesaparicion,
+				somnolencia: this.somnolencia,
+				anosmia: this.anosmia,
+				disgeusia: this.disgeusia,
+				rx_tx_tipo: this.rxTxTipo,
+				rx_tx_descrip: this.rxTxDescrip,
+				tac_torax_tipo: this.tacToraxTipo,
+				tac_torax_descrip: this.tacToraxDescrip,  
+				ecg_tipo: this.ecgTipo, 
+				ecg_descrip: this.ecgDescrip, 
+				pcr_covid_tipo: this.pcrCovidTipo, 
+				pcr_covid_descrip: this.pcrCovidDescrip,
+				observaciones: this.observaciones
+			}
+			console.log(form)
+			const pacientes = await axios.post(this.burl('/api/evolucion/new'), form)
+			loader.hide()
+		}	
+	},
+	watch: {
+		tipoAdministracionO2(value) {
+			if (value == 'Cánula nasal') {
+				this.mascaraReservorioValor = null
+			} else if (value == 'Máscara con reservorio'){
+				this.canulaNasalValor = null
+			} else {
+				this.mascaraReservorioValor = null
+				this.canulaNasalValor = null
+			}
+		},
+		//utilizo estos watchers para limpiar todos los campos asociados a los switch cuando estos se ponen en off.
+		requiereO2(value) {
+			if (!value) {
+				this.satO2 = null
+				this.tipoAdministracionO2 = false
+				this.canulaNasalValor = null
+				this.mascaraReservorioValor = null
+				this.pafi = false
+				this.valorPafi = null
+				this.pronoVigil = false
+				this.tos = false
+				this.disnea = null
+				this.estabilidadDesaparicion = false
+			}
+		},
+		rxTx(value) {
+			if (!value) {
+				this.rxTxTipo = null
+				this.rxTxDescrip = null
+			}
+		},
+		rxTxTipo(value) {
+			if (value == "normal") {
+				this.rxTxDescrip = null
+			}
+		},
+		tacTorax(value) {
+			if (!value) {
+				this.tacToraxTipo = null
+				this.tacToraxDescrip = null
+			}
+		},
+		tacToraxTipo(value) {
+			if (value == "normal") {
+				this.tacToraxDescrip = null
+			}
+		},
+		ecg(value) {
+			if (!value) {
+				this.ecgTipo = null
+				this.ecgDescrip = null
+			}
+		},
+		ecgTipo(value) {
+			if (value == "normal") {
+				this.ecgDescrip = null
+			}
+		},
+		pcrCovid(value) {
+			if (!value) {
+				this.pcrCovidTipo = null
+				this.pcrCovidDescrip = null
+			}
+		},
+		pcrCovidTipo(value) {
+			if (value == "normal") {
+				this.pcrCovidDescrip = null
+			}
+		},
+	}
 }
 </script>
 

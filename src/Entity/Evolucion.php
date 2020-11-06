@@ -336,7 +336,7 @@ class Evolucion
         return $this->disnea;
     }
 
-    public function setDisnea(int $disnea): self
+    public function setDisnea(?int $disnea): self
     {
         $this->disnea = $disnea;
 
