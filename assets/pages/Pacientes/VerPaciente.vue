@@ -39,7 +39,7 @@
 							</div>
 
 							<div class="md-layout-item">
-								<span class="md-body-1">Fecha de nacimiento: {{ paciente.fecha_nacimiento }}</span>
+								<span class="md-body-1">Fecha de nacimiento: {{ formatDate(paciente.fecha_nacimiento) }}</span>
 							</div>
 
 							<div class="md-layout-item">
@@ -50,15 +50,8 @@
 								
 								<md-dialog :md-active.sync="mostrarAntecedentes">
 									<md-dialog-title>Antecedentes</md-dialog-title>
-
-									<md-tabs>
-										<md-tab md-label="General">
-											<p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ullam mollitia dolorum dolores quae commodi impedit possimus qui, atque at voluptates cupiditate. Neque quae culpa suscipit praesentium inventore ducimus ipsa aut.</p>
-										</md-tab>
-										<md-tab md-label="General">
-											<p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ullam mollitia dolorum dolores quae commodi impedit possimus qui, atque at voluptates cupiditate. Neque quae culpa suscipit praesentium inventore ducimus ipsa aut.</p>
-										</md-tab>
-									</md-tabs>
+									
+										<p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ullam mollitia dolorum dolores quae commodi impedit possimus qui, atque at voluptates cupiditate. Neque quae culpa suscipit praesentium inventore ducimus ipsa aut.</p>
 
 									<md-dialog-actions>
 										<md-button class="md-success" @click="mostrarAntecedentes = false">Cerrar</md-button>
@@ -69,45 +62,74 @@
 
 							<md-button class="md-dense md-success" @click="mostrarAntecedentes = true">Ver Antecedentes</md-button>
 
-							<md-button class="md-dense md-success">Ver Datos de algún contacto</md-button>
+							<div>
+								
+								<md-dialog :md-active.sync="mostrarContacto">
+									<md-dialog-title>Datos de algún contacto</md-dialog-title>
+									
+									<div class="md-layout-item">
+										<span class="md-body-1">Nombre: {{ paciente.contacto_nombre }}</span>
+									</div>
 
-    					
-							<!-- <span class="md-title">Datos de algún contacto</span>
+									<div class="md-layout-item">
+										<span class="md-body-1">Apellido: {{ paciente.contacto_apellido }}</span>
+									</div>
 
-							<div class="md-layout-item">
-								<span class="md-body-1">Nombre: {{ paciente.contacto_nombre }}</span>
+									<div class="md-layout-item">
+										<span class="md-body-1">Teléfono: {{ paciente.contacto_telefono }}</span>
+									</div>
+
+									<div class="md-layout-item">
+										<span class="md-body-1">Dirección: {{ paciente.contacto_relacion }}</span>
+									</div> 
+
+									<md-dialog-actions>
+										<md-button class="md-success" @click="mostrarContacto = false">Cerrar</md-button>
+									</md-dialog-actions>
+								</md-dialog>
+								
 							</div>
 
-							<div class="md-layout-item">
-								<span class="md-body-1">Apellido: {{ paciente.contacto_apellido }}</span>
-							</div>
-
-							<div class="md-layout-item">
-								<span class="md-body-1">Teléfono: {{ paciente.contacto_telefono }}</span>
-							</div>
-
-							<div class="md-layout-item">
-								<span class="md-body-1">Dirección: {{ paciente.contacto_relacion }}</span>
-							</div> -->
+							<md-button class="md-dense md-success" @click="mostrarContacto = true">Ver datos de algún contacto</md-button>							
 
 						</div>
 
 						<div class="md-layout-item md-small-size-100 md-size-33">
 
 							<span class="md-title">Internación</span>
-							
+
 							<div class="md-layout-item">
-								<span class="md-body-1">Fecha de inicio de síntomas: {{  }}</span>
+								<span class="md-body-1">Fecha de inicio de síntomas:</span>
+								<div class="md-layout-item">
+									<span class="md-body-1">{{ formatDateTime(internacionActual.fecha_inicio_sintomas) }} hs.</span>
+								</div>
 							</div>
 							<div class="md-layout-item">
-								<span class="md-body-1">Fecha de diagnóstico de Covid: {{  }}</span>
+								<span class="md-body-1">Fecha de diagnóstico de Covid:</span>
+								<div class="md-layout-item">
+									<span class="md-body-1">{{ formatDateTime(internacionActual.fecha_diagnostico) }} hs.</span>
+								</div>
 							</div>
 							<div class="md-layout-item">
-								<span class="md-body-1">Fecha de internación: {{  }}</span>
+								<span class="md-body-1">Fecha de internación:</span>
+								<div class="md-layout-item">
+									<span class="md-body-1">{{ formatDateTime(internacionActual.fecha_carga) }} hs.</span>
+								</div>
 							</div>
+							<div class="md-layout-item">
+								<span class="md-body-1">Sistema actual: {{ internacionActual.sistema }}</span>
+							</div>
+							<div class="md-layout-item">
+								<span class="md-body-1">Sala: {{ internacionActual.sala }}</span>
+							</div>
+							<div class="md-layout-item">
+								<span class="md-body-1">Cama: {{ internacionActual.cama }}</span>
+							</div>
+						
+
 
 							<div>
-								<md-button class="md-dense md-success">Nueva Internación</md-button>
+								<md-button v-if="!internacionActual" class="md-dense md-success">Nueva Internación</md-button>
 							</div>
 
 							<div>
@@ -135,11 +157,11 @@
 							</div>
 							
 							<div>
-								<md-button class="md-dense md-success">Declarar egreso</md-button>
+								<md-button class="md-dense md-success" @click="declararEgreso()">Declarar egreso</md-button>
 							</div>
 
 							<div>
-								<md-button class="md-dense md-danger">Declarar óbito</md-button>
+								<md-button class="md-dense md-danger" @click="declararObito()">Declarar óbito</md-button>
 							</div>
 
 
@@ -210,7 +232,9 @@ export default {
   data() {
     return {
 			paciente: {},
+			internacionActual: {},
 			mostrarAntecedentes: false,
+			mostrarContacto: false,
 			evoluciones: [ { id: '1', fecha: '20201001', sistema: 'Guardia' },
 										 { id: '1', fecha: '20201001', sistema: 'Guardia' },
 										 { id: '1', fecha: '20201001', sistema: 'Guardia' }],
@@ -247,14 +271,63 @@ export default {
 		async getPaciente() {
 			let loading = this.$loading.show()
 			try {
-				const paciente = await axios.get(this.burl('/api/paciente/getPaciente?id=' + this.pacienteId)) 
+				const paciente = await axios.get(this.burl('/api/paciente/getPaciente?id=' + this.pacienteId))
+				const internacion = await axios.get(this.burl('/api/internacion/vigente?pacienteId=' + this.pacienteId))
 				this.paciente = paciente.data
-				console.log(this.paciente)
+				this.internacionActual = internacion.data
 			} catch (error) {
 				console.log(error)
 			}
 			loading.hide()
 		},
+		async declararEgreso() {
+			this.$swal.fire({
+				title: 'Está seguro?',
+				text: "Esta acción es irreversible",
+				icon: 'warning',
+				showCancelButton: true,
+				confirmButtonColor: '#F33527',
+				cancelButtonColor: '#47A44B',
+				confirmButtonText: 'Sí, declarar egreso',
+				cancelButtonText: 'Cancelar'
+			}).then((result) => {
+				if (result.isConfirmed) {
+					let loading = this.$loading.show()
+					axios.get(this.burl('/api/internacion/egreso?id=' + this.internacionActual.id))
+					.then(response => {
+
+					})
+				  .catch(error => {
+						console.log(error)
+					})
+					loading.hide()
+				}
+			})
+		},
+		async declararObito() {
+			this.$swal.fire({
+				title: 'Está seguro?',
+				text: "Esta acción es irreversible",
+				icon: 'warning',
+				showCancelButton: true,
+				confirmButtonColor: '#F33527',
+				cancelButtonColor: '#47A44B',
+				confirmButtonText: 'Sí, declarar óbito',
+				cancelButtonText: 'Cancelar'
+			}).then((result) => {
+				if (result.isConfirmed) {
+					let loading = this.$loading.show()
+					axios.get(this.burl('/api/internacion/obito?id=' + this.internacionActual.id))
+					.then(response => {
+
+					})
+				  .catch(error => {
+						console.log(error)
+					})
+					loading.hide()
+				}
+			})
+		}
   }
 }
 

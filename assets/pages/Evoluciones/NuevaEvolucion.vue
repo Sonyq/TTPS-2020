@@ -199,7 +199,7 @@
 													
 											<!-- esto se muestra si rxTx es true -->
 											<div class="md-layout-item md-small-size-100 md-size-100" v-show="rxTx">
-	
+
 												<div class="md-layout">
 													<md-radio class="md-primary" v-model="rxTxTipo" value="normal">Normal</md-radio>
 													<md-radio class="md-primary" v-model="rxTxTipo" value="patológico">Patológico</md-radio>
@@ -221,7 +221,7 @@
 
 											<!-- esto se muestra si tacTorax es true -->
 											<div class="md-layout-item md-small-size-100 md-size-100" v-show="tacTorax">
-	
+
 												<div class="md-layout">
 													<md-radio class="md-primary" v-model="tacToraxTipo" value="normal">Normal</md-radio>
 													<md-radio class="md-primary" v-model="tacToraxTipo" value="patológico">Patológico</md-radio>
@@ -243,7 +243,7 @@
 
 											<!-- esto se muestra si ecg es true -->
 											<div class="md-layout-item md-small-size-100 md-size-100" v-show="ecg">
-	
+
 												<div class="md-layout">
 													<md-radio class="md-primary" v-model="ecgTipo" value="normal">Normal</md-radio>
 													<md-radio class="md-primary" v-model="ecgTipo" value="patológico">Patológico</md-radio>
@@ -291,14 +291,14 @@
         
                     </div>
                 
-                <div class="md-layout-item md-size-100 text-right">
-                    <md-button class="md-raised md-success" @click="submit()">Guardar</md-button>
-                </div>
+									<div class="md-layout-item md-size-100 text-right">
+											<md-button class="md-raised md-success" @click="submit()">Guardar</md-button>
+									</div>
                 </div>
             </md-card-content>
-            </md-card>
+          </md-card>
         </form>
-                        
+                
     </div>
 </template>
 

@@ -6,6 +6,7 @@ use FOS\RestBundle\Controller\FOSRestController;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Paciente;
 use App\Entity\Sistema;
+use App\Entity\Internacion;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\Annotations\RequestParam;
 use FOS\RestBundle\Controller\Annotations\QueryParam;
@@ -53,10 +54,9 @@ class PacienteController extends FOSRestController
      */
     public function getPaciente(Request $request, ParamFetcher $pf): Response
     {
-      $paciente = $this->getDoctrine()->getRepository(Paciente::class)->find($pf->get('id'));  
-      
-      $serializer = $this->get('jms_serializer');        
-      return new Response($serializer->serialize($paciente, "json"));
+      $paciente = $this->getDoctrine()->getRepository(Paciente::class)->findPaciente($pf->get('id'));
+      $serializer = $this->get('jms_serializer'); 
+      return new Response($serializer->serialize($paciente, "json"), 200);
     }
 
 

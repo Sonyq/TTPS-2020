@@ -19,22 +19,16 @@ class InternacionCamaRepository extends ServiceEntityRepository
         parent::__construct($registry, InternacionCama::class);
     }
 
-    // /**
-    //  * @return InternacionCama[] Returns an array of InternacionCama objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public function findVigente($internacionId)
     {
-        return $this->createQueryBuilder('i')
-            ->andWhere('i.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('i.id', 'ASC')
-            ->setMaxResults(10)
+        return $this->createQueryBuilder('ic')
+            ->where('ic.internacion = :internacionId')
+            ->andWhere('ic.fecha_hasta is null')
+            ->setParameter('internacionId', $internacionId)
+            ->setMaxResults(1)
             ->getQuery()
-            ->getResult()
-        ;
+            ->getSingleResult();
     }
-    */
 
     /*
     public function findOneBySomeField($value): ?InternacionCama

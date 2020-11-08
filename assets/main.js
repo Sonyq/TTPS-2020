@@ -33,6 +33,10 @@ import Chartist from "chartist";
 import Loading from 'vue-loading-overlay';
 import 'vue-loading-overlay/dist/vue-loading.css';
 
+import moment from 'moment';
+Object.defineProperty(Vue.prototype, '$moment', {value: moment});
+
+
 // configure router
 const router = new VueRouter({
   routes, // short for routes: routes
@@ -153,11 +157,26 @@ Vue.mixin({
       }
       return `${url.origin}/${name}`;
     },
-    getFormattedDate(date) {
-      return [date.getDate(), date.getMonth() + 1, date.getFullYear()]
-        .map(n => (n < 10 ? `0${n}` : `${n}`))
-        .join("/");
-    }
+    /**
+     * Devuelve una fecha con formato
+     *
+     * @param {String} dateTime
+     */
+    formatDateTime: (value) => moment(String(value)).format('DD/MM/YYYY hh:mm'),
+
+    /**
+     * Devuelve una fecha con formato
+     *
+     * @param {String} dateTime
+     */
+    formatDate: (value) => moment(String(value)).format('DD/MM/YYYY'),
+
+    /**
+     * Devuelve una hora con formato
+     *
+     * @param {String} dateTime
+     */
+    formatTime: (value) => moment(String(value)).format('HH:mm'),
   }
 });
 

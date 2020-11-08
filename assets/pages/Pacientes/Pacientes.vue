@@ -119,11 +119,13 @@ export default {
         },
         {
           label: 'Sistema',
-          field: this.getSistema
+          field: this.getSistema,
+          width: '100px'
         },
         {
           label: 'Sala',
-          field: this.getSala
+          field: this.getSala,
+          width: '100px'
         },
         {
           label: 'Cama',

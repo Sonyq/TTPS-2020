@@ -54,7 +54,7 @@ const routes = [
         
       },
       {
-        path: "pacientes/ver",
+        path: "pacientes/ver/:pacienteId",
         name: "Ver Paciente",
         component: VerPaciente,
         props: true

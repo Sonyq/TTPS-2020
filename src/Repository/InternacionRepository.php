@@ -19,22 +19,24 @@ class InternacionRepository extends ServiceEntityRepository
         parent::__construct($registry, Internacion::class);
     }
 
-    // /**
-    //  * @return Internacion[] Returns an array of Internacion objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public function findInternacionActual($pacienteId)
     {
         return $this->createQueryBuilder('i')
-            ->andWhere('i.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('i.id', 'ASC')
-            ->setMaxResults(10)
+            ->select('i.id, i.fecha_inicio_sintomas, i.fecha_diagnostico, i.fecha_carga, sist.descrip as sistema, s.nombre as sala, c.numero as cama')
+			->innerJoin('App:InternacionCama', 'ic', 'WITH', 'i.id = ic.internacion')
+			->innerJoin('App:Cama', 'c', 'WITH', 'c.id = ic.cama')
+			->innerJoin('App:Sala', 's', 'WITH', 's.id = c.sala')
+			->innerJoin('App:Sistema', 'sist', 'WITH', 'sist.id = s.sistema')
+            ->where('i.paciente = :pacienteId')
+            ->andWhere('ic.fecha_hasta is null')
+            ->andWhere('i.fecha_egreso is null')
+            ->andWhere('i.fecha_obito is null')
+            ->setParameter('pacienteId', $pacienteId)
+            ->setMaxResults(1)
             ->getQuery()
-            ->getResult()
+            ->getSingleResult()
         ;
     }
-    */
 
     /*
     public function findOneBySomeField($value): ?Internacion

@@ -60,7 +60,6 @@ class InternacionController extends FOSRestController
       $internacion->setSintomas($pf->get('sintomas'));
       $internacion->setFechaInicioSintomas(date_create($pf->get('fecha_inicio_sintomas')));
       $internacion->setFechaDiagnostico(date_create($pf->get('fecha_diagnostico')));
-      //$internacion->setFechaCarga(date_create($pf->get('fecha_carga')));   
       $entityManager->persist($internacion);
       
       $internacionCama = new InternacionCama();
@@ -69,7 +68,6 @@ class InternacionController extends FOSRestController
       
       $internacionCama->setInternacion($internacion);
       $internacionCama->setCama($camaLibre);
-      //$internacionCama->setFechaDesde(new \DateTime());
       $entityManager->persist($internacionCama);
 
       $camaLibre->setEstado("ocupada");
@@ -81,6 +79,79 @@ class InternacionController extends FOSRestController
 
       return new Response('Internación creada', 200);
      
+    }
+
+    /**
+     * @Route("/vigente", name="internacion_actual", methods={"GET"})
+     * @SWG\Response(response=200, description="Internación vigente")
+     * @SWG\Tag(name="Internación")
+     * @QueryParam(name="pacienteId", strict=true, nullable=false, allowBlank=false, description="Paciente Id")
+     *      
+     * @param ParamFetcher $pf
+     */
+    public function getInternacionVigente(Request $request, ParamFetcher $pf): Response
+    {
+      $internacion = $this->getDoctrine()->getRepository(Internacion::class)->findInternacionActual($pf->get('pacienteId'));
+      $serializer = $this->get('jms_serializer');        
+      return new Response($serializer->serialize($internacion, "json"), 200);
+    }
+
+    /**
+     * @Route("/egreso", name="internacion_egreso", methods={"GET"})
+     * @SWG\Response(response=200, description="Declarar egreso")
+     * @SWG\Tag(name="Internación")
+     * @QueryParam(name="id", strict=true, nullable=false, allowBlank=false, description="Internación Id")
+     *      
+     * @param ParamFetcher $pf
+     */
+    public function declararEgreso(Request $request, ParamFetcher $pf): Response
+    {
+      $internacion = $this->getDoctrine()->getRepository(Internacion::class)->find($pf->get('id'));
+
+      if (!$internacion) {
+        return new Response('La internación id '.$pf->get('id').' no existe', 400);
+      }
+
+      $entityManager = $this->getDoctrine()->getManager();
+
+      $internacionCamaVigente = $this->getDoctrine()->getRepository(InternacionCama::class)->findVigente($pf->get('id'));
+      $internacionCamaVigente->setFechaHasta(new \DateTime);
+      
+      $internacion->setFechaEgreso(new \DateTime); 
+
+      $entityManager->flush();
+
+      $serializer = $this->get('jms_serializer');        
+      return new Response($serializer->serialize($internacion, "json"), 200);
+    }
+
+    /**
+     * @Route("/obito", name="internacion_obito", methods={"GET"})
+     * @SWG\Response(response=200, description="Declarar obito")
+     * @SWG\Tag(name="Internación")
+     * @QueryParam(name="id", strict=true, nullable=false, allowBlank=false, description="Internación Id")
+     *      
+     * @param ParamFetcher $pf
+     */
+    public function declararObito(Request $request, ParamFetcher $pf): Response
+    {
+      $internacion = $this->getDoctrine()->getRepository(Internacion::class)->find($pf->get('id'));
+
+      if (!$internacion) {
+        return new Response('La internación id '.$pf->get('id').' no existe', 400);
+      }
+
+      $entityManager = $this->getDoctrine()->getManager();
+
+      $internacionCamaVigente = $this->getDoctrine()->getRepository(InternacionCama::class)->findVigente($pf->get('id'));
+      $internacionCamaVigente->setFechaHasta(new \DateTime);
+      
+      $internacion->setFechaObito(new \DateTime);
+
+      $entityManager->flush();
+      
+      $serializer = $this->get('jms_serializer');        
+      return new Response($serializer->serialize($internacion, "json"), 200);
     }
 
 }
