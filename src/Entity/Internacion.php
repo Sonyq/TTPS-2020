@@ -67,6 +67,7 @@ class Internacion
 
     public function __construct()
     {
+        $this->fecha_carga = new \DateTime();
         $this->internacionCamas = new ArrayCollection();
         $this->evoluciones = new ArrayCollection();
     }

@@ -37,7 +37,6 @@ class InternacionController extends FOSRestController
      * @RequestParam(name="sintomas", strict=true, nullable=false, allowBlank=false, description="Sintomas")
      * @RequestParam(name="fecha_inicio_sintomas", strict=true, nullable=false, allowBlank=false, description="Fecha de inicio de síntomas")
      * @RequestParam(name="fecha_diagnostico", strict=true, nullable=false, allowBlank=false, description="Fecha de diagnóstico de Covid")
-     * @RequestParam(name="fecha_carga", strict=true, nullable=false, allowBlank=false, description="Fecha de internación")
      * 
      * @param ParamFetcher $pf
      */
@@ -46,11 +45,10 @@ class InternacionController extends FOSRestController
     
       $paciente = $this->getDoctrine()->getRepository(Paciente::class)->find($pf->get('pacienteId'));
       $sistema = $this->getUser()->getSistema();
-
       if (!$paciente) {
         return new Response('El paciente id '.$pacienteId.' no existe', 400);
       }
-
+      
       if ($sistema->getCamasDisponibles() == 0) {
         return new Response('No hay camas disponibles en el sistema', 400);
       }
@@ -62,16 +60,16 @@ class InternacionController extends FOSRestController
       $internacion->setSintomas($pf->get('sintomas'));
       $internacion->setFechaInicioSintomas(date_create($pf->get('fecha_inicio_sintomas')));
       $internacion->setFechaDiagnostico(date_create($pf->get('fecha_diagnostico')));
-      $internacion->setFechaCarga(date_create($pf->get('fecha_carga')));   
+      //$internacion->setFechaCarga(date_create($pf->get('fecha_carga')));   
       $entityManager->persist($internacion);
-
-      $internacionCama= new InternacionCama();
+      
+      $internacionCama = new InternacionCama();
 
       $camaLibre = $this->getDoctrine()->getRepository(Cama::class)->findPrimerCamaLibre($sistema->getId());
-
+      
       $internacionCama->setInternacion($internacion);
       $internacionCama->setCama($camaLibre);
-      $internacionCama->setFechaDesde(new \DateTime());
+      //$internacionCama->setFechaDesde(new \DateTime());
       $entityManager->persist($internacionCama);
 
       $camaLibre->setEstado("ocupada");

@@ -39,6 +39,11 @@ class InternacionCama
      */
     private $fecha_hasta;
 
+    public function __construct()
+    {
+        $this->fecha_desde = new \DateTime();
+    }
+
     public function getId(): ?int
     {
         return $this->id;

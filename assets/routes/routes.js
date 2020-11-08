@@ -6,6 +6,7 @@ import Pacientes from "@/pages/Pacientes/Pacientes.vue"
 import NuevoPaciente from "@/pages/Pacientes/NuevoPaciente.vue"
 import VerPaciente from "@/pages/Pacientes/VerPaciente.vue"
 import NuevaEvolucion from "@/pages/Evoluciones/NuevaEvolucion.vue"
+import NuevaInternacion from "@/pages/Internaciones/NuevaInternacion.vue"
 import Sistemas from "@/pages/Sistemas/Sistemas.vue"
 
 /*
@@ -62,6 +63,12 @@ const routes = [
         path: "evoluciones/nueva",
         name: "Nueva Evolución",
         component: NuevaEvolucion,
+        props: true
+      },
+      {
+        path: "internaciones/nueva",
+        name: "Nueva Internación",
+        component: NuevaInternacion,
         props: true
       }
     ]
