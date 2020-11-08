@@ -44,6 +44,23 @@ class PacienteController extends FOSRestController
     }
 
     /**
+     * @Route("/getPaciente", name="paciente_show", methods={"GET"})
+     * @SWG\Response(response=200, description="Paciente")
+     * @SWG\Tag(name="Paciente")
+     * @QueryParam(name="id", strict=true, nullable=false, allowBlank=false, description="Paciente Id")
+     *      
+     * @param ParamFetcher $pf
+     */
+    public function getPaciente(Request $request, ParamFetcher $pf): Response
+    {
+      $paciente = $this->getDoctrine()->getRepository(Paciente::class)->find($pf->get('id'));  
+      
+      $serializer = $this->get('jms_serializer');        
+      return new Response($serializer->serialize($paciente, "json"));
+    }
+
+
+    /**
      * @Route("/new", name="paciente_new", methods={"POST"})
      * @SWG\Response(response=200, description="Paciente creado exitosamente")
      * @SWG\Tag(name="Paciente")
