@@ -50,6 +50,7 @@
                 <!-- <button v-if="loggedUser.permisos.includes('paciente_update')" type="button" class="button is-info is-small button-is-spaced" title="Editar" @click="showAddPatientModal(props.row, 'Editar Paciente')">Editar</button>
                 <button v-if="loggedUser.permisos.includes('paciente_show')" type="button" class="button is-info is-small button-is-spaced" title="Ver" @click="showViewPatientModal(props.row)">Ver</button>
                 <button v-if="loggedUser.permisos.includes('paciente_destroy')" class="button_delete button is-danger is-small button-is-spaced" title="Eliminar" @click="deletePatient(props.row.id)">Eliminar</button> -->
+            
                 <!-- <router-link
                 v-if="loggedUser.permisos.includes('atencion_index')"
                 class="button is-info is-small button-is-spaced"
@@ -58,6 +59,26 @@
                 replace>
                   Atenciones
                 </router-link> -->
+<!-- 
+                <router-link :to="{ name: 'Ver Paciente', params: { pacienteId: props.row.id } }">
+                  <md-button class="md-success">Ver Paciente</md-button>
+                </router-link> -->
+
+
+                <md-menu md-direction="bottom-start">
+                  <md-button class="md-success" md-menu-trigger>
+                    <md-icon>menu</md-icon>
+                  </md-button>
+
+                  <md-menu-content>
+                    <router-link :to="{ name: 'Ver Paciente', params: { pacienteId: props.row.id } }">
+                      <md-menu-item>Ver</md-menu-item>
+                    </router-link>
+                    <md-menu-item>Asignar médico</md-menu-item>
+                    <md-menu-item>Cambiar estado</md-menu-item>
+                  </md-menu-content>
+                </md-menu>
+
               </span>
             </template>
           </vue-good-table>
@@ -118,6 +139,7 @@ export default {
         {
           label: 'Acciones',
           field: 'acciones',
+          width: '30px'
         },
       ],
     }
