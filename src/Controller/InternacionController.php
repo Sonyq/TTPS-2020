@@ -91,9 +91,12 @@ class InternacionController extends FOSRestController
      */
     public function getInternacionVigente(Request $request, ParamFetcher $pf): Response
     {
-      $internacion = $this->getDoctrine()->getRepository(Internacion::class)->findInternacionActual($pf->get('pacienteId'));
-      $serializer = $this->get('jms_serializer');        
-      return new Response($serializer->serialize($internacion, "json"), 200);
+      $internacion = $this->getDoctrine()->getRepository(Internacion::class)->findInternacionVigente($pf->get('pacienteId'));      
+      
+      $serializer = $this->get('jms_serializer');    
+      
+      $result = $internacion ? $serializer->serialize($internacion, "json") : null;
+      return new Response($result, 200);
     }
 
     /**

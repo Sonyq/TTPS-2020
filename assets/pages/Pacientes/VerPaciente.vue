@@ -51,7 +51,10 @@
 								<md-dialog :md-active.sync="mostrarAntecedentes">
 									<md-dialog-title>Antecedentes</md-dialog-title>
 									
-										<p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ullam mollitia dolorum dolores quae commodi impedit possimus qui, atque at voluptates cupiditate. Neque quae culpa suscipit praesentium inventore ducimus ipsa aut.</p>
+									<md-dialog-content>
+										<span v-if="paciente.antecedentes" class="md-body">{{ paciente.antecedentes }}</span>
+										<span v-else class="md-body">Sin antecedentes</span>
+									</md-dialog-content>
 
 									<md-dialog-actions>
 										<md-button class="md-success" @click="mostrarAntecedentes = false">Cerrar</md-button>
@@ -67,21 +70,23 @@
 								<md-dialog :md-active.sync="mostrarContacto">
 									<md-dialog-title>Datos de algún contacto</md-dialog-title>
 									
-									<div class="md-layout-item">
-										<span class="md-body-1">Nombre: {{ paciente.contacto_nombre }}</span>
-									</div>
+									<md-dialog-content>
+										<div class="md-layout-item">
+											<span class="md-body-1">Nombre: {{ paciente.contacto_nombre }}</span>
+										</div>
 
-									<div class="md-layout-item">
-										<span class="md-body-1">Apellido: {{ paciente.contacto_apellido }}</span>
-									</div>
+										<div class="md-layout-item">
+											<span class="md-body-1">Apellido: {{ paciente.contacto_apellido }}</span>
+										</div>
 
-									<div class="md-layout-item">
-										<span class="md-body-1">Teléfono: {{ paciente.contacto_telefono }}</span>
-									</div>
+										<div class="md-layout-item">
+											<span class="md-body-1">Teléfono: {{ paciente.contacto_telefono }}</span>
+										</div>
 
-									<div class="md-layout-item">
-										<span class="md-body-1">Dirección: {{ paciente.contacto_relacion }}</span>
-									</div> 
+										<div class="md-layout-item">
+											<span class="md-body-1">Dirección: {{ paciente.contacto_relacion }}</span>
+										</div>
+									</md-dialog-content>
 
 									<md-dialog-actions>
 										<md-button class="md-success" @click="mostrarContacto = false">Cerrar</md-button>
@@ -94,7 +99,7 @@
 
 						</div>
 
-						<div class="md-layout-item md-small-size-100 md-size-33">
+						<div v-show="internacionActual" class="md-layout-item md-small-size-100 md-size-33">
 
 							<span class="md-title">Internación</span>
 
@@ -126,11 +131,9 @@
 								<span class="md-body-1">Cama: {{ internacionActual.cama }}</span>
 							</div>
 						
-
-
-							<div>
-								<md-button v-if="!internacionActual" class="md-dense md-success">Nueva Internación</md-button>
-							</div>
+							<!-- <div>
+								<md-button class="md-dense md-success">Nueva Internación</md-button>
+							</div> -->
 
 							<div>
 								<md-button class="md-dense md-success" @click="mostrarAntecedentes = true">Internaciones previas</md-button>
@@ -138,22 +141,29 @@
 
 						</div>
 
-						<div class="md-layout-item md-small-size-100 md-size-33">
+						<div v-show="internacionActual" class="md-layout-item md-small-size-100 md-size-33">
 							
 							<span class="md-title">Otras acciones</span>
 
 							<br><br>
 
 							<span class="md-subheading">Cambiar de sistema</span>
-							<div class="md-layout-item md-small-size-40 md-size-75">
-								<md-field>
-										<label for="cambiarDeSistema">Seleccionar sistema destino</label>
-										<md-select name="cambiarDeSistema">              
-												<md-option value="Piso Covid">Piso Covid</md-option>
-												<md-option value="UTI">UTI</md-option>
-												<md-option value="Hotel">Hotel</md-option>                                        
-										</md-select>
-								</md-field>
+							<div class="md-layout">
+
+								<div class="md-layout-item md-small-size-40 md-size-40">
+									<md-field>
+											<label for="cambiarDeSistema">Seleccionar</label>
+											<md-select name="cambiarDeSistema">              
+													<md-option value="Piso Covid">Piso Covid</md-option>
+													<md-option value="UTI">UTI</md-option>
+													<md-option value="Hotel">Hotel</md-option>                                        
+											</md-select>
+									</md-field>
+								</div>
+
+								<div class="md-layout-item md-small-size-40 md-size-40">
+									<md-button class="md-success" @click="cambiarDeSistema()">Aceptar</md-button>
+								</div>
 							</div>
 							
 							<div>
@@ -164,15 +174,11 @@
 								<md-button class="md-dense md-danger" @click="declararObito()">Declarar óbito</md-button>
 							</div>
 
-
 						</div>
 									
-						<!-- <div class="md-layout-item md-size-100 text-left">
-								<md-button class="md-raised md-primary" @click="submit()">Volver</md-button>
-						</div> -->
 						<div class="md-layout">
 
-							<div class="md-layout-item md-small-size-100 md-size-80">
+							<div class="md-layout-item md-small-size-100 md-size-100">
 								
 								<span class="md-title">Evoluciones</span>
 
@@ -280,31 +286,13 @@ export default {
 			}
 			loading.hide()
 		},
-		async declararEgreso() {
-			this.$swal.fire({
-				title: 'Está seguro?',
-				text: "Esta acción es irreversible",
-				icon: 'warning',
-				showCancelButton: true,
-				confirmButtonColor: '#F33527',
-				cancelButtonColor: '#47A44B',
-				confirmButtonText: 'Sí, declarar egreso',
-				cancelButtonText: 'Cancelar'
-			}).then((result) => {
-				if (result.isConfirmed) {
-					let loading = this.$loading.show()
-					axios.get(this.burl('/api/internacion/egreso?id=' + this.internacionActual.id))
-					.then(response => {
-
-					})
-				  .catch(error => {
-						console.log(error)
-					})
-					loading.hide()
-				}
-			})
+		declararEgreso() {
+			this.cambiarEstado('egreso')
 		},
-		async declararObito() {
+		declararObito() {
+			this.cambiarEstado('obito')
+		},
+		cambiarEstado(estado) {
 			this.$swal.fire({
 				title: 'Está seguro?',
 				text: "Esta acción es irreversible",
@@ -312,17 +300,24 @@ export default {
 				showCancelButton: true,
 				confirmButtonColor: '#F33527',
 				cancelButtonColor: '#47A44B',
-				confirmButtonText: 'Sí, declarar óbito',
+				confirmButtonText: 'Sí, declarar ' + (estado == 'obito' ? 'óbito' : 'egreso'),
 				cancelButtonText: 'Cancelar'
 			}).then((result) => {
 				if (result.isConfirmed) {
 					let loading = this.$loading.show()
-					axios.get(this.burl('/api/internacion/obito?id=' + this.internacionActual.id))
+					axios.get(this.burl('/api/internacion/' + estado + '?id=' + this.internacionActual.id))
 					.then(response => {
-
-					})
-				  .catch(error => {
-						console.log(error)
+						if (response.status == 200) {
+							this.$router.push('/pacientes')
+						} else {
+							this.$swal.fire({
+								icon: 'error',
+								title: 'Oops...',
+								text: 'Se produjo un error',
+								cancelButtonColor: '#47A44B'
+							})
+						}
+						console.log(response.status)
 					})
 					loading.hide()
 				}
@@ -332,9 +327,3 @@ export default {
 }
 
 </script>
-
-<style scoped>
-  .md-dialog .md-dialog-container {
-    max-width: 768px;
-  }
-</style>

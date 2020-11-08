@@ -19,10 +19,10 @@ class InternacionRepository extends ServiceEntityRepository
         parent::__construct($registry, Internacion::class);
     }
 
-    public function findInternacionActual($pacienteId)
+    public function findInternacionVigente($pacienteId)
     {
         return $this->createQueryBuilder('i')
-            ->select('i.id, i.fecha_inicio_sintomas, i.fecha_diagnostico, i.fecha_carga, sist.descrip as sistema, s.nombre as sala, c.numero as cama')
+            ->select('i.id, i.fecha_inicio_sintomas, i.fecha_diagnostico, i.fecha_carga, sist.descrip as sistema, s.nombre as sala, c.numero as cama, i.fecha_egreso, i.fecha_obito')
 			->innerJoin('App:InternacionCama', 'ic', 'WITH', 'i.id = ic.internacion')
 			->innerJoin('App:Cama', 'c', 'WITH', 'c.id = ic.cama')
 			->innerJoin('App:Sala', 's', 'WITH', 's.id = c.sala')
@@ -32,9 +32,8 @@ class InternacionRepository extends ServiceEntityRepository
             ->andWhere('i.fecha_egreso is null')
             ->andWhere('i.fecha_obito is null')
             ->setParameter('pacienteId', $pacienteId)
-            ->setMaxResults(1)
             ->getQuery()
-            ->getSingleResult()
+            ->getOneOrNullResult();
         ;
     }
 
