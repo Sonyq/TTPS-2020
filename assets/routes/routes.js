@@ -48,25 +48,25 @@ const routes = [
         props: true
       },
       {
-        path: "pacientes/nuevo",
+        path: "nuevoPaciente",
         name: "Agregar Paciente",
         component: NuevoPaciente,
         
       },
       {
-        path: "pacientes/ver/:pacienteId",
+        path: "verPaciente/:pacienteId",
         name: "Ver Paciente",
         component: VerPaciente,
         props: true
       },
       {
-        path: "evoluciones/nueva",
+        path: "nuevaEvolucion",
         name: "Nueva Evolución",
         component: NuevaEvolucion,
         props: true
       },
       {
-        path: "internaciones/nueva",
+        path: "nuevaInternacion",
         name: "Nueva Internación",
         component: NuevaInternacion,
         props: true

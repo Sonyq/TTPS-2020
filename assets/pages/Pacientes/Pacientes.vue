@@ -12,7 +12,7 @@
         
           <div class="md-layout-item md-size-100 text-right">
       
-            <router-link to="/pacientes/nuevo">
+            <router-link to="/nuevoPaciente">
               <md-button class="md-success">Agregar Paciente</md-button>
             </router-link>
         

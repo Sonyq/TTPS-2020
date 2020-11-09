@@ -99,49 +99,77 @@
 
 						</div>
 
-						<div v-show="internacionActual" class="md-layout-item md-small-size-100 md-size-33">
+						<div class="md-layout-item md-small-size-100 md-size-33">
 
 							<span class="md-title">Internación</span>
 
-							<div class="md-layout-item">
-								<span class="md-body-1">Fecha de inicio de síntomas:</span>
+							<div v-show="!(ultimaInternacion.fecha_egreso || ultimaInternacion.fecha_obito)">
 								<div class="md-layout-item">
-									<span class="md-body-1">{{ formatDateTime(internacionActual.fecha_inicio_sintomas) }} hs.</span>
+									<span class="md-body-1">Fecha de inicio de síntomas:</span>
+									<div class="md-layout-item">
+										<span class="md-body-1">{{ formatDateTime(ultimaInternacion.fecha_inicio_sintomas) }} hs.</span>
+									</div>
+								</div>
+								<div class="md-layout-item">
+									<span class="md-body-1">Fecha de diagnóstico de Covid:</span>
+									<div class="md-layout-item">
+										<span class="md-body-1">{{ formatDateTime(ultimaInternacion.fecha_diagnostico) }} hs.</span>
+									</div>
+								</div>
+								<div class="md-layout-item">
+									<span class="md-body-1">Fecha de internación:</span>
+									<div class="md-layout-item">
+										<span class="md-body-1">{{ formatDateTime(ultimaInternacion.fecha_carga) }} hs.</span>
+									</div>
+								</div>
+								<div class="md-layout-item">
+									<span class="md-body-1">Sistema actual: {{ ultimaInternacion.sistema }}</span>
+								</div>
+								<div class="md-layout-item">
+									<span class="md-body-1">Sala: {{ ultimaInternacion.sala }}</span>
+								</div>
+								<div class="md-layout-item">
+									<span class="md-body-1">Cama: {{ ultimaInternacion.cama }}</span>
 								</div>
 							</div>
-							<div class="md-layout-item">
-								<span class="md-body-1">Fecha de diagnóstico de Covid:</span>
-								<div class="md-layout-item">
-									<span class="md-body-1">{{ formatDateTime(internacionActual.fecha_diagnostico) }} hs.</span>
-								</div>
+
+							<div v-show="ultimaInternacion.fecha_obito">
+								<span class="md-body-1">El paciente falleció</span>
 							</div>
-							<div class="md-layout-item">
-								<span class="md-body-1">Fecha de internación:</span>
-								<div class="md-layout-item">
-									<span class="md-body-1">{{ formatDateTime(internacionActual.fecha_carga) }} hs.</span>
-								</div>
+
+							<div v-show="ultimaInternacion.fecha_egreso">
+								<span class="md-body-1">No posee ninguna internación vigente</span>
 							</div>
-							<div class="md-layout-item">
-								<span class="md-body-1">Sistema actual: {{ internacionActual.sistema }}</span>
-							</div>
-							<div class="md-layout-item">
-								<span class="md-body-1">Sala: {{ internacionActual.sala }}</span>
-							</div>
-							<div class="md-layout-item">
-								<span class="md-body-1">Cama: {{ internacionActual.cama }}</span>
-							</div>
-						
-							<!-- <div>
-								<md-button class="md-dense md-success">Nueva Internación</md-button>
-							</div> -->
+
 
 							<div>
-								<md-button class="md-dense md-success" @click="mostrarAntecedentes = true">Internaciones previas</md-button>
+								
+								<md-dialog :md-active.sync="mostrarPrevias">
+									<md-dialog-title>Internaciones previas</md-dialog-title>
+									
+									<md-dialog-content>
+										<span v-if="internacionesPrevias" class="md-body"></span>
+										<span v-else class="md-body">Sin internaciones previas</span>
+									</md-dialog-content>
+
+									<md-dialog-actions>
+										<md-button class="md-success" @click="mostrarPrevias = false">Cerrar</md-button>
+									</md-dialog-actions>
+								</md-dialog>
+								
+							</div>
+						
+							<div>
+								<md-button class="md-dense md-success" @click="mostrarPrevias= true">Internaciones previas</md-button>
+							</div>
+
+							<div v-show="ultimaInternacion.fecha_egreso && !ultimaInternacion.fecha_obito">
+								<md-button class="md-dense md-success">Nueva Internación</md-button>
 							</div>
 
 						</div>
 
-						<div v-show="internacionActual" class="md-layout-item md-small-size-100 md-size-33">
+						<div v-show="!(ultimaInternacion.fecha_egreso || ultimaInternacion.fecha_obito)" class="md-layout-item md-small-size-100 md-size-33">
 							
 							<span class="md-title">Otras acciones</span>
 
@@ -176,7 +204,7 @@
 
 						</div>
 									
-						<div class="md-layout">
+						<div v-show="!(ultimaInternacion.fecha_egreso || ultimaInternacion.fecha_obito)" class="md-layout">
 
 							<div class="md-layout-item md-small-size-100 md-size-100">
 								
@@ -191,8 +219,8 @@
 								:pagination-options="{
 										enabled: true,
 										mode: 'records',
-										perPage: 10,
-										perPageDropdown: [ 10 ],
+										perPage: 5,
+										perPageDropdown: [ 5 ],
 										position: 'bottom',
 										dropdownAllowAll: false,
 										setCurrentPage: 1,
@@ -238,9 +266,11 @@ export default {
   data() {
     return {
 			paciente: {},
-			internacionActual: {},
+			ultimaInternacion: {},
+			internacionesPrevias: [],
 			mostrarAntecedentes: false,
 			mostrarContacto: false,
+			mostrarPrevias: false,
 			evoluciones: [ { id: '1', fecha: '20201001', sistema: 'Guardia' },
 										 { id: '1', fecha: '20201001', sistema: 'Guardia' },
 										 { id: '1', fecha: '20201001', sistema: 'Guardia' }],
@@ -278,9 +308,9 @@ export default {
 			let loading = this.$loading.show()
 			try {
 				const paciente = await axios.get(this.burl('/api/paciente/getPaciente?id=' + this.pacienteId))
-				const internacion = await axios.get(this.burl('/api/internacion/vigente?pacienteId=' + this.pacienteId))
+				const internacion = await axios.get(this.burl('/api/internacion/ultima?pacienteId=' + this.pacienteId))
 				this.paciente = paciente.data
-				this.internacionActual = internacion.data
+				this.ultimaInternacion = internacion.data
 			} catch (error) {
 				console.log(error)
 			}
@@ -305,7 +335,7 @@ export default {
 			}).then((result) => {
 				if (result.isConfirmed) {
 					let loading = this.$loading.show()
-					axios.get(this.burl('/api/internacion/' + estado + '?id=' + this.internacionActual.id))
+					axios.get(this.burl('/api/internacion/' + estado + '?id=' + this.ultimaInternacion.id))
 					.then(response => {
 						if (response.status == 200) {
 							this.$router.push('/pacientes')

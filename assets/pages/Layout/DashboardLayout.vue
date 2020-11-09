@@ -18,7 +18,7 @@
         <md-icon>person</md-icon>
         <p>Sistemas</p>
       </sidebar-link>
-      <sidebar-link to="/pacientes">
+      <sidebar-link :to="{ name: 'Pacientes', params: { sistemaNombre: loggedUser.sistemaNombre, sistemaId : loggedUser.sistemaId } }">
         <md-icon>person</md-icon>
         <p>Pacientes</p>
       </sidebar-link>
