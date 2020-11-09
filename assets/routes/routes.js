@@ -42,7 +42,7 @@ const routes = [
         component: Sistemas
       },
       {
-        path: 'pacientes',
+        path: 'pacientes/:sistemaId?/:sistemaNombre?',
         name: "Pacientes",
         component: Pacientes,
         props: true

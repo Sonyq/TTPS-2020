@@ -1,90 +1,74 @@
 <template>
   <div>
 
-    <div class="content">
+    <md-card>
+      <md-card-header data-background-color="green">
+        <span class="md-title">Pacientes en {{ nombreSistema }}</span>
+      </md-card-header>
 
-      <div class="md-layout">
+      <md-card-content>
 
-        <div class="md-layout-item md-size-100 text-left">
-
-          <h3>Pacientes en {{ nombreSistema }}</h3>
-
-        </div>
+        <div class="md-layout">
         
-        <div class="md-layout-item md-size-100 text-right">
-    
-          <router-link to="/pacientes/nuevo">
-            <md-button class="md-success">Agregar Paciente</md-button>
-          </router-link>
+          <div class="md-layout-item md-size-100 text-right">
       
-        </div>
+            <router-link to="/pacientes/nuevo">
+              <md-button class="md-success">Agregar Paciente</md-button>
+            </router-link>
+        
+          </div>
           
-        <div class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-100">
+          <div class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-100">
 
-          <vue-good-table
-            :columns="columnas"
-            :rows="pacientes"
-            :lineNumbers="true"
-            :defaultSortBy="{field: 'apellido', type: 'asec'}"
-            :globalSearch="false"
-            :pagination-options="{
-                enabled: true,
-                mode: 'records',
-                perPage: 10,
-                perPageDropdown: [ 10 ],
-                position: 'bottom',
-                dropdownAllowAll: false,
-                setCurrentPage: 1,
-                nextLabel: 'siguiente',
-                prevLabel: 'anterior',
-                rowsPerPageLabel: 'Pacientes por tabla',
-                ofLabel: 'de',
-              }"
-            :search-options="{ enabled: true, placeholder: 'Buscar' }"
-            styleClass="vgt-table">
-            <div slot="emptystate" class="has-text-centered">
-              <h3 class="h3">No hay pacientes para mostrar</h3>
-            </div>
-            <template slot="table-row" slot-scope="props">
-              <span v-if="props.column.field == 'acciones'">
-                <!-- <button v-if="loggedUser.permisos.includes('paciente_update')" type="button" class="button is-info is-small button-is-spaced" title="Editar" @click="showAddPatientModal(props.row, 'Editar Paciente')">Editar</button>
-                <button v-if="loggedUser.permisos.includes('paciente_show')" type="button" class="button is-info is-small button-is-spaced" title="Ver" @click="showViewPatientModal(props.row)">Ver</button>
-                <button v-if="loggedUser.permisos.includes('paciente_destroy')" class="button_delete button is-danger is-small button-is-spaced" title="Eliminar" @click="deletePatient(props.row.id)">Eliminar</button> -->
-            
-                <!-- <router-link
-                v-if="loggedUser.permisos.includes('atencion_index')"
-                class="button is-info is-small button-is-spaced"
-                :to="{ name: 'consulta', params: { idPaciente: props.row.id}}"
-                title="Atenciones"
-                replace>
-                  Atenciones
-                </router-link> -->
-<!-- 
-                <router-link :to="{ name: 'Ver Paciente', params: { pacienteId: props.row.id } }">
-                  <md-button class="md-success">Ver Paciente</md-button>
-                </router-link> -->
+            <vue-good-table
+              :columns="columnas"
+              :rows="pacientes"
+              :lineNumbers="true"
+              :defaultSortBy="{field: 'apellido', type: 'asec'}"
+              :globalSearch="false"
+              :pagination-options="{
+                  enabled: true,
+                  mode: 'records',
+                  perPage: 10,
+                  perPageDropdown: [ 10, 20 ],
+                  position: 'bottom',
+                  dropdownAllowAll: false,
+                  setCurrentPage: 1,
+                  nextLabel: 'siguiente',
+                  prevLabel: 'anterior',
+                  rowsPerPageLabel: 'Pacientes por página',
+                  ofLabel: 'de',
+                }"
+              :search-options="{ enabled: true, placeholder: 'Buscar' }"
+              styleClass="vgt-table">
+              <div slot="emptystate" class="has-text-centered">
+                <h3 class="h3">No hay pacientes para mostrar</h3>
+              </div>
+              <template slot="table-row" slot-scope="props">
+                <span v-if="props.column.field == 'acciones'">
+                  <!-- <button v-if="loggedUser.permisos.includes('paciente_update')" type="button" class="button is-info is-small button-is-spaced" title="Editar" @click="showAddPatientModal(props.row, 'Editar Paciente')">Editar</button>--> 
 
+                  <md-menu md-direction="bottom-start">
+                    <md-button class="md-success" style="height: 30px" md-menu-trigger>
+                      <md-icon>menu</md-icon>
+                    </md-button>
 
-                <md-menu md-direction="bottom-start">
-                  <md-button class="md-success" md-menu-trigger>
-                    <md-icon>menu</md-icon>
-                  </md-button>
+                    <md-menu-content>
+                      <router-link :to="{ name: 'Ver Paciente', params: { pacienteId: props.row.id } }">
+                        <md-menu-item>Ver</md-menu-item>
+                      </router-link>
+                      <md-menu-item>Asignar médico</md-menu-item>
+                      <md-menu-item>Cambiar estado</md-menu-item>
+                    </md-menu-content>
+                  </md-menu>
 
-                  <md-menu-content>
-                    <router-link :to="{ name: 'Ver Paciente', params: { pacienteId: props.row.id } }">
-                      <md-menu-item>Ver</md-menu-item>
-                    </router-link>
-                    <md-menu-item>Asignar médico</md-menu-item>
-                    <md-menu-item>Cambiar estado</md-menu-item>
-                  </md-menu-content>
-                </md-menu>
-
-              </span>
-            </template>
-          </vue-good-table>
+                </span>
+              </template>
+            </vue-good-table>
+          </div>
         </div>
-      </div>
-    </div>     
+      </md-card-content>		
+		</md-card>
   </div>   
 </template>
 
@@ -106,16 +90,17 @@ export default {
           label: 'Dni',
           field: this.getDni,
           type: 'number',
-          filterable: true,
-          width: '80px'
+          width: '80px',
         },
         {
           label: 'Apellido',
           field: this.getApellido,
+          width: '150px'
         },
         {
           label: 'Nombre',
-          field: this.getNombre
+          field: this.getNombre,
+          width: '150px'
         },
         {
           label: 'Sistema',
@@ -131,7 +116,8 @@ export default {
           label: 'Cama',
           field: this.getCama,
           type: 'number',
-          width: '80px'
+          width: '80px',
+          filterable: false,
         },
         {
           label: 'Estado',
@@ -141,7 +127,7 @@ export default {
         {
           label: 'Acciones',
           field: 'acciones',
-          width: '30px'
+          width: '50px'
         },
       ],
     }
@@ -201,30 +187,30 @@ export default {
 }
 
 .vgt-global-search, .vgt-table thead th, .vgt-table th.line-numbers, .vgt-table th.vgt-checkbox-col {
-  background: linear-gradient(#EEEEEE,#EEEEEE);
+  background: linear-gradient(#FFFFFF,#FFFFFF);
   color: #4BA64F;
   border-right: none;
-  border-bottom: 1px solid #EEEEEE;
+  border-bottom: 1px solid #FFFFFF;
 }
 
 table.vgt-table {
-    font-size: 14px;
-    border-collapse: collapse;
-    background-color: #fff;
-    table-layout: auto;
-    border: 1px solid #EEEEEE;
+  font-size: 14px;
+  border-collapse: collapse;
+  background-color: #FFFFFF;
+  table-layout: auto;
+  border: 1px solid #FFFFFF;
 }
 
 .vgt-global-search {
   padding: 10px 0;
-  border: 1px solid #EEEEEE;
+  border: 1px solid #FFFFFF;
 }
 
 .vgt-wrap__footer {
-  color: #EEEEEE;
+  color: #FFFFFF;
   padding: 1em;
-  border: 1px solid #EEEEEE;
-  background: linear-gradient(#EEEEEE,#EEEEEE);
+  border: 1px solid #FFFFFF;
+  background: linear-gradient(#FFFFFF,#FFFFFF);
 }
 
 .vgt-wrap__footer .footer__navigation__page-btn {
@@ -241,5 +227,30 @@ table.vgt-table {
 .vgt-table thead th.sorting-desc:before {
     border-top: 5px solid #4BA64F;
 }
-  
+
+.vgt-right-align {
+  text-align: left;
+}
+
+table.vgt-table td {
+  padding: .50em .50em .50em .50em;
+  vertical-align: middle; 
+  border-bottom: 1px solid #dcdfe6;
+  color: #606266;
+}
+
+.vgt-right-align {
+  text-align: left;
+}
+
+.vgt-wrap__footer .footer__navigation__page-btn .chevron.right::after {
+    border-left: 6px solid #4BA64F;
+    margin-left: -3px;
+}
+
+.vgt-wrap__footer .footer__navigation__page-btn .chevron.left::after {
+    border-right: 6px solid #4BA64F;
+    margin-left: -3px;
+}
+
 </style>

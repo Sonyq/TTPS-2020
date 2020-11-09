@@ -198,7 +198,7 @@
 										setCurrentPage: 1,
 										nextLabel: 'siguiente',
 										prevLabel: 'anterior',
-										rowsPerPageLabel: 'Pacientes por tabla',
+										rowsPerPageLabel: 'Evoluciones por página',
 										ofLabel: 'de',
 									}"
 								:search-options="{ enabled: true, placeholder: 'Buscar' }"
