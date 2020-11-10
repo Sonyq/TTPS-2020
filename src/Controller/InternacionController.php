@@ -103,6 +103,23 @@ class InternacionController extends FOSRestController
   }
 
   /**
+   * @Route("/previas", name="internaciones_previas", methods={"GET"})
+   * @SWG\Response(response=200, description="Internaciones previas del paciente")
+   * @SWG\Tag(name="Internación")
+   * @QueryParam(name="pacienteId", strict=true, nullable=false, allowBlank=false, description="Paciente Id")
+   *      
+   * @param ParamFetcher $pf
+   */
+  public function getInternacionesPrevias(Request $request, ParamFetcher $pf): Response
+  {
+    $internaciones = $this->getDoctrine()->getRepository(Internacion::class)->findInternacionesPrevias($pf->get('pacienteId'));
+    $serializer = $this->get('jms_serializer');    
+    $result = $internaciones ? $serializer->serialize($internaciones, "json") : null;
+    
+    return new Response($result, 200);
+  }
+
+  /**
    * @Route("/egreso", name="internacion_egreso", methods={"GET"})
    * @SWG\Response(response=200, description="Declarar egreso")
    * @SWG\Tag(name="Internación")

@@ -134,7 +134,10 @@
 							</div>
 
 							<div v-show="ultimaInternacion.fecha_obito">
-								<span class="md-body-1">El paciente falleció</span>
+								<span class="md-body-1">El paciente falleció.</span>
+								<div class="md-layout">
+									<span class="md-body-1">Fecha de óbito: {{ formatDateTime(ultimaInternacion.fecha_obito) }} hs.</span>
+								</div>
 							</div>
 
 							<div v-show="ultimaInternacion.fecha_egreso">
@@ -148,19 +151,35 @@
 									<md-dialog-title>Internaciones previas</md-dialog-title>
 									
 									<md-dialog-content>
-										<span v-if="internacionesPrevias" class="md-body"></span>
+										<md-table md-card v-if="internacionesPrevias" class="md-body">
+
+											<md-table-row>
+												<md-table-head>Fecha ingreso</md-table-head>
+												<md-table-head>Fecha egreso</md-table-head>
+												<md-table-head>Fecha óbito</md-table-head>
+											</md-table-row>
+
+											<md-table-row v-for="internacion in internacionesPrevias" :key="internacion.id">
+												<md-table-cell>{{ formatDateTime(internacion.fecha_carga) }}.hs</md-table-cell>
+												
+												<md-table-cell v-if="internacion.fecha_egreso">{{ formatDateTime(internacion.fecha_egreso) }}.hs</md-table-cell>
+												<md-table-cell v-else></md-table-cell>
+												<md-table-cell v-if="internacion.fecha_obito">{{ formatDateTime(internacion.fecha_obito) }}.hs</md-table-cell>
+											</md-table-row>
+
+										</md-table>
 										<span v-else class="md-body">Sin internaciones previas</span>
 									</md-dialog-content>
 
 									<md-dialog-actions>
-										<md-button class="md-success" @click="mostrarPrevias = false">Cerrar</md-button>
+										<md-button class="md-success" @click="mostrarPrevias= false">Cerrar</md-button>
 									</md-dialog-actions>
 								</md-dialog>
 								
 							</div>
 						
 							<div>
-								<md-button class="md-dense md-success" @click="mostrarPrevias= true">Internaciones previas</md-button>
+								<md-button class="md-dense md-success" @click="getInternacionesPrevias()">Internaciones previas</md-button>
 							</div>
 
 							<div v-show="ultimaInternacion.fecha_egreso && !ultimaInternacion.fecha_obito">
@@ -214,13 +233,12 @@
 								:columns="columnas"
 								:rows="evoluciones"
 								:lineNumbers="true"
-								:defaultSortBy="{field: 'id', type: 'asec'}"
 								:globalSearch="false"
 								:pagination-options="{
 										enabled: true,
 										mode: 'records',
 										perPage: 5,
-										perPageDropdown: [ 5 ],
+										perPageDropdown: [ 5, 10 ],
 										position: 'bottom',
 										dropdownAllowAll: false,
 										setCurrentPage: 1,
@@ -234,12 +252,16 @@
 								<div slot="emptystate" class="has-text-centered">
 									<h3 class="h3">No hay evoluciones</h3>
 								</div>
-								<template slot="table-row" slot-scope="props">
+								<div v-if="ultimaInternacion" slot="table-actions">
+									<router-link :to="{ name: 'Nueva Evolución', params: { internacionId: ultimaInternacion.id } }">
+            				<md-button class="md-dense md-success">Nueva evolución</md-button>
+									</router-link>
+          			</div>
+								<!-- <template slot="table-row" slot-scope="props">
 									<span v-if="props.column.field == 'acciones'">
 									
-										
 									</span>
-								</template>
+								</template> -->
 								</vue-good-table>
 
 							</div>							
@@ -271,9 +293,7 @@ export default {
 			mostrarAntecedentes: false,
 			mostrarContacto: false,
 			mostrarPrevias: false,
-			evoluciones: [ { id: '1', fecha: '20201001', sistema: 'Guardia' },
-										 { id: '1', fecha: '20201001', sistema: 'Guardia' },
-										 { id: '1', fecha: '20201001', sistema: 'Guardia' }],
+			evoluciones: [],
 			columnas: [
         {
           label: 'id',
@@ -282,8 +302,8 @@ export default {
           filterable: true,
 				},
 				 {
-          label: 'Fecha',
-          field: 'fecha',
+          label: 'Fecha de carga',
+          field: this.fechaCargaEvolucion,
           type: 'number',
           filterable: true,
 				},
@@ -293,27 +313,34 @@ export default {
           type: 'string',
           filterable: true,
         },
-        {
-          label: 'Acciones',
-          field: 'acciones',
-        },
+        // {
+        //   label: 'Acciones',
+        //   field: 'acciones',
+        // },
       ],
     }
   },
   created() {
-		this.getPaciente()    
+		this.getAllData()    
   },
   methods: {
-		async getPaciente() {
+		async getAllData() {
       events.$emit("loading:show")
-			try {
-				const paciente = await axios.get(this.burl('/api/paciente/getPaciente?id=' + this.pacienteId))
-				const internacion = await axios.get(this.burl('/api/internacion/ultima?pacienteId=' + this.pacienteId))
-				this.paciente = paciente.data
-				this.ultimaInternacion = internacion.data
-			} catch (error) {
-				console.log(error)
+			const paciente = await axios.get(this.burl('/api/paciente/getPaciente?id=' + this.pacienteId))
+			const ultimaInternacion = await axios.get(this.burl('/api/internacion/ultima?pacienteId=' + this.pacienteId))
+			this.paciente = paciente.data
+			this.ultimaInternacion = ultimaInternacion.data
+			if (this.ultimaInternacion) {
+					const evoluciones = await axios.get(this.burl('/api/evolucion/index?id=' + this.ultimaInternacion.id))
+					this.evoluciones = evoluciones.data
 			}
+			events.$emit("loading:hide")
+		},
+		async getInternacionesPrevias() {
+			events.$emit("loading:show")
+			const internaciones = await axios.get(this.burl('/api/internacion/previas?pacienteId=' + this.pacienteId))
+			this.internacionesPrevias = internaciones.data
+			this.mostrarPrevias = true
 			events.$emit("loading:hide")
 		},
 		declararEgreso() {
@@ -352,6 +379,9 @@ export default {
 					loading.hide()
 				}
 			})
+		},
+		fechaCargaEvolucion(evolucion) {
+			return this.formatDateTime(evolucion.fecha_carga)
 		}
   }
 }

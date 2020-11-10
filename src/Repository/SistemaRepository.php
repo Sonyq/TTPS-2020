@@ -18,33 +18,15 @@ class SistemaRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Sistema::class);
     }
-
-    // /**
-    //  * @return Sistema[] Returns an array of Sistema objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    
+    public function findAll()
     {
         return $this->createQueryBuilder('s')
-            ->andWhere('s.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('s.id', 'ASC')
-            ->setMaxResults(10)
+            ->select('s.id, s.nombre, s.descrip, s.camas_total, s.camas_disponibles, s.camas_ocupadas')
+            ->orderBy('s.id')
             ->getQuery()
             ->getResult()
         ;
     }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?Sistema
-    {
-        return $this->createQueryBuilder('s')
-            ->andWhere('s.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
+    
 }

@@ -304,6 +304,7 @@
 
 <script>
 export default {
+	props: ['internacionId'],
 	data() {
 		return {
 			temperatura: null,
@@ -345,7 +346,7 @@ export default {
 		async submit() {
       events.$emit("loading:show")
 			let form = {
-				internacion_id: 13,
+				internacion_id: this.internacionId,
 				temperatura: this.temperatura,
 				ta_sistolica: this.taSistolica,
 				ta_diastolica: this.taDiastolica,

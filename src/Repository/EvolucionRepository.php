@@ -19,32 +19,20 @@ class EvolucionRepository extends ServiceEntityRepository
         parent::__construct($registry, Evolucion::class);
     }
 
-    // /**
-    //  * @return Evolucion[] Returns an array of Evolucion objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public function findAllEvoluciones($internacionId)
     {
         return $this->createQueryBuilder('e')
-            ->andWhere('e.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('e.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
+        ->select('e.id, e.fecha_carga, sist.descrip as sistema')
+        ->innerJoin('App:Internacion', 'i', 'WITH', 'i.id = e.internacion')
+        ->innerJoin('App:InternacionCama', 'ic', 'WITH', 'i.id = ic.internacion')
+        ->innerJoin('App:Cama', 'c', 'WITH', 'c.id = ic.cama')
+        ->innerJoin('App:Sala', 's', 'WITH', 's.id = c.sala')
+        ->innerJoin('App:Sistema', 'sist', 'WITH', 'sist.id = s.sistema')
+        ->where('i.id = :internacionId')
+        ->setParameter('internacionId', $internacionId)
+        ->orderBy('e.fecha_carga', 'DESC')
+        ->getQuery()
+        ->getResult();
     }
-    */
 
-    /*
-    public function findOneBySomeField($value): ?Evolucion
-    {
-        return $this->createQueryBuilder('e')
-            ->andWhere('e.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }

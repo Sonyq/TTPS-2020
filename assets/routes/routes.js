@@ -1,14 +1,14 @@
 import DashboardLayout from "@/pages/Layout/DashboardLayout.vue";
 
 import Dashboard from "@/pages/Dashboard.vue";
-import Login from "@/pages/Login.vue"
-import Pacientes from "@/pages/Pacientes/Pacientes.vue"
-import NuevoPaciente from "@/pages/Pacientes/NuevoPaciente.vue"
-import VerPaciente from "@/pages/Pacientes/VerPaciente.vue"
-import NuevaEvolucion from "@/pages/Evoluciones/NuevaEvolucion.vue"
-import NuevaInternacion from "@/pages/Internaciones/NuevaInternacion.vue"
-import Sistemas from "@/pages/Sistemas/Sistemas.vue"
-import Logout from "@/pages/Logout.vue"
+import Login from "@/pages/Login.vue";
+import Pacientes from "@/pages/Pacientes/Pacientes.vue";
+import NuevoPaciente from "@/pages/Pacientes/NuevoPaciente.vue";
+import VerPaciente from "@/pages/Pacientes/VerPaciente.vue";
+import NuevaEvolucion from "@/pages/Evoluciones/NuevaEvolucion.vue";
+import NuevaInternacion from "@/pages/Internaciones/NuevaInternacion.vue";
+import Sistemas from "@/pages/Sistemas/Sistemas.vue";
+import Logout from "@/pages/Logout.vue";
 
 /*
 Si no quiero agregar el footer poner la opcion   hideFooter: true ejemplo: 
@@ -48,7 +48,7 @@ const routes = [
         component: Sistemas
       },
       {
-        path: 'pacientes/:sistemaId?/:sistemaNombre?',
+        path: "pacientes/:sistemaId?/:sistemaNombre?",
         name: "Pacientes",
         component: Pacientes,
         props: true
@@ -66,7 +66,7 @@ const routes = [
         props: true
       },
       {
-        path: "nuevaEvolucion",
+        path: "nuevaEvolucion/:internacionId",
         name: "Nueva Evolución",
         component: NuevaEvolucion,
         props: true

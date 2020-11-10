@@ -5,12 +5,12 @@
 
         <md-field>
           <label>Nombre de usuario</label>
-          <md-input v-model="username"></md-input>
+          <md-input v-model="username" @keyup.enter="login"></md-input>
         </md-field>
 
         <md-field>
           <label>Contraseña</label>
-          <md-input v-model="password"></md-input>
+          <md-input v-model="password" @keyup.enter="login"></md-input>
         </md-field>
 
         <md-button class="md-success" @click="login" :disabled="canSubmit">Aceptar</md-button>

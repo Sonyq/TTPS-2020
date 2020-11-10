@@ -29,6 +29,25 @@ use Symfony\Component\Validator\Constraints;
 class EvolucionController extends FOSRestController
 {
 
+  /**
+   * @Route("/index", name="evoluciones", methods={"GET"})
+   * @SWG\Response(response=200, description="Evoluciones de una internación")
+   * @SWG\Tag(name="Evolución")
+   * @QueryParam(name="id", strict=true, nullable=false, allowBlank=false, description="Internación Id")
+   *      
+   * @param ParamFetcher $pf
+   */
+  public function getEvoluciones(Request $request, ParamFetcher $pf): Response
+  {
+    $evoluciones = $this->getDoctrine()->getRepository(Evolucion::class)->findAllEvoluciones($pf->get('id'));      
+
+    $serializer = $this->get('jms_serializer');    
+    
+    $result = $evoluciones ? $serializer->serialize($evoluciones, "json") : null;
+    return new Response($result, 200);
+  }
+
+
     /**
      * @Route("/new", name="evolucion_new", methods={"POST"})
      * @SWG\Response(response=200, description="Evolución creada exitosamente")
