@@ -85,6 +85,7 @@ export default {
   data() {
     return {
       pacientes: [],
+      nombreSistema: null,
       columnas: [
         {
           label: 'Dni',
@@ -133,15 +134,16 @@ export default {
     }
   },
   created() {
+    this.nombreSistema = this.sistemaNombre ? this.sistemaNombre : this.loggedUser.sistemaNombre
     this.getPacientes()
   },
   methods: {
     async getPacientes() {
-      let loader = this.$loading.show()
+      events.$emit("loading:show")
       let sistemaId = this.sistemaId ? '?sistema=' + this.sistemaId : ''
       const pacientes = await axios.get(this.burl('/api/paciente/index' + sistemaId))
       this.pacientes = pacientes.data
-      loader.hide();
+      events.$emit("loading:hide")
     },
     getDni(paciente) {
       return paciente.dni
@@ -170,11 +172,6 @@ export default {
         return 'Internado'
       }
     },
-  },
-  computed: {
-    nombreSistema() {
-      return this.sistemaNombre ? this.sistemaNombre : this.loggedUser.sistemaNombre
-    }
   }
 }
 

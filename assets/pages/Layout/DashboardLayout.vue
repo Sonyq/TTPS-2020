@@ -1,33 +1,31 @@
 <template>
   <div class="wrapper" :class="{ 'nav-open': $sidebar.showSidebar }">
-    <notifications></notifications>
+    <!-- <notifications></notifications> -->
 
-    <side-bar
-      :sidebar-item-color="sidebarBackground"
-    >
+    <side-bar :sidebar-item-color="sidebarBackground">
       <mobile-menu slot="content"></mobile-menu>
-      <sidebar-link to="/dashboard">
-        <md-icon>dashboard</md-icon>
-        <p>Dashboard</p>
-      </sidebar-link>
-      <sidebar-link to="/login">
+      <sidebar-link v-if="!jwtToken" to="/login">
         <md-icon>person</md-icon>
         <p>Iniciar sesión</p>
       </sidebar-link>
-      <sidebar-link to="/sistemas">
+      <sidebar-link v-if="jwtToken" to="/sistemas">
         <md-icon>person</md-icon>
         <p>Sistemas</p>
       </sidebar-link>
-      <sidebar-link :to="{ name: 'Pacientes', params: { sistemaNombre: loggedUser.sistemaNombre, sistemaId : loggedUser.sistemaId } }">
+      <sidebar-link v-if="jwtToken" :to="{ name: 'Pacientes', params: { sistemaNombre: loggedUser.sistemaNombre, sistemaId : loggedUser.sistemaId } }">
         <md-icon>person</md-icon>
         <p>Pacientes</p>
+      </sidebar-link>
+      <sidebar-link v-if="jwtToken" to="/logout">
+        <md-icon>person</md-icon>
+        <p>Cerrar sesión</p>
       </sidebar-link>
     </side-bar>
 
     <div class="main-panel">
       <top-navbar></top-navbar>
 
-      <dashboard-content> </dashboard-content>
+      <dashboard-content></dashboard-content>
 
       <content-footer v-if="!$route.meta.hideFooter"></content-footer>
     </div>
@@ -50,8 +48,7 @@ export default {
   data() {
     return {
       sidebarBackground: "green",
-      //sidebarBackgroundImage: require("@/assets/img/sidebar-2.jpg")
     };
-  }
+  },
 };
 </script>

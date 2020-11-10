@@ -189,7 +189,8 @@ new Vue({
     store_config: "",
     store_token: "",
     store_user: {},
-    Chartist: Chartist
+    Chartist: Chartist,
+    loading: null
   },
   created() {
     events.$emit("loading:start");
@@ -204,10 +205,7 @@ new Vue({
       }
     );
 
-    //this.fetchPageConfig();
-    this.jwtToken = localStorage.getItem("token")
-      ? localStorage.getItem("token")
-      : "";
+    this.jwtToken = localStorage.getItem("token") ? localStorage.getItem("token") : "";
     if (!(this.store_token === "")) {
       this.fetchLoggedUser();
     }
@@ -215,6 +213,8 @@ new Vue({
     events.$on("change:route", componente => this.cambiarRuta(componente));
     events.$on("user:logout", () => (this.store_token = ""));
     events.$on("loading_user:finish", () => this.checkBlockUser());
+    events.$on("loading:show", () => this.loading = this.$loading.show())
+    events.$on("loading:hide", () => this.loading.hide())
   },
 
   methods: {
@@ -236,22 +236,29 @@ new Vue({
         .catch(error => {});
     },
 
+    logout() {
+      events.$emit("loading:show")
+      localStorage.removeItem("token");
+      axios.defaults.headers.common["Authorization"] = null;
+      this.jwtToken.clear
+      this.loggedUser.clear
+      events.$emit("loading:hide")
+      this.$router.replace("/")
+    },
+
     expireJWTcheck(error) {
-      if (
-        window.location.pathname != "/app/login" &&
-        401 === error.response.status
-      ) {
-        Vue.swal({
+      if (window.location.pathname != "login" && 401 === error.response.status) {
+        events.$emit("loading:hide")
+        this.$swal.fire({
           title: "La sesión expiró",
           text: "Su sesión ha expirado. Será redirigido a la página de login",
-          type: "warning",
-          confirmButtonColor: "#DD6B55",
-          confirmButtonText: "Ok"
+          timer: 2500,
+          showConfirmButton: false,
         }).then(() => {
           localStorage.removeItem("token");
           this.store_token = "";
           axios.defaults.headers.common["Authorization"] = null;
-          this.$router.replace({ name: "login" });
+          this.$router.replace({ path: "/" });
         });
       } else {
         if (
@@ -263,7 +270,7 @@ new Vue({
           if (error.response.data.length > 300) {
             events.$emit(
               "alert:error",
-              "Se produjo una violacion en los tipos de parametros"
+              "Se produjo una violacion en los tipos de parámetros"
             );
           } else {
             events.$emit("alert:error", error.response.data);

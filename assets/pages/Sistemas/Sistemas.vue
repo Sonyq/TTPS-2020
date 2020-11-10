@@ -54,10 +54,10 @@ export default {
   },
   methods: {
     async getSistemas() {
-      let loader = this.$loading.show()
+      events.$emit("loading:show")
       const sistemas = await axios.get(this.burl('/api/sistemas/index'))
       this.sistemas = sistemas.data
-      loader.hide();
+      events.$emit("loading:hide")
     }
   },
 }

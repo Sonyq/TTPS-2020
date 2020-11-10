@@ -305,7 +305,7 @@ export default {
   },
   methods: {
 		async getPaciente() {
-			let loading = this.$loading.show()
+      events.$emit("loading:show")
 			try {
 				const paciente = await axios.get(this.burl('/api/paciente/getPaciente?id=' + this.pacienteId))
 				const internacion = await axios.get(this.burl('/api/internacion/ultima?pacienteId=' + this.pacienteId))
@@ -314,7 +314,7 @@ export default {
 			} catch (error) {
 				console.log(error)
 			}
-			loading.hide()
+			events.$emit("loading:hide")
 		},
 		declararEgreso() {
 			this.cambiarEstado('egreso')

@@ -1,9 +1,8 @@
 <template>
   <div class="content">
     <div class="md-layout">
-      <div
-        class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-33"
-      >
+      <div class="md-layout-item md-medium-size-75 md-xsmall-size-75 md-size-33">
+
         <md-field>
           <label>Nombre de usuario</label>
           <md-input v-model="username"></md-input>
@@ -14,7 +13,7 @@
           <md-input v-model="password"></md-input>
         </md-field>
 
-        <md-button class="md-success" @click="login">Aceptar</md-button>
+        <md-button class="md-success" @click="login" :disabled="canSubmit">Aceptar</md-button>
       </div>
     </div>
   </div>
@@ -32,28 +31,31 @@ export default {
     }
   },
   methods: {
-    login(){
+    login() {
+      events.$emit("loading:show")
       var credentials = {
-          _username : this.username,
-          _password : this.password
+        _username : this.username,
+        _password : this.password
       };
       axios
       .post(this.burl('/api/login_check'), credentials, {dataType :  "text"}) //mando el post
       .then((response) => {
         if (response.status === 200) {
           this.jwtToken = response.data['token']; //seteo el token
-          this.$router.push('/'); // con esto me cambio de vista
+          events.$emit("loading:hide")
+          this.$router.push('/pacientes'); // con esto me cambio de vista
+          // this.$router.push('/pacientes/' + this.loggedUser.sistemaId + '/' + this.loggedUser.sistemaNombre); // con esto me cambio de vista
         }        
       })
       .catch((error) => {
+        events.$emit("loading:hide")
         this.$swal('Usuario o contraseña incorrectos', '', 'error')
-        //  events.$emit('alert:error', 'Usuario o contraseña incorrecta');//emito el error
       })
     }
   },
   computed: {
     canSubmit() {
-        return !(this.username && this.password)
+      return !(this.username && this.password)
     },
   }
 }

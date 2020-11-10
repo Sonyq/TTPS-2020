@@ -1,10 +1,7 @@
 <template>
   <ul class="nav nav-mobile-menu">
-    <li>
-      <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-        <i class="material-icons">dashboard</i>
-        <p>Dashboard</p></a
-      >
+    <!-- <li>
+     
     </li>
     <li>
       <drop-down>
@@ -25,7 +22,7 @@
         ><i class="material-icons">person</i>
         <p>Profile</p></a
       >
-    </li>
+    </li> -->
   </ul>
 </template>
 <script>

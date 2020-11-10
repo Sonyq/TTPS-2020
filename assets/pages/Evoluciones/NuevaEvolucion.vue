@@ -343,8 +343,7 @@ export default {
 	},
 	methods: {
 		async submit() {
-			console.log(this.temperatura)
-			let loader = this.$loading.show()
+      events.$emit("loading:show")
 			let form = {
 				internacion_id: 13,
 				temperatura: this.temperatura,
@@ -374,9 +373,8 @@ export default {
 				pcr_covid_descrip: this.pcrCovidDescrip,
 				observaciones: this.observaciones
 			}
-			console.log(form)
 			const pacientes = await axios.post(this.burl('/api/evolucion/new'), form)
-			loader.hide()
+      events.$emit("loading:hide")
 		}	
 	},
 	watch: {
