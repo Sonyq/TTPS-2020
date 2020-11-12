@@ -151,7 +151,7 @@
 									<md-dialog-title>Internaciones previas</md-dialog-title>
 									
 									<md-dialog-content>
-										<md-table md-card v-if="internacionesPrevias" class="md-body">
+										<md-table md-card v-if="internacionesPrevias.length > 0" class="md-body">
 
 											<md-table-row>
 												<md-table-head>Fecha ingreso</md-table-head>
@@ -253,7 +253,7 @@
 									<h3 class="h3">No hay evoluciones</h3>
 								</div>
 								<div v-if="ultimaInternacion" slot="table-actions">
-									<router-link :to="{ name: 'Nueva Evolución', params: { internacionId: ultimaInternacion.id } }">
+									<router-link :to="{ name: 'Nueva Evolución', params: { internacionId: ultimaInternacion.id, pacienteId: pacienteId } }">
             				<md-button class="md-dense md-success">Nueva evolución</md-button>
 									</router-link>
           			</div>
@@ -288,7 +288,7 @@ export default {
   data() {
     return {
 			paciente: {},
-			ultimaInternacion: {},
+			ultimaInternacion: '',
 			internacionesPrevias: [],
 			mostrarAntecedentes: false,
 			mostrarContacto: false,
@@ -340,6 +340,10 @@ export default {
 			events.$emit("loading:show")
 			const internaciones = await axios.get(this.burl('/api/internacion/previas?pacienteId=' + this.pacienteId))
 			this.internacionesPrevias = internaciones.data
+			//si hay una internación vigente, a las previas le quito la 1ra (porque es la actual...)
+			if (!(this.ultimaInternacion.fecha_obito || this.ultimaInternacion.fecha_egreso)) {
+				this.internacionesPrevias.shift()
+			}
 			this.mostrarPrevias = true
 			events.$emit("loading:hide")
 		},
@@ -361,7 +365,7 @@ export default {
 				cancelButtonText: 'Cancelar'
 			}).then((result) => {
 				if (result.isConfirmed) {
-					let loading = this.$loading.show()
+					events.$emit("loading:show")
 					axios.get(this.burl('/api/internacion/' + estado + '?id=' + this.ultimaInternacion.id))
 					.then(response => {
 						if (response.status == 200) {
@@ -376,7 +380,7 @@ export default {
 						}
 						console.log(response.status)
 					})
-					loading.hide()
+					events.$emit("loading:show")
 				}
 			})
 		},

@@ -5,6 +5,8 @@ namespace App\Controller;
 use FOS\RestBundle\Controller\FOSRestController;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Paciente;
+use App\Entity\UserPaciente;
+use App\Entity\User;
 use App\Entity\Sistema;
 use App\Entity\Internacion;
 use FOS\RestBundle\Controller\Annotations as Rest;
@@ -108,6 +110,42 @@ class PacienteController extends FOSRestController
       $entityManager->flush();
 
       return new Response('Paciente agregado', 200);
+     
+    }
+
+    /**
+     * @Route("/asignarMedico", name="asignar_medico", methods={"POST"})
+     * @SWG\Response(response=200, description="Asignar médico a paciente")
+     * @SWG\Tag(name="Paciente")
+     * @RequestParam(name="pacienteId", strict=true, nullable=false, allowBlank=false, description="Paciente Id")
+     * @RequestParam(name="medicoId", strict=true, nullable=false, allowBlank=false, description="Médico Id")
+     * 
+     * @param ParamFetcher $pf
+     */
+    public function asignarMedico(Request $request, ParamFetcher $pf): Response
+    {
+      $entityManager = $this->getDoctrine()->getManager();
+
+      $pacienteId = $pf->get('pacienteId');
+      $medicoId = $pf->get('medicoId');
+
+      $paciente = $this->getDoctrine()->getRepository(Paciente::class)->find($pacienteId);
+      $medico = $this->getDoctrine()->getRepository(User::class)->find($medicoId);
+
+      $yaExisteLaRelacion = $this->getDoctrine()->getRepository(UserPaciente::class)->findBy(['user' => $medico, 
+                                                                                              'paciente' => $paciente,
+                                                                                              'fecha_hasta' => null]);
+      
+      if ($yaExisteLaRelacion) {
+        return new Response('Ese médico ya se encuentra asignado al paciente', 200);
+      }
+
+      $userPaciente= new UserPaciente($paciente, $medico);
+      
+      $entityManager->persist($userPaciente);
+      $entityManager->flush();
+
+      return new Response('Médico asignado', 200);
      
     }
 

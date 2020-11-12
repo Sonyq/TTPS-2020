@@ -2,8 +2,8 @@
   <div>
 
     <md-card>
-      <md-card-header v-if="user" data-background-color="green">
-        <span class="md-title">Pacientes en {{ nombreSistema }}</span>
+      <md-card-header data-background-color="green">
+        <span class="md-title">Pacientes en {{ nombreSistemaComp }}</span>
       </md-card-header>
 
       <md-card-content>
@@ -55,10 +55,11 @@
 
                     <md-menu-content>
                       <router-link :to="{ name: 'Ver Paciente', params: { pacienteId: props.row.id } }">
-                        <md-menu-item>Ver</md-menu-item>
+                        <md-menu-item>Ver Paciente</md-menu-item>
                       </router-link>
-                      <md-menu-item>Asignar médico</md-menu-item>
-                      <md-menu-item>Cambiar estado</md-menu-item>
+                      <md-menu-item v-if="!(props.row.fecha_obito || props.row.fecha_egreso)" @click="getMedicosDelSistema(props.row.id)">Asignar médico</md-menu-item>
+                      <md-menu-item v-if="!(props.row.fecha_obito || props.row.fecha_egreso)" @click="cambiarEstado('egreso', props.row.internacionId)">Declarar egreso</md-menu-item>
+                      <md-menu-item v-if="!(props.row.fecha_obito || props.row.fecha_egreso)" @click="cambiarEstado('obito', props.row.internacionId)">Declarar óbito</md-menu-item>
                     </md-menu-content>
                   </md-menu>
 
@@ -69,6 +70,31 @@
         </div>
       </md-card-content>		
 		</md-card>
+
+
+      <div>
+        <md-dialog :md-active.sync="mostrarAsignarMedico">
+          <md-dialog-title>Asignar Médico</md-dialog-title>
+          
+          <md-dialog-content>
+            <div class="md-layout-item md-small-size-100 md-size-100" >
+              <md-field>
+                  <label for="medicosDelSistema">Médicos</label>
+                  <md-select v-model="medicoAsignado" name="medicosDelSistema">
+                      
+                    <md-option v-for="medico in medicosDelSistema" :key="medico.id" :value="medico.id">{{ medico.first_name + ' ' + medico.last_name }}</md-option>             
+                      
+                  </md-select>
+              </md-field>
+            </div>
+          </md-dialog-content>
+
+          <md-dialog-actions>
+            <md-button class="md-success" @click="mostrarAsignarMedico = false">Cerrar</md-button>
+            <md-button class="md-success" @click="asignarMedico()">Guardar</md-button>
+          </md-dialog-actions>
+        </md-dialog>
+      </div>
   </div>   
 </template>
 
@@ -85,7 +111,11 @@ export default {
   data() {
     return {
       pacientes: [],
-      user: '',
+      sistemaNombreLocal: '',
+      mostrarAsignarMedico: false,
+      medicosDelSistema: [],
+      medicoAsignado: '',
+      pacienteSeleccionado: '',
       columnas: [
         {
           label: 'Dni',
@@ -105,17 +135,17 @@ export default {
         },
         {
           label: 'Sistema',
-          field: 'sistema',
+          field: this.getSistema,
           width: '100px'
         },
         {
           label: 'Sala',
-          field: 'sala',
+          field: this.getSala,
           width: '100px'
         },
         {
           label: 'Cama',
-          field: 'cama',
+          field: this.getCama,
           type: 'number',
           width: '80px',
           filterable: false,
@@ -135,9 +165,7 @@ export default {
   },
   created () {
     this.getPacientes()
-  },
-  mounted() {
-    events.$on('loading_user:finish', () => this.user = this.loggedUser )
+    events.$on('loading_user:finish', () => this.sistemaNombreLocal = this.loggedUser.sistemaNombre )
   },
   methods: {
     async getPacientes() {
@@ -147,6 +175,15 @@ export default {
       this.pacientes = pacientes.data
       events.$emit("loading:hide")
     },
+    getSistema(paciente) {
+      return (paciente.fecha_egreso || paciente.fecha_obito) ? '-' : paciente.sistema
+    },
+    getSala(paciente) {
+      return (paciente.fecha_egreso || paciente.fecha_obito) ? '-' : paciente.sala
+    },
+    getCama(paciente) {
+      return (paciente.fecha_egreso || paciente.fecha_obito) ? '-' : paciente.cama
+    },    
     getEstado(paciente) {
       if (paciente.fecha_egreso) {
         return 'Egresado'
@@ -156,10 +193,69 @@ export default {
         return 'Internado'
       }
     },
+    async getMedicosDelSistema(pacienteId) {
+      events.$emit("loading:show")
+      this.pacienteSeleccionado = pacienteId
+      let sistemaId = this.sistemaId ? '?sistema=' + this.sistemaId : ''
+      const medicos = await axios.get(this.burl('/api/sistemas/medicos' + sistemaId))
+      this.medicosDelSistema = medicos.data
+      console.log(this.medicos)
+      this.mostrarAsignarMedico = true
+      events.$emit("loading:hide")
+    },
+    cambiarEstado(estado, internacionId) {
+			this.$swal.fire({
+				title: 'Está seguro?',
+				text: "Esta acción es irreversible",
+				icon: 'warning',
+				showCancelButton: true,
+				confirmButtonColor: '#F33527',
+				cancelButtonColor: '#47A44B',
+				confirmButtonText: 'Sí, declarar ' + (estado == 'obito' ? 'óbito' : 'egreso'),
+				cancelButtonText: 'Cancelar'
+			}).then((result) => {
+				if (result.isConfirmed) {
+					events.$emit("loading:show")
+					axios.get(this.burl('/api/internacion/' + estado + '?id=' + internacionId))
+					.then(response => {
+						if (response.status == 200) {
+              this.$swal.fire({
+								icon: 'success',
+								text: 'Médico asignado',
+								cancelButtonColor: '#47A44B'
+							})
+            } else {
+							this.$swal.fire({
+								icon: 'error',
+								title: 'Oops...',
+								text: 'Se produjo un error',
+								cancelButtonColor: '#47A44B'
+							})
+						}
+						console.log(response.status)
+          })
+					events.$emit("loading:hide")
+				}
+			})
+    },
+    async asignarMedico() {
+      events.$emit("loading:show")
+      let form = { pacienteId: this.pacienteSeleccionado, 
+                   medicoId: this.medicoAsignado
+                 }
+      const response = await axios.post(this.burl('/api/paciente/asignarMedico'), form)
+      this.mostrarAsignarMedico = false
+      events.$emit("loading:hide")
+      this.$swal.fire({
+        icon: 'success',
+        text: 'Médico asignado',
+        cancelButtonColor: '#47A44B'
+      })
+    }
   },
   computed: {
-    nombreSistema () {
-      return this.sistemaNombre ? this.sistemaNombre : this.user.sistemaNombre 
+    nombreSistemaComp () {
+      return this.sistemaNombre ? this.sistemaNombre : this.sistemaNombreLocal 
     }
   }
 }

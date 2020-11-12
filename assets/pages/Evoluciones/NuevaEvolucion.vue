@@ -290,10 +290,16 @@
 											</div>
         
                     </div>
-                
-									<div class="md-layout-item md-size-100 text-right">
-											<md-button class="md-raised md-success" @click="submit()">Guardar</md-button>
-									</div>
+
+										<div class="md-layout">
+											<div class="md-layout-item md-size-50 text-left">
+												<md-button class="md-raised md-success" @click="volver()">Volver</md-button>
+											</div>
+
+											<div class="md-layout-item md-size-50 text-right">
+												<md-button class="md-raised md-success" @click="submit()">Guardar</md-button>
+											</div>
+										</div>
                 </div>
             </md-card-content>
           </md-card>
@@ -304,7 +310,7 @@
 
 <script>
 export default {
-	props: ['internacionId'],
+	props: ['internacionId', 'pacienteId'],
 	data() {
 		return {
 			temperatura: null,
@@ -376,7 +382,10 @@ export default {
 			}
 			const pacientes = await axios.post(this.burl('/api/evolucion/new'), form)
       events.$emit("loading:hide")
-		}	
+		},
+		volver() {
+			this.$router.push('/verPaciente/' + this.pacienteId)
+		}
 	},
 	watch: {
 		tipoAdministracionO2(value) {

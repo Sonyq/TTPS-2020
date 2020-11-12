@@ -39,6 +39,13 @@ class UserPaciente
      */
     private $fecha_hasta;
 
+    public function __construct($paciente, $medico)
+    {
+       $this->fecha_desde = new \DateTime();
+       $this->paciente = $paciente;
+       $this->user = $medico;
+    }
+
     public function getId(): ?int
     {
         return $this->id;

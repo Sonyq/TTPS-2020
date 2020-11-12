@@ -112,7 +112,7 @@ class InternacionController extends FOSRestController
    */
   public function getInternacionesPrevias(Request $request, ParamFetcher $pf): Response
   {
-    $internaciones = $this->getDoctrine()->getRepository(Internacion::class)->findInternacionesPrevias($pf->get('pacienteId'));
+    $internaciones = $this->getDoctrine()->getRepository(Internacion::class)->findAllInternaciones($pf->get('pacienteId'));
     $serializer = $this->get('jms_serializer');    
     $result = $internaciones ? $serializer->serialize($internaciones, "json") : null;
     

@@ -17,17 +17,18 @@ class UserRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, User::class);
-    }
+    }    
     
-    /*
-    public function findOneBySomeField($value): ?User
+    public function findMedicosDeUnSistema($sistemId)
     {
         return $this->createQueryBuilder('u')
-            ->andWhere('u.exampleField = :val')
-            ->setParameter('val', $value)
+            ->select('u.id, u.first_name, u.last_name')    
+            ->where('u.sistema = :sistemaId')
+            ->andWhere('u.activo = true')
+            ->setParameter('sistemaId', $sistemId)
             ->getQuery()
-            ->getOneOrNullResult()
+            ->getResult()
         ;
     }
-    */
+    
 }

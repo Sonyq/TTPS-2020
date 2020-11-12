@@ -66,7 +66,7 @@ const routes = [
         props: true
       },
       {
-        path: "nuevaEvolucion/:internacionId",
+        path: "nuevaEvolucion/:internacionId/:pacienteId",
         name: "Nueva Evolución",
         component: NuevaEvolucion,
         props: true

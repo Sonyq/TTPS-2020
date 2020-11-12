@@ -5,6 +5,7 @@ namespace App\Controller;
 use FOS\RestBundle\Controller\FOSRestController;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Sistema;
+use App\Entity\User;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\Annotations\RequestParam;
 use FOS\RestBundle\Controller\Annotations\QueryParam;
@@ -37,6 +38,22 @@ class SistemasController extends FOSRestController
   {        
     $serializer = $this->get('jms_serializer');
     $sistemas = $this->getDoctrine()->getRepository(Sistema::class)->findAll();
+    return new Response($serializer->serialize($sistemas, "json", SerializationContext::create()->enableMaxDepthChecks()));
+  }
+
+  /**
+   * @Route("/medicos", name="medicos", methods={"GET"})
+   * @SWG\Response(response=200, description="Médicos de un sistema")
+   * @SWG\Tag(name="Sistemas")
+   * @QueryParam(name="sistema", strict=false, nullable=true, allowBlank=false, description="Sistema Id")
+   *      
+   * @param ParamFetcher $pf
+   */
+  public function getMedicosDeUnSistema(Request $request, ParamFetcher $pf): Response
+  {        
+    $sistemaId = $pf->get('sistema') ? $pf->get('sistema') : $this->getUser()->getSistema()->getId();
+    $sistemas = $this->getDoctrine()->getRepository(User::class)->findMedicosDeUnSistema($sistemaId);
+    $serializer = $this->get('jms_serializer');
     return new Response($serializer->serialize($sistemas, "json", SerializationContext::create()->enableMaxDepthChecks()));
   }
 

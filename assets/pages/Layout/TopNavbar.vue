@@ -1,7 +1,7 @@
 <template>
   <md-toolbar md-elevation="0" class="md-transparent">
     <div class="md-toolbar-row">
-      <div v-if="user" class="md-toolbar-section-start">
+      <div v-if="usuarioLocal" class="md-toolbar-section-start">
         <h3 class="md-title">{{ datosUsuario }}</h3>
       </div>
       <div class="md-toolbar-section-end">
@@ -63,11 +63,12 @@
 export default {
   data() {
     return {
-      user: ''
+      usuarioLocal: ''
     };
   },
-  mounted() {
-    events.$on('loading_user:finish', () => this.user = this.loggedUser )
+  mounted () {
+    events.$on('loading_user:finish', () => this.usuarioLocal = this.loggedUser )
+    events.$on("user:logout", () => this.usuarioLocal = '')
   },
   methods: {
     toggleSidebar() {
@@ -76,7 +77,7 @@ export default {
   },
   computed: {
     datosUsuario () {
-      return this.user.first_name + ' ' + this.user.last_name + ', Médico de ' + this.user.sistemaNombre
+      return this.usuarioLocal.first_name + ' ' + this.usuarioLocal.last_name + ', Médico de ' + this.usuarioLocal.sistemaNombre
     }
   }
 };
