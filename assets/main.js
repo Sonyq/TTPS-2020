@@ -212,7 +212,7 @@ new Vue({
 
     events.$on("change:route", componente => this.cambiarRuta(componente));
     events.$on("user:logout", () => (this.store_token = ""));
-    events.$on("loading_user:finish", () => this.checkBlockUser());
+    // events.$on("loading_user:finish", () => this.checkBlockUser());
     events.$on("loading:show", () => this.loading = this.$loading.show())
     events.$on("loading:hide", () => this.loading.hide())
   },
@@ -234,16 +234,6 @@ new Vue({
           this.loggedUser = response.data;
         })
         .catch(error => {});
-    },
-
-    logout() {
-      events.$emit("loading:show")
-      localStorage.removeItem("token");
-      axios.defaults.headers.common["Authorization"] = null;
-      this.jwtToken.clear
-      this.loggedUser.clear
-      events.$emit("loading:hide")
-      this.$router.replace("/")
     },
 
     expireJWTcheck(error) {

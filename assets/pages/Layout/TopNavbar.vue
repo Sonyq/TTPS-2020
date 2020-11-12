@@ -1,9 +1,9 @@
 <template>
   <md-toolbar md-elevation="0" class="md-transparent">
     <div class="md-toolbar-row">
-      <!-- <div class="md-toolbar-section-start">
-        <h3 class="md-title">{{ $route.name }}</h3>
-      </div> -->
+      <div v-if="user" class="md-toolbar-section-start">
+        <h3 class="md-title">{{ datosUsuario }}</h3>
+      </div>
       <div class="md-toolbar-section-end">
         <md-button
           class="md-just-icon md-simple md-toolbar-toggle"
@@ -63,11 +63,20 @@
 export default {
   data() {
     return {
+      user: ''
     };
+  },
+  mounted() {
+    events.$on('loading_user:finish', () => this.user = this.loggedUser )
   },
   methods: {
     toggleSidebar() {
       this.$sidebar.displaySidebar(!this.$sidebar.showSidebar);
+    }
+  },
+  computed: {
+    datosUsuario () {
+      return this.user.first_name + ' ' + this.user.last_name + ', Médico de ' + this.user.sistemaNombre
     }
   }
 };

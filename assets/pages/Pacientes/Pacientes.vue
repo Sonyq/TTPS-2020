@@ -2,7 +2,7 @@
   <div>
 
     <md-card>
-      <md-card-header data-background-color="green">
+      <md-card-header v-if="user" data-background-color="green">
         <span class="md-title">Pacientes en {{ nombreSistema }}</span>
       </md-card-header>
 
@@ -85,37 +85,37 @@ export default {
   data() {
     return {
       pacientes: [],
-      nombreSistema: null,
+      user: '',
       columnas: [
         {
           label: 'Dni',
-          field: this.getDni,
+          field: 'dni',
           type: 'number',
           width: '80px',
         },
         {
           label: 'Apellido',
-          field: this.getApellido,
+          field: 'apellido',
           width: '150px'
         },
         {
           label: 'Nombre',
-          field: this.getNombre,
+          field: 'nombre',
           width: '150px'
         },
         {
           label: 'Sistema',
-          field: this.getSistema,
+          field: 'sistema',
           width: '100px'
         },
         {
           label: 'Sala',
-          field: this.getSala,
+          field: 'sala',
           width: '100px'
         },
         {
           label: 'Cama',
-          field: this.getCama,
+          field: 'cama',
           type: 'number',
           width: '80px',
           filterable: false,
@@ -133,9 +133,11 @@ export default {
       ],
     }
   },
-  created() {
-    this.nombreSistema = this.sistemaNombre ? this.sistemaNombre : this.loggedUser.sistemaNombre
+  created () {
     this.getPacientes()
+  },
+  mounted() {
+    events.$on('loading_user:finish', () => this.user = this.loggedUser )
   },
   methods: {
     async getPacientes() {
@@ -144,24 +146,6 @@ export default {
       const pacientes = await axios.get(this.burl('/api/paciente/index' + sistemaId))
       this.pacientes = pacientes.data
       events.$emit("loading:hide")
-    },
-    getDni(paciente) {
-      return paciente.dni
-    },
-    getApellido(paciente) {
-      return paciente.apellido
-    },
-    getNombre(paciente) {
-      return paciente.nombre
-    },
-    getSistema(paciente) {
-      return paciente.sistema
-    },
-    getSala(paciente) {
-      return paciente.sala
-    },
-    getCama(paciente) {
-      return paciente.cama
     },
     getEstado(paciente) {
       if (paciente.fecha_egreso) {
@@ -172,6 +156,11 @@ export default {
         return 'Internado'
       }
     },
+  },
+  computed: {
+    nombreSistema () {
+      return this.sistemaNombre ? this.sistemaNombre : this.user.sistemaNombre 
+    }
   }
 }
 
