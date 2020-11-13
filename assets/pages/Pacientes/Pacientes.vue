@@ -12,9 +12,7 @@
         
           <div class="md-layout-item md-size-100 text-right">
       
-            <router-link to="/nuevoPaciente">
-              <md-button class="md-success">Agregar Paciente</md-button>
-            </router-link>
+            <md-button to="/nuevoPaciente" class="md-success">Agregar Paciente</md-button>
         
           </div>
           
@@ -165,7 +163,7 @@ export default {
   },
   created () {
     this.getPacientes()
-    events.$on('loading_user:finish', () => this.sistemaNombreLocal = this.loggedUser.sistemaNombre )
+    events.$on('loading_user:finish', () => this.sistemaNombreLocal = this.loggedUser.sistemaNombre)
   },
   methods: {
     async getPacientes() {

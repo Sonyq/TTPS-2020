@@ -253,9 +253,7 @@
 									<h3 class="h3">No hay evoluciones</h3>
 								</div>
 								<div v-if="ultimaInternacion" slot="table-actions">
-									<router-link :to="{ name: 'Nueva Evolución', params: { internacionId: ultimaInternacion.id, pacienteId: pacienteId } }">
-            				<md-button class="md-dense md-success">Nueva evolución</md-button>
-									</router-link>
+            			<md-button :to="{ name: 'Nueva Evolución', params: { internacionId: ultimaInternacion.id, pacienteId: pacienteId } }" class="md-dense md-success">Nueva evolución</md-button>
           			</div>
 								<!-- <template slot="table-row" slot-scope="props">
 									<span v-if="props.column.field == 'acciones'">
@@ -321,14 +319,30 @@ export default {
     }
   },
   created() {
-		this.getAllData()    
+		this.getPaciente()
+		this.getUltimaInternacionYEvoluciones()    
   },
   methods: {
-		async getAllData() {
-      events.$emit("loading:show")
-			const paciente = await axios.get(this.burl('/api/paciente/getPaciente?id=' + this.pacienteId))
+		async getPaciente() {
+
+			axios.get(this.burl('/api/paciente/getPaciente?id=' + this.pacienteId))
+			.then(response => {
+				this.paciente = response.data
+			}).catch(err => {
+				console.log(error)
+			})	
+
+			// try {
+			// 	const paciente = await axios.get(this.burl('/api/paciente/getPaciente?id=' + this.pacienteId))
+			// 	this.paciente = paciente.data
+			// } catch (error) {
+			// 	console.log(error)
+			// }
+
+		},
+		async getUltimaInternacionYEvoluciones() {
+			events.$emit("loading:show")
 			const ultimaInternacion = await axios.get(this.burl('/api/internacion/ultima?pacienteId=' + this.pacienteId))
-			this.paciente = paciente.data
 			this.ultimaInternacion = ultimaInternacion.data
 			if (this.ultimaInternacion) {
 					const evoluciones = await axios.get(this.burl('/api/evolucion/index?id=' + this.ultimaInternacion.id))

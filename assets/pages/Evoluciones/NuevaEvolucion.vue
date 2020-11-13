@@ -384,7 +384,7 @@ export default {
       events.$emit("loading:hide")
 		},
 		volver() {
-			this.$router.push('/verPaciente/' + this.pacienteId)
+			this.$router.go(-1)
 		}
 	},
 	watch: {

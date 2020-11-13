@@ -14,11 +14,13 @@ use FOS\RestBundle\Controller\Annotations\RequestParam;
 use FOS\RestBundle\Controller\Annotations\QueryParam;
 use FOS\RestBundle\Request\ParamFetcher;
 use Symfony\Component\Config\Definition\Exception\Exception;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use Swagger\Annotations as SWG;
+
 
 /**
  * Class Paciente Controller
@@ -56,6 +58,9 @@ class PacienteController extends FOSRestController
      */
     public function getPaciente(Request $request, ParamFetcher $pf): Response
     {
+      // return new Response("todo mal", 400);
+      // throw new BadRequestHttpException('message cannot be empty');
+      
       $paciente = $this->getDoctrine()->getRepository(Paciente::class)->findPaciente($pf->get('id'));
       $serializer = $this->get('jms_serializer'); 
       return new Response($serializer->serialize($paciente, "json"), 200);
