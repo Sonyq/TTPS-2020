@@ -1,34 +1,37 @@
 <template>
     <div>
         <form>
-            <div class="md-layout">
-                <md-card class="md-layout-item md-small-size-100 md-size-100">
-                    <md-card-header data-background-color="green">
-                        <h4 class="title">Nueva Internación</h4>
-                    </md-card-header>
-                    <md-card-content>
-                        <div class="md-layout">
-                            <div class="md-layout-item md-small-size-100 md-size-100">
+            <md-card>
+
+                <md-card-header data-background-color="green">
+                    <h3 class="title">Nueva Internación</h3>
+                </md-card-header>
+
+                <md-card-content>
+                    <div class="md-layout">
+                        <div class="md-layout-item md-small-size-100 md-size-100">
+                            <md-datepicker v-model="fechaInicioSintomas" md-immediately>
                                 <label>Fecha de inicio de síntomas</label>
-                                <md-datepicker v-model="fechaInicioSintomas" md-immediately />
-                            </div>
-                            <div class="md-layout-item md-small-size-100 md-size-100">
-                                <label>Fecha de diagnóstico</label>
-                                <md-datepicker v-model="fechaDiagnostico" md-immediately />
-                            </div>
-                            <div class="md-layout-item md-size-100 right">
-                                <md-field maxlength="5">
-                                    <label>Descripción</label>
-                                    <md-textarea v-model="descripcion"></md-textarea>
-                                </md-field>
-                            </div>
-                            <div class="md-layout-item md-size-100 right">
-                                <md-button class="md-raised md-success" v-on:click="agregarInternacion()" >Agregar Internación</md-button>
-                            </div>
+                            </md-datepicker>
                         </div>
-                    </md-card-content>
-                </md-card>
-            </div>
+                        <div class="md-layout-item md-small-size-100 md-size-100">
+                            <md-datepicker v-model="fechaDiagnostico" md-immediately>
+                                <label>Fecha de diagnóstico</label>
+                            </md-datepicker>
+                        </div>
+                        <div class="md-layout-item md-size-100 right">
+                            <md-field maxlength="5">
+                                <label>Descripción</label>
+                                <md-textarea v-model="descripcion"></md-textarea>
+                            </md-field>
+                        </div>
+                        <div class="md-layout-item md-size-100 right">
+                            <md-button class="md-raised md-success" v-on:click="agregarInternacion()" >Agregar Internación</md-button>
+                        </div>
+                    </div>
+                </md-card-content>
+
+            </md-card>
         </form>
     </div>
 </template>
@@ -36,12 +39,13 @@
 <script>
 
 export default {
+    props: ['pacienteId'],
     data() {
         return {
-        fechaInicioSintomas: null,
-        fechaDiagnostico: null,
-        descripcion: null,
-        successMessage: "Internación agregada",
+            fechaInicioSintomas: null,
+            fechaDiagnostico: null,
+            descripcion: null,
+            successMessage: "Internación agregada",
         };
     },
 
@@ -56,12 +60,17 @@ export default {
                 'fecha_inicio_sintomas' : this.fechaInicioSintomas,
                 'fecha_diagnostico'     : this.fechaDiagnostico,
                 'sintomas'              : this.descripcion,
-                'pacienteId'            : '2' //hardcodeado hay que sacarlo
+                'pacienteId'            : this.pacienteId
             }
             const response = await axios.post(this.burl('/api/internacion/new'), formData)
-            if (response.status == 200){
-                this.successMessage = response.data
-            }
+            this.$swal.fire({
+                title: "Internación creada",
+                icon: 'success',
+                timer: 2000,
+                showConfirmButton: false,
+            }).then(() => {
+                this.$router.replace({ path: "verPaciente/" + this.pacienteId });
+            });
             loader.hide();
         }
     }

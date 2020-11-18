@@ -113,8 +113,8 @@ class PacienteController extends FOSRestController
       
       $entityManager->persist($paciente);
       $entityManager->flush();
-
-      return new Response('Paciente agregado', 200);
+      $serializer = $this->get('jms_serializer');
+      return new Response($serializer->serialize($paciente, "json"), 200);
      
     }
 

@@ -72,7 +72,7 @@ const routes = [
         props: true
       },
       {
-        path: "nuevaInternacion",
+        path: "nuevaInternacion/:pacienteId",
         name: "Nueva Internación",
         component: NuevaInternacion,
         props: true
