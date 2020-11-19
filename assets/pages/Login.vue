@@ -43,8 +43,8 @@ export default {
         if (response.status === 200) {
           this.jwtToken = response.data['token']; //seteo el token
           events.$emit("loading:hide")
-          this.$router.push('/pacientes'); // con esto me cambio de vista
-          // this.$router.push('/pacientes/' + this.loggedUser.sistemaId + '/' + this.loggedUser.sistemaNombre); // con esto me cambio de vista
+          this.$router.push('/internaciones'); // con esto me cambio de vista
+          // this.$router.push('/internaciones/' + this.loggedUser.sistemaId + '/' + this.loggedUser.sistemaNombre); // con esto me cambio de vista
         }        
       })
       .catch((error) => {

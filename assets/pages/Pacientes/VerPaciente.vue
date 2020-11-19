@@ -200,10 +200,12 @@
 								<div class="md-layout-item md-small-size-40 md-size-40">
 									<md-field>
 											<label for="cambiarDeSistema">Seleccionar</label>
-											<md-select name="cambiarDeSistema">              
-													<md-option value="Piso Covid">Piso Covid</md-option>
-													<md-option value="UTI">UTI</md-option>
-													<md-option value="Hotel">Hotel</md-option>                                        
+											<md-select v-model="sistemaDestinoSelected" name="sistemaDestino">
+
+													<md-option v-for="sistema in sistemasDestino" :key="sistema.id" :value="sistema.id">
+														{{ sistema.descrip }}
+													</md-option>
+												                                   
 											</md-select>
 									</md-field>
 								</div>
@@ -292,6 +294,8 @@ export default {
 			mostrarContacto: false,
 			mostrarPrevias: false,
 			evoluciones: [],
+			sistemasDestino: [],
+			sistemaDestinoSelected: '',
 			columnas: [
         {
           label: 'id',
@@ -320,25 +324,17 @@ export default {
   },
   created() {
 		this.getPaciente()
-		this.getUltimaInternacionYEvoluciones()    
+		this.getUltimaInternacionYEvoluciones()
+		this.getSistemasDestino()
   },
   methods: {
 		async getPaciente() {
-
 			axios.get(this.burl('/api/paciente/getPaciente?id=' + this.pacienteId))
 			.then(response => {
 				this.paciente = response.data
 			}).catch(err => {
 				console.log(error)
-			})	
-
-			// try {
-			// 	const paciente = await axios.get(this.burl('/api/paciente/getPaciente?id=' + this.pacienteId))
-			// 	this.paciente = paciente.data
-			// } catch (error) {
-			// 	console.log(error)
-			// }
-
+			})
 		},
 		async getUltimaInternacionYEvoluciones() {
 			events.$emit("loading:show")
@@ -360,6 +356,10 @@ export default {
 			}
 			this.mostrarPrevias = true
 			events.$emit("loading:hide")
+		},
+		async getSistemasDestino() {
+			const response = await axios.get(this.burl('/api/sistemas/sistemasDestino'))
+			this.sistemasDestino = response.data
 		},
 		declararEgreso() {
 			this.cambiarEstado('egreso')
@@ -383,7 +383,7 @@ export default {
 					axios.get(this.burl('/api/internacion/' + estado + '?id=' + this.ultimaInternacion.id))
 					.then(response => {
 						if (response.status == 200) {
-							this.$router.push('/pacientes')
+							this.$router.push('/internaciones')
 						} else {
 							this.$swal.fire({
 								icon: 'error',
@@ -394,7 +394,43 @@ export default {
 						}
 						console.log(response.status)
 					})
+					events.$emit("loading:hide")
+				}
+			})
+		},
+		cambiarDeSistema() {
+			this.$swal.fire({
+			title: 'Está seguro?',
+			icon: 'warning',
+			showCancelButton: true,
+			confirmButtonColor: '#F33527',
+			cancelButtonColor: '#47A44B',
+			confirmButtonText: 'Sí, cambiar',
+			cancelButtonText: 'Cancelar'
+			}).then((result) => {
+				if (result.isConfirmed) {
 					events.$emit("loading:show")
+					let form = { sistemaDestinoId: this.sistemaDestinoSelected, 
+											 pacienteId: this.pacienteId,
+											 internacionId: this.ultimaInternacion.id
+					}
+					console.log(form)
+					axios.post(this.burl('/api/sistemas/cambiar'), form)
+					.then(response => {
+						if (response.status == 200) {
+							this.getPaciente()
+							this.getUltimaInternacionYEvoluciones()
+						} else {
+							this.$swal.fire({
+								icon: 'error',
+								title: 'Oops...',
+								text: 'Se produjo un error',
+								cancelButtonColor: '#47A44B'
+							})
+						}
+						console.log(response.status)
+					})
+					events.$emit("loading:hide")
 				}
 			})
 		},

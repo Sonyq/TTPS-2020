@@ -34,6 +34,7 @@ class PacienteRepository extends ServiceEntityRepository
 			->innerJoin('App:Cama', 'c', 'WITH', 'c.id = ic.cama')
 			->innerJoin('App:Sala', 's', 'WITH', 's.id = c.sala')
 			->innerJoin('App:Sistema', 'sist', 'WITH', 'sist.id = s.sistema')
+			->where('ic.fecha_hasta IS NULL')
 			->andWhere('sist.id = :sistemaId')
 			->setParameter('sistemaId', $sistemaId)
 			->orderBy('p.apellido', 'ASC')

@@ -185,7 +185,6 @@ export default {
       }
       try {
         const response = await axios.post(this.burl('/api/paciente/new'), formData)
-        console.log(response)
         this.$swal.fire({
           title: "Paciente agregado",
           icon: 'success',

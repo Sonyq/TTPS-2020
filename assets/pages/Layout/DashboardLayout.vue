@@ -12,9 +12,9 @@
         <md-icon>person</md-icon>
         <p>Sistemas</p>
       </sidebar-link>
-      <sidebar-link v-if="jwtToken" :to="{ name: 'Pacientes', params: { sistemaNombre: loggedUser.sistemaNombre, sistemaId : loggedUser.sistemaId } }">
+      <sidebar-link v-if="jwtToken" :to="{ name: 'Internaciones', params: { sistemaNombre: loggedUser.sistemaNombre, sistemaId : loggedUser.sistemaId } }">
         <md-icon>person</md-icon>
-        <p>Pacientes</p>
+        <p>Internaciones</p>
       </sidebar-link>
       <sidebar-link v-if="jwtToken" to="/logout">
         <md-icon>person</md-icon>

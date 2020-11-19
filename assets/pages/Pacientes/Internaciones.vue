@@ -3,7 +3,7 @@
 
     <md-card>
       <md-card-header data-background-color="green">
-        <span class="md-title">Pacientes en {{ nombreSistemaComp }}</span>
+        <span class="md-title">Internaciones en {{ nombreSistemaComp }}</span>
       </md-card-header>
 
       <md-card-content>
@@ -34,7 +34,7 @@
                   setCurrentPage: 1,
                   nextLabel: 'siguiente',
                   prevLabel: 'anterior',
-                  rowsPerPageLabel: 'Pacientes por página',
+                  rowsPerPageLabel: 'Internaciones por página',
                   ofLabel: 'de',
                 }"
               :search-options="{ enabled: true, placeholder: 'Buscar' }"

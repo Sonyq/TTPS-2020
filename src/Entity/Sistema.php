@@ -47,6 +47,13 @@ class Sistema
     private $camas_ocupadas;
 
     /**
+     * @var array
+     *
+     * @ORM\Column(name="sistemas_destino", type="json_array", nullable=true)
+     */
+    private $sistemas_destino = [];
+
+    /**
      * @ORM\OneToMany(targetEntity=Sala::class, mappedBy="sistema")
      * @MaxDepth(1)
      */
@@ -127,6 +134,16 @@ class Sistema
         $this->camas_ocupadas = $camas_ocupadas;
 
         return $this;
+    }
+
+    /**
+     * Get sistemas destino
+     *
+     * @return array
+     */
+    public function getSistemasDestino()
+    {
+        return $this->sistemas_destino;
     }
 
     /**

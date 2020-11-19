@@ -28,6 +28,7 @@ class InternacionRepository extends ServiceEntityRepository
 				->innerJoin('App:Sala', 's', 'WITH', 's.id = c.sala')
 				->innerJoin('App:Sistema', 'sist', 'WITH', 'sist.id = s.sistema')
 				->where('i.paciente = :pacienteId')
+				->andWhere('ic.fecha_hasta is null')
 				->setParameter('pacienteId', $pacienteId)
 				->groupBy('i.id, sist.descrip, s.nombre, c.numero')
 				->orderby('i.fecha_carga', 'DESC')

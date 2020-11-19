@@ -36,7 +36,6 @@ import 'vue-loading-overlay/dist/vue-loading.css';
 import moment from 'moment';
 Object.defineProperty(Vue.prototype, '$moment', {value: moment});
 
-
 // configure router
 const router = new VueRouter({
   routes, // short for routes: routes
