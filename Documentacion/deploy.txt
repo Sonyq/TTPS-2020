@@ -1,21 +1,24 @@
 1- Instalar yarn https://yarnpkg.com/lang/en/
 2- Instalar Node.js https://nodejs.org/es/ ( v 10.15.3 LTS )
-3- Abrir la consola en la carpeta y ejecutar los siguiente comando:
+3- Abrir la consola en la carpeta del proyecto y ejecutar los siguiente comando:
     yarn install
 
 4- Configurar la BD:
     4.1 Renombrar el archivo config\packages\doctrine.yaml.local a doctrine.yaml
     
-5- Ejecutar composer install
+5- Ejecutar el comando: composer install
 
 6- Crear la BD
-    5.1 abrir el archivo .env y colocar las credenciales de la bd en DATABASE_URL
+    6.1 abrir el archivo .env y colocar las credenciales de la bd en DATABASE_URL
 
-7- Para comenzar a utilizar la página abrir dos consolas en la carpeta y ejecutar los siguientes comandos (uno solo en cada una):
+7- Desde Powershell, ejecutar script para cargar BD:
+    7.1 psql -U postgres (pass: 123456) - Loguea con user postgre
+    7.2 \c segco - Selecciona BD
+    7.3 \i {path}/TTPS-2020/Documentacion/segco.sql - Ejecuta script segco.sql
 
-    php bin/console server:run
-
-    yarn dev
+8- Para comenzar a utilizar la página abrir dos consolas en la carpeta y ejecutar los siguientes comandos (uno solo en cada una):
+    8.1 php bin/console server:run
+    8.2 yarn dev
 
 La página debería estar corriendo en http://localhost:8000/ , para ver la documentación de la página entrar a http://localhost:8000/api/doc
 Cada cambio que se haga en la vista se va auto compilar, para que esto surta efecto hay que apretar Ctrl+F5 en el navegador.

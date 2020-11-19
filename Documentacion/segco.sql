@@ -4,7 +4,9 @@
 -- Database  : segco
 -- Version   : PostgreSQL 13.0, compiled by Visual C++ build 1914, 64-bit
 
+-- DROP DATABASE IF EXISTS segco;
 
+-- CREATE DATABASE segco;
 
 SET check_function_bodies = false;
 --
@@ -232,7 +234,7 @@ CREATE SEQUENCE public.user_paciente_id_seq
 -- Data for table public."user" (OID = 40986) (LIMIT 0,1)
 --
 INSERT INTO "user" (id, sistema_id, email, username, password, roles, created_at, updated_at, first_name, last_name, activo)
-VALUES (2, 1, 'usuario@gmail.com', 'usuario', 'qsC2oCD92vaaJETg2sF4XE0/8neDLDYUCJhyva17RZ2TV2ayDVQmos3rrI4Ru5T3KAk7XJQ8g3KqZ75bGUsz+A==', '[]', '2020-11-06 00:36:28', '2020-11-06 00:36:28', 'raul', 'taibo', true);
+VALUES (1, 1, 'usuario@gmail.com', 'usuario', 'qsC2oCD92vaaJETg2sF4XE0/8neDLDYUCJhyva17RZ2TV2ayDVQmos3rrI4Ru5T3KAk7XJQ8g3KqZ75bGUsz+A==', '[]', '2020-11-06 00:36:28', '2020-11-06 00:36:28', 'raul', 'taibo', true);
 
 --
 -- Data for table public.cama (OID = 40997) (LIMIT 0,2)
