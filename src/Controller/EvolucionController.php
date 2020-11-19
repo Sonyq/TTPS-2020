@@ -91,8 +91,7 @@ class EvolucionController extends FOSRestController
         return new Response('La internación id '.$pf->get('internacion_id').' no existe', 400);
       }
 
-      date_default_timezone_set('America/Argentina/Buenos_Aires');
-      $fecha_carga = new \DateTime(date('yy-m-d h:i:s'));
+      $fecha_carga = new \DateTime();
 
       $evolucion = new Evolucion();
       $evolucion->setInternacion($internacion);

@@ -217,11 +217,7 @@ export default {
 					axios.get(this.burl('/api/internacion/' + estado + '?id=' + internacionId))
 					.then(response => {
 						if (response.status == 200) {
-              this.$swal.fire({
-								icon: 'success',
-								text: 'Médico asignado',
-								cancelButtonColor: '#47A44B'
-							})
+              this.getPacientes()
             } else {
 							this.$swal.fire({
 								icon: 'error',
