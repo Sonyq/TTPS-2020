@@ -40,7 +40,7 @@
               :search-options="{ enabled: true, placeholder: 'Buscar' }"
               styleClass="vgt-table">
               <div slot="emptystate" class="has-text-centered">
-                <h3 class="h3">No hay pacientes para mostrar</h3>
+                <h3 class="h3">No hay internaciones vigentes para mostrar</h3>
               </div>
               <template slot="table-row" slot-scope="props">
                 <span v-if="props.column.field == 'acciones'">

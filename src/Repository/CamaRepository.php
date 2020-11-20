@@ -33,5 +33,17 @@ class CamaRepository extends ServiceEntityRepository
             ->getQuery()
             ->getOneOrNullResult();
     }
+
+    public function getNroCamaMax($salaDomicilio)
+    {
+        return $this->createQueryBuilder('c')
+            ->select('c.numero')
+            ->where('c.sala = :salaDomicilio')
+            ->setParameter('salaDomicilio', $salaDomicilio)
+            ->orderBy('c.numero', 'DESC')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
     
 }

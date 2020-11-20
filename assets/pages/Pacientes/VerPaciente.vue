@@ -188,7 +188,7 @@
 
 						</div>
 
-						<div v-show="!(ultimaInternacion.fecha_egreso || ultimaInternacion.fecha_obito)" class="md-layout-item md-small-size-100 md-size-33">
+						<div v-show="!(ultimaInternacion.fecha_egreso || ultimaInternacion.fecha_obito) && (ultimaInternacion.sistema == loggedUser.sistemaNombre)" class="md-layout-item md-small-size-100 md-size-33">
 							
 							<span class="md-title">Otras acciones</span>
 
@@ -225,7 +225,7 @@
 
 						</div>
 									
-						<div v-show="!(ultimaInternacion.fecha_egreso || ultimaInternacion.fecha_obito)" class="md-layout">
+						<div v-show="!(ultimaInternacion.fecha_egreso || ultimaInternacion.fecha_obito) && (ultimaInternacion.sistema == loggedUser.sistemaNombre)" class="md-layout">
 
 							<div class="md-layout-item md-small-size-100 md-size-100">
 								
@@ -414,12 +414,10 @@ export default {
 											 pacienteId: this.pacienteId,
 											 internacionId: this.ultimaInternacion.id
 					}
-					console.log(form)
 					axios.post(this.burl('/api/sistemas/cambiar'), form)
 					.then(response => {
 						if (response.status == 200) {
-							this.getPaciente()
-							this.getUltimaInternacionYEvoluciones()
+							this.$router.push('/internaciones')
 						} else {
 							this.$swal.fire({
 								icon: 'error',

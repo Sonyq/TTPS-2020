@@ -22,8 +22,8 @@
                 <h3 class="title">{{ sistema.descrip }}</h3>
                 <div v-if="sistema.nombre != 'DOMICILIO'">
                   <p class="category">Camas totales:{{ sistema.camas_total }}</p>
-                  <p class="category">Camas ocupadas: {{ sistema.camas_disponibles }}</p>
-                  <p class="category">Camas disponibles: {{ sistema.camas_ocupadas }}</p>
+                  <p class="category">Camas ocupadas: {{ sistema.camas_ocupadas }}</p>
+                  <p class="category">Camas disponibles: {{ sistema.camas_disponibles }}</p>
                 </div>
               </template>
 
