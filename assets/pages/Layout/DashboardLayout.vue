@@ -12,7 +12,16 @@
         <md-icon>person</md-icon>
         <p>Sistemas</p>
       </sidebar-link>
-      <sidebar-link v-if="jwtToken" :to="{ name: 'Internaciones', params: { sistemaNombre: loggedUser.sistemaNombre, sistemaId : loggedUser.sistemaId } }">
+      <sidebar-link
+        v-if="jwtToken"
+        :to="{
+          name: 'Internaciones',
+          params: {
+            sistemaNombre: loggedUser.sistemaNombre,
+            sistemaId: loggedUser.sistemaId
+          }
+        }"
+      >
         <md-icon>person</md-icon>
         <p>Internaciones</p>
       </sidebar-link>
@@ -43,12 +52,12 @@ export default {
     TopNavbar,
     DashboardContent,
     // ContentFooter,
-    MobileMenu,
+    MobileMenu
   },
   data() {
     return {
-      sidebarBackground: "green",
+      sidebarBackground: "green"
     };
-  },
+  }
 };
 </script>

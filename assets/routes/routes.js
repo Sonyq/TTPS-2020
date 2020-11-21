@@ -56,8 +56,7 @@ const routes = [
       {
         path: "nuevoPaciente",
         name: "Agregar Paciente",
-        component: NuevoPaciente,
-        
+        component: NuevoPaciente
       },
       {
         path: "verPaciente/:pacienteId",

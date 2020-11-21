@@ -20,7 +20,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use Swagger\Annotations as SWG;
-
+use Symfony\Component\Mime\Message;
 
 /**
  * Class Paciente Controller
@@ -58,8 +58,16 @@ class PacienteController extends FOSRestController
      */
     public function getPaciente(Request $request, ParamFetcher $pf): Response
     {
-      // return new Response("todo mal", 400);
-      // throw new BadRequestHttpException('message cannot be empty');
+
+      // Ejemplo del nuevo manejo de errores ///
+      $serializer = $this->get('jms_serializer'); 
+      $error = [ 
+        "message" => "El id no existe",
+        "title" => "No se encontro el usuario",
+        "relocate" => "go back"
+      ];
+      return new Response($serializer->serialize($error, "json"), 404);
+      ///////----------------//////
       
       $paciente = $this->getDoctrine()->getRepository(Paciente::class)->findPaciente($pf->get('id'));
       $serializer = $this->get('jms_serializer'); 

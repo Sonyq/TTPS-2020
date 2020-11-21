@@ -30,11 +30,11 @@ import MaterialDashboard from "./material-dashboard";
 import Chartist from "chartist";
 
 //vue-loading with styles
-import Loading from 'vue-loading-overlay';
-import 'vue-loading-overlay/dist/vue-loading.css';
+import Loading from "vue-loading-overlay";
+import "vue-loading-overlay/dist/vue-loading.css";
 
-import moment from 'moment';
-Object.defineProperty(Vue.prototype, '$moment', {value: moment});
+import moment from "moment";
+Object.defineProperty(Vue.prototype, "$moment", { value: moment });
 
 // configure router
 const router = new VueRouter({
@@ -54,8 +54,8 @@ Vue.use(GlobalDirectives);
 Vue.use(Notifications);
 Vue.use(VueSweetalert2);
 Vue.use(Loading, {
-  color: '#4CAF50'
-})
+  color: "#4CAF50"
+});
 
 /**************************************************************** */
 
@@ -96,8 +96,8 @@ Vue.mixin({
         this.$root.$data.store_user["username"] = data.username;
         this.$root.$data.store_user["roles"] = [];
         this.$root.$data.store_user["permisos"] = [];
-        this.$root.$data.store_user["sistemaNombre"] = data.sistema.descrip
-        this.$root.$data.store_user["sistemaId"] = data.sistema.id
+        this.$root.$data.store_user["sistemaNombre"] = data.sistema.descrip;
+        this.$root.$data.store_user["sistemaId"] = data.sistema.id;
         data.roles.forEach(r => {
           this.$root.$data.store_user["roles"].push(r.nombre);
           r.permisos.forEach(p => {
@@ -161,21 +161,21 @@ Vue.mixin({
      *
      * @param {String} dateTime
      */
-    formatDateTime: (value) => moment(String(value)).format('DD/MM/YYYY hh:mm'),
+    formatDateTime: value => moment(String(value)).format("DD/MM/YYYY hh:mm"),
 
     /**
      * Devuelve una fecha con formato
      *
      * @param {String} dateTime
      */
-    formatDate: (value) => moment(String(value)).format('DD/MM/YYYY'),
+    formatDate: value => moment(String(value)).format("DD/MM/YYYY"),
 
     /**
      * Devuelve una hora con formato
      *
      * @param {String} dateTime
      */
-    formatTime: (value) => moment(String(value)).format('HH:mm'),
+    formatTime: value => moment(String(value)).format("HH:mm")
   }
 });
 
@@ -189,6 +189,7 @@ new Vue({
     store_token: "",
     store_user: {},
     Chartist: Chartist,
+    cancelSource: null,
     loading: null
   },
   created() {
@@ -200,20 +201,27 @@ new Vue({
         return response;
       },
       error => {
-        this.expireJWTcheck(error);
+        events.$emit("loading:hide");
+        if (error.name) {
+          this.expireJWTcheck(error);
+        }
+        return Promise.reject(error);
       }
     );
 
-    this.jwtToken = localStorage.getItem("token") ? localStorage.getItem("token") : "";
+    this.newCancelToken();
+
+    this.jwtToken = localStorage.getItem("token")
+      ? localStorage.getItem("token")
+      : "";
     if (!(this.store_token === "")) {
       this.fetchLoggedUser();
     }
 
     events.$on("change:route", componente => this.cambiarRuta(componente));
     events.$on("user:logout", () => (this.store_token = ""));
-    // events.$on("loading_user:finish", () => this.checkBlockUser());
-    events.$on("loading:show", () => this.loading = this.$loading.show())
-    events.$on("loading:hide", () => this.loading.hide())
+    events.$on("loading:show", () => (this.loading = this.$loading.show()));
+    events.$on("loading:hide", () => this.loading.hide());
   },
 
   methods: {
@@ -235,37 +243,73 @@ new Vue({
         .catch(error => {});
     },
 
+    newCancelToken() {
+      this.cancelSource = axios.CancelToken.source();
+
+      let requestInterceptor = config => {
+        config.cancelToken = this.cancelSource.token;
+        return config;
+      };
+
+      //token de canselacion para los axios
+
+      axios.interceptors.request.use(requestInterceptor);
+    },
+
     expireJWTcheck(error) {
-      if (window.location.pathname != "login" && 401 === error.response.status) {
-        events.$emit("loading:hide")
-        this.$swal.fire({
-          title: "La sesión expiró",
-          text: "Su sesión ha expirado. Será redirigido a la página de login",
-          timer: 2500,
-          showConfirmButton: false,
-        }).then(() => {
-          localStorage.removeItem("token");
-          this.store_token = "";
-          axios.defaults.headers.common["Authorization"] = null;
-          this.$router.replace({ path: "/" });
-        });
+      if (window.location.hash != "#/login" && 401 === error.response.status) {
+        this.cancelSource.cancel("sesión expiró");
+        this.newCancelToken();
+        events.$emit("loading:hide");
+        this.$swal
+          .fire({
+            title: "La sesión expiró",
+            text: "Su sesión ha expirado. Será redirigido a la página de login",
+            timer: 2500,
+            showConfirmButton: false
+          })
+          .then(() => {
+            localStorage.removeItem("token");
+            this.store_token = "";
+            axios.defaults.headers.common["Authorization"] = null;
+            this.$router.replace({ path: "/" });
+          });
       } else {
+        this.cancelSource.cancel();
+        this.newCancelToken();
         if (
           400 === error.response.status ||
           403 === error.response.status ||
           404 === error.response.status ||
           500 === error.response.status
         ) {
-          if (error.response.data.length > 300) {
+          if (error.response.data.length > 200) {
             events.$emit(
               "alert:error",
               "Se produjo una violacion en los tipos de parámetros"
             );
           } else {
-            events.$emit("alert:error", error.response.data);
+            this.$swal
+              .fire({
+                title: error.response.data.title
+                  ? error.response.data.title
+                  : "Algo salió mal!",
+                text: error.response.data.message,
+                icon: "error"
+              })
+              .then(() => {
+                if (error.response.data.relocate) {
+                  if (error.response.data.relocate == "go back") {
+                    router.go(-1);
+                  } else {
+                    this.$router.replace({
+                      path: error.response.data.relocate
+                    });
+                  }
+                }
+              });
           }
         }
-        return Promise.reject(error);
       }
     },
 

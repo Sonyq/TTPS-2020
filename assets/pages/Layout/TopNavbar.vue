@@ -63,12 +63,15 @@
 export default {
   data() {
     return {
-      usuarioLocal: ''
+      usuarioLocal: ""
     };
   },
-  mounted () {
-    events.$on('loading_user:finish', () => this.usuarioLocal = this.loggedUser )
-    events.$on("user:logout", () => this.usuarioLocal = '')
+  mounted() {
+    events.$on(
+      "loading_user:finish",
+      () => (this.usuarioLocal = this.loggedUser)
+    );
+    events.$on("user:logout", () => (this.usuarioLocal = ""));
   },
   methods: {
     toggleSidebar() {
@@ -76,8 +79,14 @@ export default {
     }
   },
   computed: {
-    datosUsuario () {
-      return this.usuarioLocal.first_name + ' ' + this.usuarioLocal.last_name + ', Médico de ' + this.usuarioLocal.sistemaNombre
+    datosUsuario() {
+      return (
+        this.usuarioLocal.first_name +
+        " " +
+        this.usuarioLocal.last_name +
+        ", Médico de " +
+        this.usuarioLocal.sistemaNombre
+      );
     }
   }
 };

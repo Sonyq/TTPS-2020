@@ -1,33 +1,28 @@
 <template>
-  <div>
-   
-  </div>
+  <div></div>
 </template>
 
 <script>
-
 export default {
   data() {
-    return {
-
-    }
+    return {};
   },
   created() {
-    this.logout()
+    this.logout();
   },
   methods: {
     logout(recursive = false) {
-      events.$emit("loading:show")
-      if(!recursive){
-        events.$emit('user:logout')
+      events.$emit("loading:show");
+      if (!recursive) {
+        events.$emit("user:logout");
       }
-      axios.defaults.headers.common['Authorization'] = null
-      localStorage.removeItem('token')
-      this.jwtToken.clear
-      this.loggedUser.clear
-      events.$emit("loading:hide")
-      this.$router.replace("/")
+      axios.defaults.headers.common["Authorization"] = null;
+      localStorage.removeItem("token");
+      this.jwtToken.clear;
+      this.loggedUser.clear;
+      events.$emit("loading:hide");
+      this.$router.replace("/");
     }
   }
-}
+};
 </script>
