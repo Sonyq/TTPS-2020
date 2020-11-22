@@ -31,20 +31,44 @@ class PacienteController extends FOSRestController
 {
 
     /**
-     * @Route("/index", name="paciente_index", methods={"GET"})
-     * @SWG\Response(response=200, description="Listado de Pacientes")
+     * @Route("/internados", name="pacientes_internados", methods={"GET"})
+     * @SWG\Response(response=200, description="Listado de pacientes internados")
      * @SWG\Tag(name="Paciente")
      * @QueryParam(name="sistema", strict=false, nullable=true, allowBlank=false, description="Sistema Id")
      *      
      * @param ParamFetcher $pf
      */
-    public function index(Request $request, ParamFetcher $pf): Response
+    public function getPacientesInternados(Request $request, ParamFetcher $pf): Response
     {
         //si se recibe un sistemaId como parámetro se utiliza ese, 
         //sinó se utiliza el id del sistema al que pertenece el usuario.
         $sistema = $pf->get('sistema') ? $pf->get('sistema') : $this->getUser()->getSistema()->getId();
         
-        $pacientes = $this->getDoctrine()->getRepository(Paciente::class)->findAllPacientes($sistema);        
+        $pacientes = $this->getDoctrine()->getRepository(Paciente::class)->findAllPacientesInternados($sistema);        
+        return new JsonResponse($pacientes, 200);
+    }
+
+    /**
+     * @Route("/egresados", name="pacientes_egresados", methods={"GET"})
+     * @SWG\Response(response=200, description="Listado de pacientes egresados")
+     * @SWG\Tag(name="Paciente")
+     *      
+     */
+    public function getPacientesEgresados(Request $request): Response
+    {        
+        $pacientes = $this->getDoctrine()->getRepository(Paciente::class)->findAllPacientesEgresados();        
+        return new JsonResponse($pacientes, 200);
+    }
+
+    /**
+     * @Route("/fallecidos", name="pacientes_fallecidos", methods={"GET"})
+     * @SWG\Response(response=200, description="Listado de pacientes egresados")
+     * @SWG\Tag(name="Paciente")
+     *      
+     */
+    public function getPacientesFallecidos(Request $request): Response
+    {        
+        $pacientes = $this->getDoctrine()->getRepository(Paciente::class)->findAllPacientesFallecidos();        
         return new JsonResponse($pacientes, 200);
     }
 
