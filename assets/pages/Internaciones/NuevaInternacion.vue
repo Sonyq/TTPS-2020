@@ -54,7 +54,7 @@ export default {
 
   methods: {
     async agregarInternacion() {
-      let loader = this.$loading.show();
+      events.$emit("loading:show");
       let formData = {
         fecha_inicio_sintomas: this.fechaInicioSintomas,
         fecha_diagnostico: this.fechaDiagnostico,
@@ -73,9 +73,9 @@ export default {
           showConfirmButton: false
         })
         .then(() => {
-          this.$router.replace({ path: "verPaciente/" + this.pacienteId });
+          this.$router.push({ name: "Ver Paciente", params: { pacienteId: this.pacienteId } });
         });
-      loader.hide();
+      events.$emit("loading:hide");
     }
   }
 };

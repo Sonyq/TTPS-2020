@@ -20,7 +20,6 @@ use Swagger\Annotations as SWG;
 use Symfony\Component\Validator\Constraints\DateTime;
 use Symfony\Component\Validator\Constraints;
 
-
 /**
  * Class Evolución Controller
  *
@@ -39,7 +38,7 @@ class EvolucionController extends FOSRestController
    */
   public function getEvoluciones(Request $request, ParamFetcher $pf): Response
   {
-    $evoluciones = $this->getDoctrine()->getRepository(Evolucion::class)->findAllEvoluciones($pf->get('id'));      
+    $evoluciones = $this->getDoctrine()->getRepository(Evolucion::class)->findAllEvoluciones($pf->get('id'));    
 
     $serializer = $this->get('jms_serializer');    
     
@@ -47,49 +46,59 @@ class EvolucionController extends FOSRestController
     return new Response($result, 200);
   }
 
+  /**
+   * @Route("/new", name="evolucion_new", methods={"POST"})
+   * @SWG\Response(response=200, description="Evolución creada exitosamente")
+   * @SWG\Tag(name="Evolución")
+   * @RequestParam(name="internacion_id", strict=true, nullable=false, allowBlank=false, description="internacionId")
+   * @RequestParam(name="temperatura", strict=true, nullable=false, allowBlank=false, description="temperatura")
+   * @RequestParam(name="ta_sistolica", strict=true, nullable=false, allowBlank=false, description="Tensión Arterial Sistólica")
+   * @RequestParam(name="ta_diastolica", strict=true, nullable=false, allowBlank=false, description="Tensión Arterial Diastólica")
+   * @RequestParam(name="frecuencia_cardiaca", strict=true, nullable=false, allowBlank=false, description="Frecuencia cardiaca")
+   * @RequestParam(name="frecuencia_respiratoria", strict=true, nullable=false, allowBlank=false, description="Frecuencia respiratoria")
+   * @RequestParam(name="mecanica_ventilatoria", strict=true, nullable=false, allowBlank=false, description="Mecánica ventilatoria")
+   * @RequestParam(name="canula_nasal_valor", strict=true, nullable=true, allowBlank=false, description="Cánula nasal valor")
+   * @RequestParam(name="mascara_reservorio_valor", strict=true, nullable=true, allowBlank=false, description="Máscara reservorio valor")
+   * @RequestParam(name="saturacion_oxigeno", strict=true, nullable=true, allowBlank=false, description="Saturación oxígeno")
+   * @RequestParam(name="pafi", strict=true, nullable=true, allowBlank=false, description="PaFi")
+   * @RequestParam(name="prono_vigil", strict=true, nullable=true, allowBlank=true, description="Prono vigil")
+   * @RequestParam(name="tos", strict=true, nullable=true, allowBlank=true, description="Tos") 
+   * @RequestParam(name="disnea", strict=true, nullable=true, allowBlank=true, description="Disnea")
+   * @RequestParam(name="estabilidad_sintomas_respiratorios", strict=true, nullable=true, allowBlank=true, description="Estabilidad/Desaparición síntomas respiratorios")
+   * @RequestParam(name="somnolencia", strict=true, nullable=false, allowBlank=true, description="Somnolencia")
+   * @RequestParam(name="anosmia", strict=true, nullable=false, allowBlank=true, description="Anosmia")   
+   * @RequestParam(name="disgeusia", strict=true, nullable=false, allowBlank=true, description="Disgeusia")
+   * @RequestParam(name="rx_tx_tipo", strict=true, nullable=true, allowBlank=true, description="Radiografía Tórax Tipo")
+   * @RequestParam(name="rx_tx_descrip", strict=true, nullable=true, allowBlank=true, description="Radiografía Tórax descripción")
+   * @RequestParam(name="tac_torax_tipo", strict=true, nullable=true, allowBlank=true, description="TAC tórax tipo")
+   * @RequestParam(name="tac_torax_descrip", strict=true, nullable=true, allowBlank=true, description="TAC tóorax decripción")
+   * @RequestParam(name="ecg_tipo", strict=true, nullable=true, allowBlank=true, description="ECG tipo")
+   * @RequestParam(name="ecg_descrip", strict=true, nullable=true, allowBlank=true, description="ECG descripción")
+   * @RequestParam(name="pcr_covid_tipo", strict=true, nullable=true, allowBlank=true, description="PCR Covid tipo")
+   * @RequestParam(name="pcr_covid_descrip", strict=true, nullable=true, allowBlank=true, description="PCR Covid descripción")
+   * @RequestParam(name="observacion", strict=true, nullable=true, allowBlank=true, description="Observaciones")
+   *
+   *  @param ParamFetcher $pf
+   */
+  public function new(Request $request, ParamFetcher $pf): Response
+  {
 
-    /**
-     * @Route("/new", name="evolucion_new", methods={"POST"})
-     * @SWG\Response(response=200, description="Evolución creada exitosamente")
-     * @SWG\Tag(name="Evolución")
-     * @RequestParam(name="internacion_id", strict=true, nullable=false, allowBlank=false, description="internacionId")
-     * @RequestParam(name="temperatura", strict=true, nullable=false, allowBlank=false, description="temperatura")
-     * @RequestParam(name="ta_sistolica", strict=true, nullable=false, allowBlank=false, description="Tensión Arterial Sistólica")
-     * @RequestParam(name="ta_diastolica", strict=true, nullable=false, allowBlank=false, description="Tensión Arterial Diastólica")
-     * @RequestParam(name="frecuencia_cardiaca", strict=true, nullable=false, allowBlank=false, description="Frecuencia cardiaca")
-     * @RequestParam(name="frecuencia_respiratoria", strict=true, nullable=false, allowBlank=false, description="Frecuencia respiratoria")
-     * @RequestParam(name="mecanica_ventilatoria", strict=true, nullable=false, allowBlank=false, description="Mecánica ventilatoria")
-     * @RequestParam(name="canula_nasal_valor", strict=true, nullable=true, allowBlank=false, description="Cánula nasal valor")
-     * @RequestParam(name="mascara_reservorio_valor", strict=true, nullable=true, allowBlank=false, description="Máscara reservorio valor")
-     * @RequestParam(name="saturacion_oxigeno", strict=true, nullable=true, allowBlank=false, description="Saturación oxígeno")
-     * @RequestParam(name="pafi", strict=true, nullable=true, allowBlank=false, description="PaFi")
-     * @RequestParam(name="prono_vigil", strict=true, nullable=true, allowBlank=true, description="Prono vigil")
-     * @RequestParam(name="tos", strict=true, nullable=true, allowBlank=true, description="Tos") 
-     * @RequestParam(name="disnea", strict=true, nullable=true, allowBlank=true, description="Disnea")
-     * @RequestParam(name="estabilidad_sintomas_respiratorios", strict=true, nullable=true, allowBlank=true, description="Estabilidad/Desaparición síntomas respiratorios")
-     * @RequestParam(name="somnolencia", strict=true, nullable=false, allowBlank=true, description="Somnolencia")
-     * @RequestParam(name="anosmia", strict=true, nullable=false, allowBlank=true, description="Anosmia")   
-     * @RequestParam(name="disgeusia", strict=true, nullable=false, allowBlank=true, description="Disgeusia")
-     * @RequestParam(name="rx_tx_tipo", strict=true, nullable=true, allowBlank=true, description="Radiografía Tórax Tipo")
-     * @RequestParam(name="rx_tx_descrip", strict=true, nullable=true, allowBlank=true, description="Radiografía Tórax descripción")
-     * @RequestParam(name="tac_torax_tipo", strict=true, nullable=true, allowBlank=true, description="TAC tórax tipo")
-     * @RequestParam(name="tac_torax_descrip", strict=true, nullable=true, allowBlank=true, description="TAC tóorax decripción")
-     * @RequestParam(name="ecg_tipo", strict=true, nullable=true, allowBlank=true, description="ECG tipo")
-     * @RequestParam(name="ecg_descrip", strict=true, nullable=true, allowBlank=true, description="ECG descripción")
-     * @RequestParam(name="pcr_covid_tipo", strict=true, nullable=true, allowBlank=true, description="PCR Covid tipo")
-     * @RequestParam(name="pcr_covid_descrip", strict=true, nullable=true, allowBlank=true, description="PCR Covid descripción")
-     * @RequestParam(name="observacion", strict=true, nullable=true, allowBlank=true, description="Observaciones")
-     *
-     *  @param ParamFetcher $pf
-     */
-    public function new(Request $request, ParamFetcher $pf): Response
-    {
+    $internacion = $this->getDoctrine()->getRepository(Internacion::class)->find($pf->get('internacion_id'));
 
-      $internacion = $this->getDoctrine()->getRepository(Internacion::class)->find($pf->get('internacion_id'));
+    if (!$internacion) {
 
-      if (!$internacion) {
-        return new Response('La internación id '.$pf->get('internacion_id').' no existe', 400);
-      }
+      $error = [ 
+        "message" => "La internación id ".$pf->get('internacion_id')." no existe",
+      ];
+
+      return new Response($serializer->serialize($error, "json"), 404);
+
+    }
+
+    try {
+
+      $entityManager = $this->getDoctrine()->getManager();
+      $entityManager->getConnection()->beginTransaction();
 
       $fecha_carga = new \DateTime();
 
@@ -122,13 +131,26 @@ class EvolucionController extends FOSRestController
       $evolucion->setPcrCovidTipo($pf->get('pcr_covid_tipo'));
       $evolucion->setPcrCovidDescrip($pf->get('pcr_covid_descrip'));
       $evolucion->setObservacion($pf->get('observacion'));
-      
-      $entityManager = $this->getDoctrine()->getManager();
+    
       $entityManager->persist($evolucion);
       $entityManager->flush();
 
-      return new Response('Evolución creada', 200);
-     
+      $entityManager->getConnection()->commit();
+      
+    } catch (\Throwable $th) {
+
+      $entityManager->getConnection()->rollBack();
+
+      $error = [ 
+        "message" => "Se produjo un error al intentar crear la evolución",
+      ];
+
+      return new Response($serializer->serialize($error, "json"), 500);
+
     }
+
+    return new Response('Evolución creada', 200);
+    
+  }
 
 }

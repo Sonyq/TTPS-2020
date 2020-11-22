@@ -242,7 +242,6 @@ export default {
         this.burl("/api/sistemas/medicos" + sistemaId)
       );
       this.medicosDelSistema = medicos.data;
-      console.log(this.medicos);
       this.mostrarAsignarMedico = true;
       events.$emit("loading:hide");
     },
@@ -267,17 +266,7 @@ export default {
                 this.burl("/api/internacion/" + estado + "?id=" + internacionId)
               )
               .then(response => {
-                if (response.status == 200) {
-                  this.getPacientes();
-                } else {
-                  this.$swal.fire({
-                    icon: "error",
-                    title: "Oops...",
-                    text: "Se produjo un error",
-                    cancelButtonColor: "#47A44B"
-                  });
-                }
-                console.log(response.status);
+                this.getPacientes();
               });
             events.$emit("loading:hide");
           }

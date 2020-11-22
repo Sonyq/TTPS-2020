@@ -522,17 +522,7 @@ export default {
                 )
               )
               .then(response => {
-                if (response.status == 200) {
-                  this.$router.push("/internaciones");
-                } else {
-                  this.$swal.fire({
-                    icon: "error",
-                    title: "Oops...",
-                    text: "Se produjo un error",
-                    cancelButtonColor: "#47A44B"
-                  });
-                }
-                console.log(response.status);
+                this.$router.push("/internaciones");
               });
             events.$emit("loading:hide");
           }
@@ -560,17 +550,7 @@ export default {
             axios
               .post(this.burl("/api/sistemas/cambiar"), form)
               .then(response => {
-                if (response.status == 200) {
-                  this.$router.push("/internaciones");
-                } else {
-                  this.$swal.fire({
-                    icon: "error",
-                    title: "Oops...",
-                    text: "Se produjo un error",
-                    cancelButtonColor: "#47A44B"
-                  });
-                }
-                console.log(response.status);
+                this.$router.push("/internaciones");
               });
             events.$emit("loading:hide");
           }

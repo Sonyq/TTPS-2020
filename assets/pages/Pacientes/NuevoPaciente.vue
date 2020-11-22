@@ -160,7 +160,7 @@ export default {
   created() {},
   methods: {
     async agregarPaciente() {
-      let loader = this.$loading.show();
+      events.$emit("loading:show");  
       let formData = {
         dni: this.dni,
         apellido: this.apellido,
@@ -176,27 +176,23 @@ export default {
         contacto_telefono: this.telefonoContacto,
         contacto_parentesco: this.parentescoContacto
       };
-      try {
-        const response = await axios.post(
-          this.burl("/api/paciente/new"),
-          formData
-        );
-        this.$swal
-          .fire({
-            title: "Paciente agregado",
-            icon: "success",
-            timer: 2000,
-            showConfirmButton: false
-          })
-          .then(() => {
-            this.$router.replace({
-              path: "nuevaInternacion/" + response.data.id
-            });
+      const response = await axios.post(
+        this.burl("/api/paciente/new"),
+        formData
+      );
+      this.$swal
+        .fire({
+          title: "Paciente creado",
+          icon: "success",
+          timer: 2000,
+          showConfirmButton: false
+        })
+        .then(() => {
+          this.$router.push({
+            path: "nuevaInternacion/" + response.data.id
           });
-      } catch (error) {
-        console.log(error);
-      }
-      loader.hide();
+        });
+      events.$emit("loading:hide");
     }
   }
 };

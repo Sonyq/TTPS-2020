@@ -88,22 +88,33 @@ class SistemasController extends FOSRestController
    */
   public function cambiarDeSistema(Request $request, ParamFetcher $pf): Response
   {
+    
+    $serializer = $this->get('jms_serializer');
+    
     $paciente = $this->getDoctrine()->getRepository(Paciente::class)->find($pf->get('pacienteId'));
     if (!$paciente) {
-      return new Response('El paciente id '.$pacienteId.' no existe', 400);
+
+      $error = [ 
+        "message" => "El paciente id '.$pacienteId.' no existe",
+      ];
+
+      return new Response($serializer->serialize($error, "json"), 404);
     }
 
     $sistemaDestino = $this->getDoctrine()->getRepository(Sistema::class)->find($pf->get('sistemaDestinoId'));
     if ($sistemaDestino->getCamasDisponibles() == 0) {
-      return new Response('No hay camas disponibles en el sistema destino', 400);
+
+      $error = [ 
+        "message" => "No hay camas disponibles en el sistema destino",
+      ];
+
+      return new Response($serializer->serialize($error, "json"), 400);
     }
 
-    $entityManager = $this->getDoctrine()->getManager();
-    $serializer = $this->get('jms_serializer');
-
-    $entityManager->getConnection()->beginTransaction();
-
     try {
+      
+      $entityManager = $this->getDoctrine()->getManager();
+      $entityManager->getConnection()->beginTransaction();
 
       $internacionActual = $this->getDoctrine()->getRepository(Internacion::class)->find($pf->get('internacionId'));
   
@@ -168,11 +179,16 @@ class SistemasController extends FOSRestController
     } catch (\Exception $e) {
 
       $entityManager->getConnection()->rollBack();
-      return new Response($serializer->serialize(["msg" => "Se produjo un error"], "json"), 400);
+
+      $error = [ 
+        "message" => "Se produjo un error al intentar el cambio de sistema",
+      ];
+
+      return new Response($serializer->serialize($error, "json"), 500);
 
     } 
 
-    return new Response($serializer->serialize(["msg" => "Se efectuó el cambio de sistema"], "json"), 200);
+    return new Response($serializer->serialize($internacionCamaActual, "json"), 200);
 
   }
 

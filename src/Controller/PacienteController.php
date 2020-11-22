@@ -59,21 +59,22 @@ class PacienteController extends FOSRestController
     public function getPaciente(Request $request, ParamFetcher $pf): Response
     {
 
-      // Ejemplo del nuevo manejo de errores ///
       $serializer = $this->get('jms_serializer'); 
-      $error = [ 
-        "message" => "El id no existe",
-        "title" => "No se encontro el usuario",
-        "relocate" => "go back"
-      ];
-      return new Response($serializer->serialize($error, "json"), 404);
-      ///////----------------//////
       
       $paciente = $this->getDoctrine()->getRepository(Paciente::class)->findPaciente($pf->get('id'));
-      $serializer = $this->get('jms_serializer'); 
+
+      if (!$paciente) {
+
+        $error = [ 
+          "message" => "El paciente id ".$pf->get('id')." no existe",
+          "title" => "No se encontró el paciente",
+        ];
+  
+        return new Response($serializer->serialize($error, "json"), 404);
+      }
+
       return new Response($serializer->serialize($paciente, "json"), 200);
     }
-
 
     /**
      * @Route("/new", name="paciente_new", methods={"POST"})
@@ -97,15 +98,27 @@ class PacienteController extends FOSRestController
      */
     public function new(Request $request, ParamFetcher $pf): Response
     {
-      $entityManager = $this->getDoctrine()->getManager();
 
       $dni = (int)$pf->get('dni');
 
+      $serializer = $this->get('jms_serializer'); 
+
       if ($this->getDoctrine()->getRepository(Paciente::class)->findBy(["dni" => $dni])) {
-        return new Response('El paciente con dni: '.$dni.' ya se encuentra en el sistema', 400);
+
+        $error = [ 
+          "message" => "El paciente con dni: ".$dni." ya se encuentra cargado en el sistema",
+          "title" => "Paciente ya existente",
+        ];
+        return new Response($serializer->serialize($error, "json"), 400);
+
       }
-      
-      $paciente= new Paciente($dni,
+
+      try {
+
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->getConnection()->beginTransaction();
+
+        $paciente= new Paciente($dni,
                               $pf->get('apellido'),
                               $pf->get('nombre'),
                               $pf->get('direccion'),
@@ -119,9 +132,22 @@ class PacienteController extends FOSRestController
                               $pf->get('contacto_telefono') ? $pf->get('contacto_telefono') : null,
                               $pf->get('contacto_parentesco') ? $pf->get('contacto_parentesco') : null);
       
-      $entityManager->persist($paciente);
-      $entityManager->flush();
-      $serializer = $this->get('jms_serializer');
+        $entityManager->persist($paciente);
+        $entityManager->flush();
+        $entityManager->getConnection()->commit();
+        
+      } catch (\Throwable $th) {
+
+        $entityManager->getConnection()->rollBack();
+
+        $error = [ 
+          "message" => "Se produjo un error al intentar crear el paciente",
+        ];
+  
+        return new Response($serializer->serialize($error, "json"), 500);
+
+      }
+      
       return new Response($serializer->serialize($paciente, "json"), 200);
      
     }
@@ -149,8 +175,16 @@ class PacienteController extends FOSRestController
                                                                                               'paciente' => $paciente,
                                                                                               'fecha_hasta' => null]);
       
+      $serializer = $this->get('jms_serializer'); 
+
       if ($yaExisteLaRelacion) {
-        return new Response('Ese médico ya se encuentra asignado al paciente', 200);
+
+        $error = [
+          "message" => "Ese médico ya se encuentra asignado al paciente",
+        ];
+        
+        return new Response($serializer->serialize($error, "json"), 400);
+        
       }
 
       $userPaciente= new UserPaciente($paciente, $medico);
@@ -158,7 +192,7 @@ class PacienteController extends FOSRestController
       $entityManager->persist($userPaciente);
       $entityManager->flush();
 
-      return new Response('Médico asignado', 200);
+      return new Response($serializer->serialize($userPaciente, "json"), 200);
      
     }
 

@@ -45,42 +45,73 @@ class InternacionController extends FOSRestController
    */
   public function new(Request $request, ParamFetcher $pf): Response
   {
-  
+
+    $serializer = $this->get('jms_serializer');    
+
     $paciente = $this->getDoctrine()->getRepository(Paciente::class)->find($pf->get('pacienteId'));
-    $sistema = $this->getUser()->getSistema();
     if (!$paciente) {
-      return new Response('El paciente id '.$pacienteId.' no existe', 400);
+
+      $error = [ 
+        "message" => "El paciente id ".$pacienteId." no existe",
+        "title" => "No se encontró el paciente",
+      ];
+
+      return new Response($serializer->serialize($error, "json"), 404);
     }
     
+    $sistema = $this->getUser()->getSistema();
     if ($sistema->getCamasDisponibles() == 0) {
-      return new Response('No hay camas disponibles en el sistema', 400);
+
+      $error = [ 
+        "message" => "No hay camas disponibles en el sistema",
+      ];
+
+      return new Response($serializer->serialize($error, "json"), 400);
     }
 
-    $entityManager = $this->getDoctrine()->getManager();
     
-    $internacion= new Internacion();
-    $internacion->setPaciente($paciente);
-    $internacion->setSintomas($pf->get('sintomas'));
-    $internacion->setFechaInicioSintomas(date_create($pf->get('fecha_inicio_sintomas')));
-    $internacion->setFechaDiagnostico(date_create($pf->get('fecha_diagnostico')));
-    $entityManager->persist($internacion);
-    
-    $internacionCama = new InternacionCama();
+    try {
 
-    $camaLibre = $this->getDoctrine()->getRepository(Cama::class)->findPrimerCamaLibre($sistema->getId());
-    
-    $internacionCama->setInternacion($internacion);
-    $internacionCama->setCama($camaLibre);
-    $entityManager->persist($internacionCama);
+      $entityManager = $this->getDoctrine()->getManager();
+      $entityManager->getConnection()->beginTransaction();
+      
+      $internacion= new Internacion();
+      $internacion->setPaciente($paciente);
+      $internacion->setSintomas($pf->get('sintomas'));
+      $internacion->setFechaInicioSintomas(date_create($pf->get('fecha_inicio_sintomas')));
+      $internacion->setFechaDiagnostico(date_create($pf->get('fecha_diagnostico')));
+      $entityManager->persist($internacion);
+      
+      $internacionCama = new InternacionCama();
 
-    $camaLibre->setEstado("ocupada");
+      $camaLibre = $this->getDoctrine()->getRepository(Cama::class)->findPrimerCamaLibre($sistema->getId());
+      
+      $internacionCama->setInternacion($internacion);
+      $internacionCama->setCama($camaLibre);
+      $entityManager->persist($internacionCama);
 
-    $sistema->setCamasDisponibles($sistema->getCamasDisponibles() - 1);
-    $sistema->setCamasOcupadas($sistema->getCamasOcupadas() + 1);
-    
-    $entityManager->flush();
+      $camaLibre->setEstado("ocupada");
 
-    return new Response('Internación creada', 200);
+      $sistema->setCamasDisponibles($sistema->getCamasDisponibles() - 1);
+      $sistema->setCamasOcupadas($sistema->getCamasOcupadas() + 1);
+      
+      $entityManager->flush();
+      $entityManager->getConnection()->commit();
+
+      
+    } catch (\Throwable $th) {
+
+      $entityManager->getConnection()->rollBack();
+
+      $error = [ 
+        "message" => "Se produjo un error al intentar crear la internación: ".$th->getMessage(),
+      ];
+
+      return new Response($serializer->serialize($error, "json"), 500);
+
+    }    
+
+    return new Response($serializer->serialize($internacion, "json"), 200);
     
   }
 
@@ -113,9 +144,10 @@ class InternacionController extends FOSRestController
   public function getInternacionesPrevias(Request $request, ParamFetcher $pf): Response
   {
     $internaciones = $this->getDoctrine()->getRepository(Internacion::class)->findAllInternaciones($pf->get('pacienteId'));
-    $serializer = $this->get('jms_serializer');    
-    $result = $internaciones ? $serializer->serialize($internaciones, "json") : null;
     
+    $serializer = $this->get('jms_serializer');    
+    
+    $result = $internaciones ? $serializer->serialize($internaciones, "json") : null;
     return new Response($result, 200);
   }
 
@@ -130,12 +162,12 @@ class InternacionController extends FOSRestController
   public function declararEgreso(Request $request, ParamFetcher $pf): Response
   {
     $response = $this->cambiarEstado($pf->get('id'), 'egreso');
-    return new Response($response, 200);
+    return $response;
   }
 
   /**
    * @Route("/obito", name="internacion_obito", methods={"GET"})
-   * @SWG\Response(response=200, description="Declarar obito")
+   * @SWG\Response(response=200, description="Declarar óbito")
    * @SWG\Tag(name="Internación")
    * @QueryParam(name="id", strict=true, nullable=false, allowBlank=false, description="Internación Id")
    *      
@@ -144,7 +176,7 @@ class InternacionController extends FOSRestController
   public function declararObito(Request $request, ParamFetcher $pf): Response
   {
     $response = $this->cambiarEstado($pf->get('id'), 'obito');
-    return new Response($response, 200);
+    return $response;
   }
 
 }
