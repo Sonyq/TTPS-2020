@@ -68,6 +68,7 @@ class PacienteController extends FOSRestController
         $error = [ 
           "message" => "El paciente id ".$pf->get('id')." no existe",
           "title" => "No se encontró el paciente",
+          "relocate" => "go back",
         ];
   
         return new Response($serializer->serialize($error, "json"), 404);

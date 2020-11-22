@@ -45,12 +45,12 @@ class PacienteRepository extends ServiceEntityRepository
 	public function findPaciente($pacienteId)
 	{    
 		return $this->createQueryBuilder('p')
-			->select('p.id, p.dni, p.apellido, p.nombre, p.direccion, p.telefono, p.email, p.fecha_nacimiento, p.obra_social, 
+			->select('p.id, p.dni, p.apellido, p.nombre, p.direccion, p.telefono, p.email, p.fecha_nacimiento, p.obra_social, p.antecedentes, 
 								p.contacto_nombre, p.contacto_apellido, p.contacto_telefono, p.contacto_parentesco')
 			->where('p.id = :pacienteId')
 			->setParameter('pacienteId', $pacienteId)
 			->getQuery()
-			->getSingleResult();
+			->getOneOrNullResult();
 	}
     
 }
