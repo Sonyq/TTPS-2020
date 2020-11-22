@@ -9,7 +9,7 @@
         >
           <router-link
             :to="{
-              name: 'Internaciones',
+              name: 'Pacientes',
               params: { sistemaNombre: sistema.descrip, sistemaId: sistema.id }
             }"
           >

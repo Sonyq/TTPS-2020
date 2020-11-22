@@ -25,7 +25,7 @@ class PacienteRepository extends ServiceEntityRepository
 			parent::__construct($registry, Paciente::class);
 	}
 
-	public function findAllPacientes($sistemaId)
+	public function findAllPacientesInternados($sistemaId)
 	{    
 		return $this->createQueryBuilder('p')
 			->select('p.id, p.dni, p.apellido, p.nombre, sist.descrip as sistema, s.nombre as sala, c.numero as cama, i.id AS internacionId, i.fecha_egreso, i.fecha_obito')
@@ -37,6 +37,28 @@ class PacienteRepository extends ServiceEntityRepository
 			->where('ic.fecha_hasta IS NULL')
 			->andWhere('sist.id = :sistemaId')
 			->setParameter('sistemaId', $sistemaId)
+			->orderBy('p.apellido', 'ASC')
+			->getQuery()
+			->getResult();
+	}
+
+	public function findAllPacientesEgresados()
+	{    
+		return $this->createQueryBuilder('p')
+			->select('p.id, p.dni, p.apellido, p.nombre, i.fecha_egreso, i.fecha_obito')
+			->innerJoin('App:Internacion', 'i', 'WITH', 'i.paciente = p.id')
+			->where('i.fecha_egreso IS NOT NULL')
+			->orderBy('p.apellido', 'ASC')
+			->getQuery()
+			->getResult();
+	}
+
+	public function findAllPacientesFallecidos()
+	{    
+		return $this->createQueryBuilder('p')
+			->select('p.id, p.dni, p.apellido, p.nombre, i.fecha_egreso, i.fecha_obito')
+			->innerJoin('App:Internacion', 'i', 'WITH', 'i.paciente = p.id')
+			->where('i.fecha_obito IS NOT NULL')
 			->orderBy('p.apellido', 'ASC')
 			->getQuery()
 			->getResult();

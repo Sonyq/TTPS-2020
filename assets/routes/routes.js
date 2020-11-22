@@ -2,7 +2,7 @@ import DashboardLayout from "@/pages/Layout/DashboardLayout.vue";
 
 import Dashboard from "@/pages/Dashboard.vue";
 import Login from "@/pages/Login.vue";
-import Internaciones from "@/pages/Pacientes/Internaciones.vue";
+import Pacientes from "@/pages/Pacientes/Pacientes.vue";
 import NuevoPaciente from "@/pages/Pacientes/NuevoPaciente.vue";
 import VerPaciente from "@/pages/Pacientes/VerPaciente.vue";
 import NuevaEvolucion from "@/pages/Evoluciones/NuevaEvolucion.vue";
@@ -48,9 +48,9 @@ const routes = [
         component: Sistemas
       },
       {
-        path: "internaciones/:sistemaId?/:sistemaNombre?",
-        name: "Internaciones",
-        component: Internaciones,
+        path: "pacientes/:sistemaId?/:sistemaNombre?",
+        name: "Pacientes",
+        component: Pacientes,
         props: true
       },
       {
