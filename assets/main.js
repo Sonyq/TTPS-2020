@@ -5,16 +5,41 @@ import VueRouter from "vue-router";
 import App from "./App";
 
 import axios from "axios";
-import { required } from "vee-validate/dist/rules";
-import { extend, setInteractionMode } from "vee-validate";
-import VueSweetalert2 from "vue-sweetalert2";
 
-setInteractionMode("eager");
+// vee-validate
+import { ValidationProvider, ValidationObserver, extend, setInteractionMode } from 'vee-validate';
+import { required, numeric, max, double } from "vee-validate/dist/rules";
 
 extend("required", {
   ...required,
-  message: "{_field_} no puede estar vacío"
+  message: "No puede estar vacío"
 });
+
+extend("numeric", {
+  ...numeric,
+  message: 'Debe ser un valor numérico'
+});
+
+extend("double", {
+  ...double,
+  message: 'Debe ser un valor decimal'
+});
+
+extend("max", {
+  ...max,
+  validate(value, { length }) {
+    return value.length <= length;
+  },
+  params: ['length'],
+  message: 'Máximo {length} caracteres'
+});
+
+setInteractionMode("eager");
+
+Vue.component('ValidationProvider', ValidationProvider);
+Vue.component('ValidationObserver', ValidationObserver);
+
+import VueSweetalert2 from "vue-sweetalert2";
 
 // router setup
 import routes from "./routes/routes";

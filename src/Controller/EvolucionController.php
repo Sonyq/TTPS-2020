@@ -82,6 +82,7 @@ class EvolucionController extends FOSRestController
    */
   public function new(Request $request, ParamFetcher $pf): Response
   {
+    $serializer = $this->get('jms_serializer');    
 
     $internacion = $this->getDoctrine()->getRepository(Internacion::class)->find($pf->get('internacion_id'));
 
