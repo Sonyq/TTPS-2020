@@ -522,7 +522,7 @@ export default {
                 )
               )
               .then(response => {
-                this.$router.push("/internaciones");
+                this.$router.push("/pacientes");
               });
             events.$emit("loading:hide");
           }
@@ -550,7 +550,7 @@ export default {
             axios
               .post(this.burl("/api/sistemas/cambiar"), form)
               .then(response => {
-                this.$router.push("/internaciones");
+                this.$router.push("/pacientes");
               });
             events.$emit("loading:hide");
           }

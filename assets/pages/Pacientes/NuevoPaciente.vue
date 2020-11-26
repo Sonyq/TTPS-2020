@@ -18,14 +18,15 @@
                   </md-field>
                 </div>
 
-                <div class="md-layout-item md-small-size-50 md-size-50">
-                  <md-datepicker
-                    v-model="fechaNacimiento"
-                    md-immediately
-                    placeholder="Fecha de nacimiento"
+                <div class="md-layout-item md-small-size-50 md-size-50" style="margin-top: 23px">
+                  <datepicker 
+                    v-model="fechaNacimiento" 
+                    :lang="this.$root.datePickerOptions" 
+                    placeholder="Fecha de nacimiento" 
+                    :disabled-date="this.$root.datePickerOptions.disabledDate"
+                    format="DD/MM/YYYY" 
                   >
-                    <label>Fecha de nacimiento</label>
-                  </md-datepicker>
+                  </datepicker>
                 </div>
               </div>
               <div class="md-layout">
@@ -139,7 +140,15 @@
 </template>
 
 <script>
+
+import Datepicker from 'vue2-datepicker';
+import "vue2-datepicker/index.css";
+import 'vue2-datepicker/locale/es';
+
 export default {
+  components: {
+    Datepicker
+  },
   data() {
     return {
       dni: null,
@@ -168,7 +177,7 @@ export default {
         direccion: this.domicilio,
         telefono: this.telefono,
         email: this.email,
-        fecha_nacimiento: this.fechaNacimiento,
+        fecha_nacimiento: this.formatDate(this.fechaNacimiento.toISOString()),
         obra_social: this.obraSocial,
         antecedentes: this.antecedentesPersonales,
         contacto_nombre: this.nombreContacto,

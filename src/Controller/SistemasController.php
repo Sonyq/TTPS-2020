@@ -122,16 +122,23 @@ class SistemasController extends FOSRestController
       if ($sistemaDestino->getNombre() == 'DOMICILIO') {
   
         //si el destino es domicilio creo una cama nueva para la única sala que hay para DOMICILIO y le pongo estado 'ocupada'.
-        //el nro de cama es el uno más del máximo num. q haya.
-        $salaDomicilio = $this->getDoctrine()->getRepository(Sala::class)->findBy(['sistema' => $sistemaDestino])[0];
+        $salaDomicilio = $this->getDoctrine()->getRepository(Sala::class)->findOneBy(['sistema' => $sistemaDestino]);
+
+        if (!$salaDomicilio) {
+
+          $error = [ 
+            "message" => "Se produjo un error al intentar el cambio de sistema: no hay sala para el sistema Domicilio",
+          ];
+    
+          return new Response($serializer->serialize($error, "json"), 400);
+        }
 
         $cama = new Cama();
         $cama->setSala($salaDomicilio);
         $cama->setEstado('ocupada');
-  
-        $numeroCama = $this->getDoctrine()->getRepository(Cama::class)->getNroCamaMax($salaDomicilio);
 
-        $cama->setNumero($numeroCama['numero'] + 1);
+        //algo hay que poner (la columna es not null)
+        $cama->setNumero(1);
     
       } else {
   

@@ -33,7 +33,9 @@ import Chartist from "chartist";
 import Loading from "vue-loading-overlay";
 import "vue-loading-overlay/dist/vue-loading.css";
 
-import moment from "moment";
+import moment from 'moment-timezone'
+moment.tz.setDefault("America/Argentina/Buenos_Aires")
+
 Object.defineProperty(Vue.prototype, "$moment", { value: moment });
 
 // configure router
@@ -156,12 +158,13 @@ Vue.mixin({
       }
       return `${url.origin}/${name}`;
     },
+
     /**
      * Devuelve una fecha con formato
      *
      * @param {String} dateTime
      */
-    formatDateTime: value => moment(String(value)).format("DD/MM/YYYY hh:mm"),
+    formatDateTime: value => moment(String(value)).format("DD/MM/YYYY hh:mm:ss"),
 
     /**
      * Devuelve una fecha con formato
@@ -190,7 +193,16 @@ new Vue({
     store_user: {},
     Chartist: Chartist,
     cancelSource: null,
-    loading: null
+    loading: null,
+    datePickerOptions: {
+      disabledDate (date) {
+          return date > new Date();
+      },
+      formatLocale: {
+          firstDayOfWeek: 1,
+      },
+      monthBeforeYear: false,
+    },
   },
   created() {
     events.$emit("loading:start");

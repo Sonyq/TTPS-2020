@@ -409,20 +409,20 @@ VALUES (10, 5, 'Sala 2');
 --
 -- Data for table public.sistema (OID = 41057) (LIMIT 0,5)
 --
-INSERT INTO sistema (id, nombre, descrip, camas_total, camas_disponibles, camas_ocupadas)
-VALUES (1, 'GUARDIA', 'Guardia', 5, 3, 2);
+INSERT INTO sistema (id, nombre, descrip, camas_total, camas_disponibles, camas_ocupadas, sistemas_destino)
+VALUES (1, 'GUARDIA', 'Guardia', 5, 3, 2, '[{"id": 2, "descrip": "Piso Covid"}, {"id": 3, "descrip": "UTI"}]');
 
-INSERT INTO sistema (id, nombre, descrip, camas_total, camas_disponibles, camas_ocupadas)
-VALUES (2, 'PISOCOVID', 'Piso Covid', 5, 5, 0);
+INSERT INTO sistema (id, nombre, descrip, camas_total, camas_disponibles, camas_ocupadas, sistemas_destino)
+VALUES (2, 'PISOCOVID', 'Piso Covid', 5, 5, 0, '[{"id": 3, "descrip": "UTI"}, {"id": 4, "descrip": "Hotel"}, {"id": 5, "descrip": "Domicilio"}]');
 
-INSERT INTO sistema (id, nombre, descrip, camas_total, camas_disponibles, camas_ocupadas)
-VALUES (3, 'UTI', 'UTI', 5, 5, 0);
+INSERT INTO sistema (id, nombre, descrip, camas_total, camas_disponibles, camas_ocupadas, sistemas_destino)
+VALUES (3, 'UTI', 'UTI', 5, 5, 0, '[{"id": 2, "descrip": "Piso Covid"}]');
 
-INSERT INTO sistema (id, nombre, descrip, camas_total, camas_disponibles, camas_ocupadas)
-VALUES (4, 'HOTEL', 'Hotel', 5, 5, 0);
+INSERT INTO sistema (id, nombre, descrip, camas_total, camas_disponibles, camas_ocupadas, sistemas_destino)
+VALUES (4, 'HOTEL', 'Hotel', 5, 5, 0, '[{"id": 2, "descrip": "Piso Covid"}]');
 
-INSERT INTO sistema (id, nombre, descrip, camas_total, camas_disponibles, camas_ocupadas)
-VALUES (5, 'DOMICILIO', 'Domicilio', 5, 5, 0);
+INSERT INTO sistema (id, nombre, descrip, camas_total, camas_disponibles, camas_ocupadas, sistemas_destino)
+VALUES (5, 'DOMICILIO', 'Domicilio', -1, -1, -1, '[{"id": 2, "descrip": "Piso Covid"}]');
 
 --
 -- Definition for index uniq_8d93d649e7927c74 (OID = 40994) : 
