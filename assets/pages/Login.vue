@@ -43,9 +43,9 @@ export default {
         .then(response => {
           if (response.status === 200) {
             this.jwtToken = response.data["token"]; //seteo el token
+            this.$root.fetchLoggedUser();
             events.$emit("loading:hide");
             this.$router.push("/pacientes"); // con esto me cambio de vista
-            // this.$router.push('/internaciones/' + this.loggedUser.sistemaId + '/' + this.loggedUser.sistemaNombre); // con esto me cambio de vista
           }
         })
         .catch(error => {

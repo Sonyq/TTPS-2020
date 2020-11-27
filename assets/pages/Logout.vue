@@ -21,7 +21,7 @@ export default {
       this.jwtToken.clear;
       this.loggedUser.clear;
       events.$emit("loading:hide");
-      this.$router.replace("/");
+      this.$router.push("/");
     }
   }
 };

@@ -230,7 +230,6 @@ new Vue({
     },
   },
   created() {
-    events.$emit("loading:start");
 
     axios.interceptors.response.use(
       response => {
@@ -251,8 +250,11 @@ new Vue({
     this.jwtToken = localStorage.getItem("token")
       ? localStorage.getItem("token")
       : "";
-    if (!(this.store_token === "")) {
-      this.fetchLoggedUser();
+
+    //si abrís la app y tenías sesión te manda al listado de pacientes... 
+    if ( this.store_token !== "" ) {
+      this.fetchLoggedUser()
+      this.$router.push("/pacientes")
     }
 
     events.$on("change:route", componente => this.cambiarRuta(componente));
@@ -378,9 +380,7 @@ new Vue({
 
   watch: {
     $route(to, from) {
-      events.$emit("loading:start");
-      //this.fetchPageConfig();
-      if (!(this.store_token === "")) {
+      if ( (this.store_token !== "") && (from.path !== "/login") && (to.path !== "/logout") ) {
         this.fetchLoggedUser();
       }
     }
