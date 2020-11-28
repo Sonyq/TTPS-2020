@@ -7,13 +7,17 @@
 
       <md-card-content>
         <div class="md-layout">
-          
           <div class="md-layout-item md-size-50 text-left">
-            <md-button class="md-simple" @click="getPacientesInternados()">Internados</md-button>
-            <md-button class="md-simple" @click="getPacientesEgresados()">Egresados</md-button>
-            <md-button class="md-simple" @click="getPacientesFallecidos()">Fallecidos</md-button>
+            <md-button class="md-simple" @click="getPacientesInternados()"
+              >Internados</md-button
+            >
+            <md-button class="md-simple" @click="getPacientesEgresados()"
+              >Egresados</md-button
+            >
+            <md-button class="md-simple" @click="getPacientesFallecidos()"
+              >Fallecidos</md-button
+            >
           </div>
-
 
           <div class="md-layout-item md-size-50 text-right">
             <md-button to="/nuevoPaciente" class="md-success"
@@ -63,7 +67,6 @@
                     </md-button>
 
                     <md-menu-content>
-
                       <router-link
                         :to="{
                           name: 'Ver Paciente',
@@ -78,7 +81,7 @@
                         :to="{
                           name: 'Nueva Internación',
                           params: { pacienteId: props.row.id }
-                        }"  
+                        }"
                       >
                         <md-menu-item>Nueva internación</md-menu-item>
                       </router-link>
@@ -232,17 +235,13 @@ export default {
     },
     async getPacientesEgresados() {
       events.$emit("loading:show");
-      const pacientes = await axios.get(
-        this.burl("/api/paciente/egresados")
-      );
+      const pacientes = await axios.get(this.burl("/api/paciente/egresados"));
       this.pacientes = pacientes.data;
       events.$emit("loading:hide");
     },
     async getPacientesFallecidos() {
       events.$emit("loading:show");
-      const pacientes = await axios.get(
-        this.burl("/api/paciente/fallecidos")
-      );
+      const pacientes = await axios.get(this.burl("/api/paciente/fallecidos"));
       this.pacientes = pacientes.data;
       events.$emit("loading:hide");
     },

@@ -7,7 +7,12 @@ import App from "./App";
 import axios from "axios";
 
 // vee-validate
-import { ValidationProvider, ValidationObserver, extend, setInteractionMode } from 'vee-validate';
+import {
+  ValidationProvider,
+  ValidationObserver,
+  extend,
+  setInteractionMode
+} from "vee-validate";
 import { required, numeric, max, double } from "vee-validate/dist/rules";
 
 extend("required", {
@@ -17,12 +22,12 @@ extend("required", {
 
 extend("numeric", {
   ...numeric,
-  message: 'Debe ser un valor numérico'
+  message: "Debe ser un valor numérico"
 });
 
 extend("double", {
   ...double,
-  message: 'Debe ser un valor decimal'
+  message: "Debe ser un valor decimal"
 });
 
 extend("max", {
@@ -30,14 +35,14 @@ extend("max", {
   validate(value, { length }) {
     return value.length <= length;
   },
-  params: ['length'],
-  message: 'Máximo {length} caracteres'
+  params: ["length"],
+  message: "Máximo {length} caracteres"
 });
 
 setInteractionMode("eager");
 
-Vue.component('ValidationProvider', ValidationProvider);
-Vue.component('ValidationObserver', ValidationObserver);
+Vue.component("ValidationProvider", ValidationProvider);
+Vue.component("ValidationObserver", ValidationObserver);
 
 import VueSweetalert2 from "vue-sweetalert2";
 
@@ -58,8 +63,8 @@ import Chartist from "chartist";
 import Loading from "vue-loading-overlay";
 import "vue-loading-overlay/dist/vue-loading.css";
 
-import moment from 'moment-timezone'
-moment.tz.setDefault("America/Argentina/Buenos_Aires")
+import moment from "moment-timezone";
+moment.tz.setDefault("America/Argentina/Buenos_Aires");
 
 Object.defineProperty(Vue.prototype, "$moment", { value: moment });
 
@@ -189,7 +194,8 @@ Vue.mixin({
      *
      * @param {String} dateTime
      */
-    formatDateTime: value => moment(String(value)).format("DD/MM/YYYY hh:mm:ss"),
+    formatDateTime: value =>
+      moment(String(value)).format("DD/MM/YYYY hh:mm:ss"),
 
     /**
      * Devuelve una fecha con formato
@@ -220,17 +226,16 @@ new Vue({
     cancelSource: null,
     loading: null,
     datePickerOptions: {
-      disabledDate (date) {
-          return date > new Date();
+      disabledDate(date) {
+        return date > new Date();
       },
       formatLocale: {
-          firstDayOfWeek: 1,
+        firstDayOfWeek: 1
       },
-      monthBeforeYear: false,
-    },
+      monthBeforeYear: false
+    }
   },
   created() {
-
     axios.interceptors.response.use(
       response => {
         //metodo para redirigir a login cuando la sesion expira, siempre y cuando no este en el login
@@ -251,10 +256,10 @@ new Vue({
       ? localStorage.getItem("token")
       : "";
 
-    //si abrís la app y tenías sesión te manda al listado de pacientes... 
-    if ( this.store_token !== "" ) {
-      this.fetchLoggedUser()
-      this.$router.push("/pacientes")
+    //si abrís la app y tenías sesión te manda al listado de pacientes...
+    if (this.store_token !== "") {
+      this.fetchLoggedUser();
+      this.$router.push("/pacientes");
     }
 
     events.$on("change:route", componente => this.cambiarRuta(componente));
@@ -380,7 +385,11 @@ new Vue({
 
   watch: {
     $route(to, from) {
-      if ( (this.store_token !== "") && (from.path !== "/login") && (to.path !== "/logout") ) {
+      if (
+        this.store_token !== "" &&
+        from.path !== "/login" &&
+        to.path !== "/logout"
+      ) {
         this.fetchLoggedUser();
       }
     }

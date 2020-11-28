@@ -6,20 +6,30 @@
       </md-card-header>
 
       <md-card-content>
-
         <ValidationObserver v-slot="{ invalid }">
           <form @submit.prevent="submit">
-
             <div class="md-layout">
               <div class="md-layout-item md-small-size-100 md-size-50">
                 <h4>Signos vitales</h4>
 
                 <div class="md-layout-item md-small-size-40 md-size-40">
                   <md-field>
-                    <ValidationProvider rules="required|double|max:4" v-slot="{ errors }">
-                      <md-input name="temperatura" v-model="temperatura" type="text"></md-input>
+                    <ValidationProvider
+                      rules="required|double|max:4"
+                      v-slot="{ errors }"
+                    >
+                      <md-input
+                        name="temperatura"
+                        v-model="temperatura"
+                        type="text"
+                      ></md-input>
                       <label for="temperatura">Temperatura (°C)</label>
-                      <span class="field-error" v-for="error in errors">{{ error }}</span>
+                      <span
+                        class="field-error"
+                        v-for="error in errors"
+                        v-bind:key="error.id"
+                        >{{ error }}</span
+                      >
                     </ValidationProvider>
                   </md-field>
                 </div>
@@ -27,8 +37,15 @@
                 <div class="md-layout">
                   <div class="md-layout-item md-small-size-40 md-size-40">
                     <md-field>
-                      <ValidationProvider rules="required|numeric|max:3" v-slot="{ errors }">
-                        <md-input name="taSistolica" v-model="taSistolica" type="number"></md-input>
+                      <ValidationProvider
+                        rules="required|numeric|max:3"
+                        v-slot="{ errors }"
+                      >
+                        <md-input
+                          name="taSistolica"
+                          v-model="taSistolica"
+                          type="number"
+                        ></md-input>
                         <label for="taSistolica">TA Sistólica</label>
                         <span class="field-error">{{ errors[0] }}</span>
                       </ValidationProvider>
@@ -37,8 +54,15 @@
 
                   <div class="md-layout-item md-small-size-40 md-size-40">
                     <md-field>
-                      <ValidationProvider rules="required|numeric|max:3" v-slot="{ errors }">
-                        <md-input name="taDiastolica" v-model="taDiastolica" type="number"></md-input>
+                      <ValidationProvider
+                        rules="required|numeric|max:3"
+                        v-slot="{ errors }"
+                      >
+                        <md-input
+                          name="taDiastolica"
+                          v-model="taDiastolica"
+                          type="number"
+                        ></md-input>
                         <label for="taDiastolica">TA diastólica</label>
                         <span class="field-error">{{ errors[0] }}</span>
                       </ValidationProvider>
@@ -49,28 +73,38 @@
                 <div class="md-layout">
                   <div class="md-layout-item md-small-size-40 md-size-40">
                     <md-field>
-                      <ValidationProvider rules="required|numeric|max:3" v-slot="{ errors }">
+                      <ValidationProvider
+                        rules="required|numeric|max:3"
+                        v-slot="{ errors }"
+                      >
                         <md-input
                           name="frecuenciaCardiaca"
                           v-model="frecuenciaCardiaca"
                           type="number"
                         ></md-input>
-                        <label for="frecuenciaCardiaca">Frecuencia cardíaca</label>
-                        <span class="field-error">{{ errors[0] }}</span>                      
+                        <label for="frecuenciaCardiaca"
+                          >Frecuencia cardíaca</label
+                        >
+                        <span class="field-error">{{ errors[0] }}</span>
                       </ValidationProvider>
                     </md-field>
                   </div>
 
                   <div class="md-layout-item md-small-size-40 md-size-40">
                     <md-field>
-                      <ValidationProvider rules="required|numeric|max:3" v-slot="{ errors }">
+                      <ValidationProvider
+                        rules="required|numeric|max:3"
+                        v-slot="{ errors }"
+                      >
                         <md-input
                           name="frecuenciaRespiratoria"
                           v-model="frecuenciaRespiratoria"
                           type="number"
                         ></md-input>
-                        <label for="frecuenciaRespiratoria">Frecuencia respiratoria</label>
-                        <span class="field-error">{{ errors[0] }}</span>                      
+                        <label for="frecuenciaRespiratoria"
+                          >Frecuencia respiratoria</label
+                        >
+                        <span class="field-error">{{ errors[0] }}</span>
                       </ValidationProvider>
                     </md-field>
                   </div>
@@ -95,7 +129,7 @@
                         <md-option value="regular">Regular</md-option>
                         <md-option value="mala">Mala</md-option>
                       </md-select>
-                      <span class="field-error">{{ errors[0] }}</span>                      
+                      <span class="field-error">{{ errors[0] }}</span>
                     </ValidationProvider>
                   </md-field>
                 </div>
@@ -114,7 +148,10 @@
                   <div class="md-layout">
                     <div class="md-layout-item md-small-size-50 md-size-50">
                       <md-field>
-                        <ValidationProvider rules="required" v-slot="{ errors }">
+                        <ValidationProvider
+                          rules="required"
+                          v-slot="{ errors }"
+                        >
                           <label for="tipoAdministracionO2"
                             >Tipo Administración O2</label
                           >
@@ -130,37 +167,44 @@
                               >Máscara con reservorio</md-option
                             >
                           </md-select>
-                          <span class="field-error">{{ errors[0] }}</span>                      
-                        </ValidationProvider> 
+                          <span class="field-error">{{ errors[0] }}</span>
+                        </ValidationProvider>
                       </md-field>
                     </div>
 
                     <!-- esto se muestra si se setea tipo de administración O2 es true -->
                     <div class="md-layout-item md-small-size-50 md-size-50">
                       <md-field v-if="tipoAdministracionO2 == 'Cánula nasal'">
-                        <ValidationProvider rules="required|double" v-slot="{ errors }">
+                        <ValidationProvider
+                          rules="required|double"
+                          v-slot="{ errors }"
+                        >
                           <label>Valor cánula nasal</label>
                           <md-input
                             v-model="canulaNasalValor"
                             type="text"
                           ></md-input>
-                          <span class="field-error">{{ errors[0] }}</span>                      
-                        </ValidationProvider> 
+                          <span class="field-error">{{ errors[0] }}</span>
+                        </ValidationProvider>
                       </md-field>
 
-                      <md-field v-if="tipoAdministracionO2 == 'Máscara con reservorio'">
-                        <ValidationProvider rules="required|double" v-slot="{ errors }">
+                      <md-field
+                        v-if="tipoAdministracionO2 == 'Máscara con reservorio'"
+                      >
+                        <ValidationProvider
+                          rules="required|double"
+                          v-slot="{ errors }"
+                        >
                           <label>Valor máscara con reservorio</label>
                           <md-input
                             v-model="mascaraReservorioValor"
                             type="text"
                           ></md-input>
-                          <span class="field-error">{{ errors[0] }}</span>                      
-                        </ValidationProvider>                       
+                          <span class="field-error">{{ errors[0] }}</span>
+                        </ValidationProvider>
                       </md-field>
                     </div>
                     <!-- hasta acá si se setea tipo de administración O2 -->
-
                   </div>
 
                   <div class="md-layout-item md-small-size-40 md-size-40">
@@ -168,8 +212,8 @@
                       <ValidationProvider rules="required" v-slot="{ errors }">
                         <label>Saturación O2</label>
                         <md-input v-model="satO2" type="number"></md-input>
-                        <span class="field-error">{{ errors[0] }}</span>                      
-                      </ValidationProvider>              
+                        <span class="field-error">{{ errors[0] }}</span>
+                      </ValidationProvider>
                     </md-field>
                   </div>
 
@@ -180,11 +224,17 @@
                     <!-- esto se muestra si pafi es true -->
                     <div v-if="pafi">
                       <md-field>
-                        <ValidationProvider rules="required" v-slot="{ errors }">
+                        <ValidationProvider
+                          rules="required"
+                          v-slot="{ errors }"
+                        >
                           <label>Valor PaO2/FiO2</label>
-                          <md-input v-model="valorPafi" type="number"></md-input>
-                          <span class="field-error">{{ errors[0] }}</span>                      
-                        </ValidationProvider>                      
+                          <md-input
+                            v-model="valorPafi"
+                            type="number"
+                          ></md-input>
+                          <span class="field-error">{{ errors[0] }}</span>
+                        </ValidationProvider>
                       </md-field>
                     </div>
                     <!-- hasta acá si pafi es true -->
@@ -211,8 +261,8 @@
                           <md-option value="3">3</md-option>
                           <md-option value="4">4</md-option>
                         </md-select>
-                        <span class="field-error">{{ errors[0] }}</span>                      
-                      </ValidationProvider>       
+                        <span class="field-error">{{ errors[0] }}</span>
+                      </ValidationProvider>
                     </md-field>
                   </div>
 
@@ -264,7 +314,10 @@
                     <md-radio class="md-primary" v-model="anosmia" :value="true"
                       >Sí</md-radio
                     >
-                    <md-radio class="md-primary" v-model="anosmia" :value="false"
+                    <md-radio
+                      class="md-primary"
+                      v-model="anosmia"
+                      :value="false"
                       >No</md-radio
                     >
                   </div>
@@ -273,7 +326,10 @@
                 <div class="md-layout-item md-small-size-100 md-size-100">
                   <label for="disgeusia">Disgeusia</label>
                   <div class="md-layout">
-                    <md-radio class="md-primary" v-model="disgeusia" :value="true"
+                    <md-radio
+                      class="md-primary"
+                      v-model="disgeusia"
+                      :value="true"
                       >Sí</md-radio
                     >
                     <md-radio
@@ -300,7 +356,10 @@
                 >
                   <ValidationProvider rules="required" v-slot="{ errors }">
                     <div class="md-layout">
-                      <md-radio class="md-primary" v-model="rxTxTipo" value="normal"
+                      <md-radio
+                        class="md-primary"
+                        v-model="rxTxTipo"
+                        value="normal"
                         >Normal</md-radio
                       >
                       <md-radio
@@ -310,7 +369,7 @@
                         >Patológico</md-radio
                       >
                     </div>
-                  <span class="field-error">{{ errors[0] }}</span>                      
+                    <span class="field-error">{{ errors[0] }}</span>
                   </ValidationProvider>
 
                   <div
@@ -351,8 +410,8 @@
                         >Patológico</md-radio
                       >
                     </div>
-                  <span class="field-error">{{ errors[0] }}</span>                      
-                  </ValidationProvider>                  
+                    <span class="field-error">{{ errors[0] }}</span>
+                  </ValidationProvider>
 
                   <div
                     v-if="tacToraxTipo == 'patológico'"
@@ -377,7 +436,10 @@
                 >
                   <ValidationProvider rules="required" v-slot="{ errors }">
                     <div class="md-layout">
-                      <md-radio class="md-primary" v-model="ecgTipo" value="normal"
+                      <md-radio
+                        class="md-primary"
+                        v-model="ecgTipo"
+                        value="normal"
                         >Normal</md-radio
                       >
                       <md-radio
@@ -387,8 +449,8 @@
                         >Patológico</md-radio
                       >
                     </div>
-                  <span class="field-error">{{ errors[0] }}</span>                      
-                  </ValidationProvider>                  
+                    <span class="field-error">{{ errors[0] }}</span>
+                  </ValidationProvider>
 
                   <div
                     v-if="ecgTipo == 'patológico'"
@@ -428,8 +490,8 @@
                         >Patológico</md-radio
                       >
                     </div>
-                    <span class="field-error">{{ errors[0] }}</span>                      
-                  </ValidationProvider>                               
+                    <span class="field-error">{{ errors[0] }}</span>
+                  </ValidationProvider>
 
                   <div
                     v-if="pcrCovidTipo == 'patológico'"
@@ -463,7 +525,10 @@
                 </div>
 
                 <div class="md-layout-item md-size-50 text-right">
-                  <md-button type="submit" class="md-raised md-success" :disabled="invalid"
+                  <md-button
+                    type="submit"
+                    class="md-raised md-success"
+                    :disabled="invalid"
                     >Guardar</md-button
                   >
                 </div>
@@ -548,7 +613,7 @@ export default {
         pcr_covid_descrip: this.pcrCovidDescrip,
         observaciones: this.observaciones
       };
-      const response = await axios.post(this.burl("/api/evolucion/new"), form)
+      const response = await axios.post(this.burl("/api/evolucion/new"), form);
       this.$swal
         .fire({
           title: "Evolución cargada",
@@ -557,12 +622,15 @@ export default {
           showConfirmButton: false
         })
         .then(() => {
-          this.$router.push({ name: "Ver Paciente", params: { pacienteId: this.pacienteId } })
+          this.$router.push({
+            name: "Ver Paciente",
+            params: { pacienteId: this.pacienteId }
+          });
         });
-      events.$emit("loading:hide")
+      events.$emit("loading:hide");
     },
     volver() {
-      this.$router.go(-1)
+      this.$router.go(-1);
     }
   },
   watch: {

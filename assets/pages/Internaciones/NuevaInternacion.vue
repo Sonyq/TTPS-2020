@@ -8,21 +8,27 @@
 
         <md-card-content>
           <div class="md-layout">
-            <div class="md-layout-item md-small-size-100 md-size-100" style="margin-top: 20px">
+            <div
+              class="md-layout-item md-small-size-100 md-size-100"
+              style="margin-top: 20px"
+            >
               <datepicker
-                v-model="fechaInicioSintomas" 
-                :lang="this.$root.datePickerOptions" 
-                placeholder="Fecha inicio síntomas" 
+                v-model="fechaInicioSintomas"
+                :lang="this.$root.datePickerOptions"
+                placeholder="Fecha inicio síntomas"
                 :disabled-date="this.$root.datePickerOptions.disabledDate"
-                format="DD/MM/YYYY" 
+                format="DD/MM/YYYY"
               >
               </datepicker>
             </div>
-            <div class="md-layout-item md-small-size-100 md-size-100" style="margin-top: 20px; margin-bottom: 10px;">
-              <datepicker 
-                v-model="fechaDiagnostico" 
-                :lang="this.$root.datePickerOptions" 
-                placeholder="Fecha diagnóstico" 
+            <div
+              class="md-layout-item md-small-size-100 md-size-100"
+              style="margin-top: 20px; margin-bottom: 10px;"
+            >
+              <datepicker
+                v-model="fechaDiagnostico"
+                :lang="this.$root.datePickerOptions"
+                placeholder="Fecha diagnóstico"
                 :disabled-date="this.$root.datePickerOptions.disabledDate"
                 format="DD/MM/YYYY"
               >
@@ -49,10 +55,9 @@
 </template>
 
 <script>
-
-import Datepicker from 'vue2-datepicker';
+import Datepicker from "vue2-datepicker";
 import "vue2-datepicker/index.css";
-import 'vue2-datepicker/locale/es';
+import "vue2-datepicker/locale/es";
 
 export default {
   components: {
@@ -63,14 +68,16 @@ export default {
     return {
       fechaInicioSintomas: null,
       fechaDiagnostico: null,
-      descripcion: null,
-    }
+      descripcion: null
+    };
   },
   methods: {
     async agregarInternacion() {
       events.$emit("loading:show");
       let formData = {
-        fecha_inicio_sintomas: this.formatDate(this.fechaInicioSintomas.toISOString()),
+        fecha_inicio_sintomas: this.formatDate(
+          this.fechaInicioSintomas.toISOString()
+        ),
         fecha_diagnostico: this.formatDate(this.fechaDiagnostico.toISOString()),
         sintomas: this.descripcion,
         pacienteId: this.pacienteId
@@ -87,7 +94,10 @@ export default {
           showConfirmButton: false
         })
         .then(() => {
-          this.$router.push({ name: "Ver Paciente", params: { pacienteId: this.pacienteId } });
+          this.$router.push({
+            name: "Ver Paciente",
+            params: { pacienteId: this.pacienteId }
+          });
         });
       events.$emit("loading:hide");
     }

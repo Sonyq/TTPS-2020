@@ -18,13 +18,16 @@
                   </md-field>
                 </div>
 
-                <div class="md-layout-item md-small-size-50 md-size-50" style="margin-top: 23px">
-                  <datepicker 
-                    v-model="fechaNacimiento" 
-                    :lang="this.$root.datePickerOptions" 
-                    placeholder="Fecha de nacimiento" 
+                <div
+                  class="md-layout-item md-small-size-50 md-size-50"
+                  style="margin-top: 23px"
+                >
+                  <datepicker
+                    v-model="fechaNacimiento"
+                    :lang="this.$root.datePickerOptions"
+                    placeholder="Fecha de nacimiento"
                     :disabled-date="this.$root.datePickerOptions.disabledDate"
-                    format="DD/MM/YYYY" 
+                    format="DD/MM/YYYY"
                   >
                   </datepicker>
                 </div>
@@ -140,10 +143,9 @@
 </template>
 
 <script>
-
-import Datepicker from 'vue2-datepicker';
+import Datepicker from "vue2-datepicker";
 import "vue2-datepicker/index.css";
-import 'vue2-datepicker/locale/es';
+import "vue2-datepicker/locale/es";
 
 export default {
   components: {
@@ -169,7 +171,7 @@ export default {
   created() {},
   methods: {
     async agregarPaciente() {
-      events.$emit("loading:show");  
+      events.$emit("loading:show");
       let formData = {
         dni: this.dni,
         apellido: this.apellido,
