@@ -84,9 +84,7 @@ class PacienteController extends FOSRestController
     {
 
       $serializer = $this->get('jms_serializer'); 
-      
       $paciente = $this->getDoctrine()->getRepository(Paciente::class)->findPaciente($pf->get('id'));
-
       if (!$paciente) {
 
         $error = [ 
@@ -178,6 +176,80 @@ class PacienteController extends FOSRestController
     }
 
     /**
+     * @Route("/update/{id}", name="paciente_update", methods={"POST"})
+     * @SWG\Response(response=200, description="Paciente actualizado exitosamente")
+     * @SWG\Tag(name="Paciente")
+     * @RequestParam(name="dni", strict=true, nullable=false, allowBlank=false, description="Dni")
+     * @RequestParam(name="apellido", strict=true, nullable=false, allowBlank=false, description="Apellido")
+     * @RequestParam(name="nombre", strict=true, nullable=false, allowBlank=false, description="Nombre")
+     * @RequestParam(name="direccion", strict=true, nullable=false, allowBlank=false, description="Dirección")
+     * @RequestParam(name="telefono", strict=true, nullable=false, allowBlank=false, description="Teléfono")
+     * @RequestParam(name="email", strict=true, nullable=false, allowBlank=false, description="Email")
+     * @RequestParam(name="fecha_nacimiento", strict=true, nullable=false, allowBlank=false, description="Fecha de nacimiento.")
+     * @RequestParam(name="obra_social", strict=true, nullable=true, allowBlank=true, description="Obra Social")
+     * @RequestParam(name="antecedentes", strict=true, nullable=true, allowBlank=true, description="Antecedentes")
+     * @RequestParam(name="contacto_nombre", strict=false, description="Nombre de algún contacto")
+     * @RequestParam(name="contacto_apellido", strict=false, description="Apellido de algún contacto")
+     * @RequestParam(name="contacto_telefono", strict=false, description="Teléfono de algún contacto")
+     * @RequestParam(name="contacto_parentesco", strict=false, description="Parentesco del contacto")
+     * 
+     * @param ParamFetcher $pf
+     */
+    public function update(Request $request, ParamFetcher $pf): Response
+    {
+
+      $serializer = $this->get('jms_serializer'); 
+      $dni = (int)$pf->get('dni');
+      $entityManager = $this->getDoctrine()->getManager();
+      $paciente = $entityManager->getRepository(Paciente::class)->findBy(["dni" => $dni]);
+
+      if (!$paciente) {
+
+        $error = [ 
+          "message" => "No se encontró el paciente con dni: ".$dni,
+          "title" => "Paciente inexistente",
+        ];
+
+        return new Response($serializer->serialize($error, "json"), 400);
+
+      }
+
+      try {
+
+        $entityManager->getConnection()->beginTransaction();
+
+        $paciente[0]->setApellido($pf->get('apellido'));
+        $paciente[0]->setNombre($pf->get('nombre'));
+        $paciente[0]->setDireccion($pf->get('direccion'));
+        $paciente[0]->setTelefono($pf->get('telefono'));
+        $paciente[0]->setEmail($pf->get('email'));
+        $paciente[0]->setFechaNacimiento(date_create($pf->get('fecha_nacimiento')));
+        $paciente[0]->setObraSocial($pf->get('obra_social'));
+        $paciente[0]->setAntecedentes($pf->get('antecedentes'));
+        $paciente[0]->setContactoNombre($pf->get('contacto_nombre'));
+        $paciente[0]->setContactoApellido($pf->get('contacto_apellido'));
+        $paciente[0]->setContactoTelefono($pf->get('contacto_telefono'));
+        $paciente[0]->setContactoParentesco($pf->get('contacto_parentesco'));
+        $entityManager->flush();
+        $entityManager->getConnection()->commit();
+        
+      } catch (\Throwable $th) {
+
+        $entityManager->getConnection()->rollBack();
+
+        $error = [ 
+          "message" => "Se produjo un error al intentar actualizar el paciente",
+        ];
+  
+        return new Response($serializer->serialize($error, "json"), 500);
+
+      }
+      
+      return new Response($serializer->serialize($paciente, "json"), 200);
+     
+    }
+
+    /**
      * @Route("/asignarMedico", name="asignar_medico", methods={"POST"})
      * @SWG\Response(response=200, description="Asignar médico a paciente")
      * @SWG\Tag(name="Paciente")
@@ -219,6 +291,39 @@ class PacienteController extends FOSRestController
 
       return new Response($serializer->serialize($userPaciente, "json"), 200);
      
+    }
+
+    /**
+     * @Route("/existsWithDni", name="exists_with_dni", methods={"POST"})
+     * @SWG\Response(response=200, description="Existe o no existe un paciente con un dni especifico")
+     * @SWG\Tag(name="Paciente")
+     * @RequestParam(name="dni", strict=true, nullable=false, allowBlank=false, description="Dni")
+     * 
+     * @param ParamFetcher $pf
+     */
+    public function existsWithDni(Request $request, ParamFetcher $pf): Response
+    {
+      $serializer = $this->get('jms_serializer'); 
+      $dni = (int)$pf->get('dni');
+      if ($this->getDoctrine()->getRepository(Paciente::class)->findBy(["dni" => $dni])) {
+        $response = [ 
+          "title" => "Paciente existente",
+          "message" => "El paciente con dni: ".$dni." ya se encuentra cargado en el sistema",
+          "exists" => true,
+          "dni" => $dni,
+        ];
+        return new Response($serializer->serialize($response, "json"), 200);
+
+      }else{
+        $response = [ 
+          "title" => "Paciente inexistente",
+          "message" => "El paciente con dni: ".$dni." no se encuentra cargado en el sistema",
+          "exists" => false,
+          "dni" => $dni,
+        ];
+        return new Response($serializer->serialize($response, "json"), 200);
+      }
+
     }
 
 }

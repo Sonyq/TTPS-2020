@@ -11,6 +11,15 @@
             <div class="md-layout-item md-small-size-100 md-size-33">
               <span class="md-title">Datos filiatorios</span>
 
+              <!-- <md-button
+                class="md-fab md-success md-icon-button"
+                :to="{
+                  name: 'Editar Paciente',
+                  params: { pacienteId: pacienteId }
+                }"
+                ><md-icon>edit</md-icon>
+              </md-button> -->
+
               <div class="md-layout-item">
                 <span class="md-body-1">Dni: {{ paciente.dni }}</span>
               </div>
@@ -122,6 +131,16 @@
                 @click="mostrarContacto = true"
                 >Ver datos de algún contacto</md-button
               >
+
+              <md-button
+                class="md-dense md-success"
+                :to="{
+                  name: 'Editar Paciente',
+                  params: { pacienteId: pacienteId }
+                }"
+                >Editar Paciente
+              </md-button>
+
             </div>
 
             <div class="md-layout-item md-small-size-100 md-size-33">
@@ -398,6 +417,7 @@ import "vue-good-table/dist/vue-good-table.css";
 import { VueGoodTable } from "vue-good-table";
 
 export default {
+  name: 'IconButtons',
   components: {
     VueGoodTable
   },
