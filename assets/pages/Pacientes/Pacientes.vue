@@ -1,6 +1,6 @@
 <template>
   <div>
-    <md-card>
+    <md-card v-if="pacientes">
       <md-card-header data-background-color="green">
         <span class="md-title">Pacientes en {{ nombreSistemaComp }}</span>
       </md-card-header>
@@ -20,7 +20,7 @@
           </div>
 
           <div class="md-layout-item md-size-50 text-right">
-            <md-button to="/nuevoPaciente" class="md-success"
+            <md-button to="/paciente" class="md-success"
               >Agregar Paciente</md-button
             >
           </div>
@@ -163,7 +163,7 @@ export default {
   props: ["sistemaNombre", "sistemaId"],
   data() {
     return {
-      pacientes: [],
+      pacientes: null,
       sistemaNombreLocal: "",
       mostrarAsignarMedico: false,
       medicosDelSistema: [],

@@ -135,7 +135,7 @@
               <md-button
                 class="md-dense md-success"
                 :to="{
-                  name: 'Editar Paciente',
+                  name: 'Paciente',
                   params: { pacienteId: pacienteId }
                 }"
                 >Editar Paciente

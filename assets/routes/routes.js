@@ -54,13 +54,8 @@ const routes = [
         props: true
       },
       {
-        path: "nuevoPaciente",
-        name: "Agregar Paciente",
-        component: NuevoPaciente
-      },
-      {
-        path: "editarPaciente/:pacienteId",
-        name: "Editar Paciente",
+        path: "paciente/:pacienteId?",
+        name: "Paciente",
         component: NuevoPaciente,
         props: true
       },
