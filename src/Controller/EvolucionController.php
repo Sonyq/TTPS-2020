@@ -47,6 +47,23 @@ class EvolucionController extends FOSRestController
   }
 
   /**
+   * @Route("/show", name="evolucion_show", methods={"GET"})
+   * @SWG\Response(response=200, description="Ver Evolución")
+   * @SWG\Tag(name="Evolución")
+   * @QueryParam(name="id", strict=true, nullable=false, allowBlank=false, description="Evolución Id")
+   *      
+   * @param ParamFetcher $pf
+   */
+  public function getEvolucion(Request $request, ParamFetcher $pf): Response
+  {
+    $evolucion = $this->getDoctrine()->getRepository(Evolucion::class)->find($pf->get('id'));    
+
+    $serializer = $this->get('jms_serializer');    
+    
+    return new Response($serializer->serialize($evolucion, "json"), 200);
+  }
+
+  /**
    * @Route("/new", name="evolucion_new", methods={"POST"})
    * @SWG\Response(response=200, description="Evolución creada exitosamente")
    * @SWG\Tag(name="Evolución")

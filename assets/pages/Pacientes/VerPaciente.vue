@@ -397,12 +397,22 @@
                       >Nueva evolución</md-button
                     >
                   </div>
-                  <!-- <template slot="table-row" slot-scope="props">
-									<span v-if="props.column.field == 'acciones'">
-									
-									</span>
-								</template> -->
+                  <template slot="table-row" slot-scope="props">
+									  <span v-if="props.column.field == 'acciones'">
+                      <md-button @click="verEvolucion(props.row.evolucionId)">Ver</md-button>
+									  </span>
+								  </template>
                 </vue-good-table>
+
+                <ver-evolucion-modal v-if="evolucion"
+                  :mostrar="mostrarEvolucion"
+                  :data="evolucion"
+                  @cerrarEvolucionModal="mostrarEvolucion = false"
+                >
+                </ver-evolucion-modal>
+
+                
+                
               </div>
             </div>
           </div>
@@ -415,11 +425,13 @@
 <script>
 import "vue-good-table/dist/vue-good-table.css";
 import { VueGoodTable } from "vue-good-table";
+import VerEvolucionModal from "./../Evoluciones/VerEvolucionModal";
 
 export default {
   name: 'IconButtons',
   components: {
-    VueGoodTable
+    VueGoodTable,
+    VerEvolucionModal
   },
   props: ["pacienteId"],
   data() {
@@ -430,9 +442,11 @@ export default {
       mostrarAntecedentes: false,
       mostrarContacto: false,
       mostrarPrevias: false,
+      mostrarEvolucion: false,
       evoluciones: [],
       sistemasDestino: [],
       sistemaDestinoSelected: "",
+      evolucion: null,
       columnas: [
         {
           label: "id",
@@ -451,11 +465,11 @@ export default {
           field: "sistema",
           type: "string",
           filterable: true
+        },
+        {
+          label: 'Acciones',
+          field: 'acciones',
         }
-        // {
-        //   label: 'Acciones',
-        //   field: 'acciones',
-        // },
       ]
     };
   },
@@ -578,6 +592,18 @@ export default {
     },
     fechaCargaEvolucion(evolucion) {
       return this.formatDateTime(evolucion.fecha_carga);
+    },
+    async verEvolucion(evolucionId) {
+      events.$emit("loading:show");
+      const response = await axios.get(
+        this.burl("/api/evolucion/show?id=" + evolucionId)
+      );
+      this.evolucion= response.data
+      events.$emit("loading:hide");
+      this.mostrarEvolucion = true
+    },
+    cerrarEvolucionModal() {
+      this.$modal.hide('evolucion')
     }
   }
 };
