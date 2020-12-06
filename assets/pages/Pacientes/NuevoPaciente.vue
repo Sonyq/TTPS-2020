@@ -1,5 +1,11 @@
 <template>
   <div>
+
+    <loading :active.sync="isLoading"
+        :is-full-page="false"
+        color='#4CAF50'>
+    </loading>
+
     <form>
       <md-card>
         <md-card-header data-background-color="green">
@@ -167,10 +173,14 @@
 import Datepicker from "vue2-datepicker";
 import "vue2-datepicker/index.css";
 import "vue2-datepicker/locale/es";
+import Loading from 'vue-loading-overlay';
+// Import stylesheet
+import 'vue-loading-overlay/dist/vue-loading.css';
 
 export default {
   components: {
-    Datepicker
+    Datepicker,
+    Loading
   },
   name: 'BasicSelect',
   props: ["pacienteId"],
@@ -188,7 +198,8 @@ export default {
       nombreContacto: null,
       telefonoContacto: null,
       relacionContacto: null,
-      antecedentesPersonales: null
+      antecedentesPersonales: null,
+      isLoading: false,
     };
   },
   created() {
@@ -199,30 +210,26 @@ export default {
     }
   },
   methods: {
-
     async getPaciente() {
-      events.$emit("loading:show");
-      axios
-        .get(this.burl("/api/paciente/getPaciente?id=" + this.pacienteId))
-        .then(response => {
-          this.dni = response.data.dni,
-          this.apellido = response.data.apellido,
-          this.nombre = response.data.nombre,
-          this.fechaNacimiento = new Date(response.data.fecha_nacimiento),
-          this.telefono = response.data.telefono,
-          this.domicilio = response.data.direccion,
-          this.obraSocial = response.data.obra_social,
-          this.email = response.data.email,
-          this.apellidoContacto = response.data.contacto_apellido,
-          this.nombreContacto = response.data.contacto_nombre,
-          this.telefonoContacto = response.data.contacto_telefono,
-          this.relacionContacto = response.data.contacto_parentesco,
-          this.antecedentesPersonales = response.data.antecedentes
-        });
-       events.$emit("loading:hide");
+      this.isLoading = true
+      const response = await axios.get(this.burl("/api/paciente/getPaciente?id=" + this.pacienteId))        
+      this.dni = response.data.dni,
+      this.apellido = response.data.apellido,
+      this.nombre = response.data.nombre,
+      this.fechaNacimiento = new Date(response.data.fecha_nacimiento),
+      this.telefono = response.data.telefono,
+      this.domicilio = response.data.direccion,
+      this.obraSocial = response.data.obra_social,
+      this.email = response.data.email,
+      this.apellidoContacto = response.data.contacto_apellido,
+      this.nombreContacto = response.data.contacto_nombre,
+      this.telefonoContacto = response.data.contacto_telefono,
+      this.relacionContacto = response.data.contacto_parentesco,
+      this.antecedentesPersonales = response.data.antecedentes
+      this.isLoading = false
     },
     async agregarPaciente() {
-      events.$emit("loading:show");
+      this.isLoading = true
       let formData = {
         dni: this.dni,
         apellido: this.apellido,
@@ -254,10 +261,10 @@ export default {
             path: "nuevaInternacion/" + response.data.id
           });
         });
-      events.$emit("loading:hide");
+      this.isLoading = false
     },
     async editarPaciente() {
-      events.$emit("loading:show");
+      this.isLoading = true
       let formData = {
         dni: this.dni,
         apellido: this.apellido,
@@ -290,7 +297,7 @@ export default {
             params: { pacienteId: this.pacienteId }
           });
         });
-      events.$emit("loading:hide");
+      this.isLoading = false
     },
     async existsWithDni() {
       this.$swal

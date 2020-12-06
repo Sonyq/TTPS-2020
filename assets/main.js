@@ -127,14 +127,14 @@ Vue.mixin({
         this.$root.$data.store_user["email"] = data.email;
         this.$root.$data.store_user["username"] = data.username;
         this.$root.$data.store_user["roles"] = [];
-        this.$root.$data.store_user["permisos"] = [];
+        // this.$root.$data.store_user["permisos"] = [];
         this.$root.$data.store_user["sistemaNombre"] = data.sistema.descrip;
         this.$root.$data.store_user["sistemaId"] = data.sistema.id;
         data.roles.forEach(r => {
-          this.$root.$data.store_user["roles"].push(r.nombre);
-          r.permisos.forEach(p => {
-            this.$root.$data.store_user["permisos"].push(p.nombre); //despues ve de eliminar los repetidos
-          });
+          this.$root.$data.store_user["roles"].push(r);
+          // r.permisos.forEach(p => {
+          //   this.$root.$data.store_user["permisos"].push(p.nombre); //despues ve de eliminar los repetidos
+          // });
         });
         this.$root.$data.store_user["created_at"] = data.created_at;
         this.$root.$data.store_user["updated_at"] = data.updated_at;
@@ -194,8 +194,7 @@ Vue.mixin({
      *
      * @param {String} dateTime
      */
-    formatDateTime: value =>
-      moment(String(value)).format("DD/MM/YYYY hh:mm:ss"),
+    formatDateTime: value => moment(String(value)).format("DD/MM/YYYY HH:mm"),
 
     /**
      * Devuelve una fecha con formato

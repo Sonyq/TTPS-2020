@@ -156,6 +156,22 @@ class PacienteController extends FOSRestController
                               $pf->get('contacto_parentesco') ? $pf->get('contacto_parentesco') : null);
       
         $entityManager->persist($paciente);
+
+        //busco al jefe del sistema
+        $users = $this->getDoctrine()->getRepository(User::class)
+                          ->findBy(["sistema" => $this->getUser()->getSistema()->getId()]);
+
+        foreach ($users as $user) {
+          if (in_array("ROLE_JEFE", $user->getRoles())) {
+            $jefeSistema = $user;
+            break;
+          };
+        }
+
+        $userPaciente = new UserPaciente($paciente, $jefeSistema);
+
+        $entityManager->persist($userPaciente);
+
         $entityManager->flush();
         $entityManager->getConnection()->commit();
         

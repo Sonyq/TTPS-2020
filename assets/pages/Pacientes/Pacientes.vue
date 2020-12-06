@@ -1,6 +1,13 @@
 <template>
   <div>
-    <md-card v-if="pacientes">
+
+    <loading :active.sync="isLoading"
+      :is-full-page="true"
+      color='#4CAF50'>
+    </loading>
+
+    <md-card v-if="pacientes">     
+      
       <md-card-header data-background-color="green">
         <span class="md-title">Pacientes en {{ nombreSistemaComp }}</span>
       </md-card-header>
@@ -88,7 +95,7 @@
 
                       <md-menu-item
                         v-if="
-                          !(props.row.fecha_obito || props.row.fecha_egreso)
+                          !(props.row.fecha_obito || props.row.fecha_egreso) && loggedUser.roles.includes('ROLE_JEFE')
                         "
                         @click="getMedicosDelSistema(props.row.id)"
                         >Asignar médico</md-menu-item
@@ -155,14 +162,19 @@
 <script>
 import "vue-good-table/dist/vue-good-table.css";
 import { VueGoodTable } from "vue-good-table";
+import Loading from 'vue-loading-overlay';
+// Import stylesheet
+import 'vue-loading-overlay/dist/vue-loading.css';
 
 export default {
   components: {
-    VueGoodTable
+    VueGoodTable,
+    Loading
   },
   props: ["sistemaNombre", "sistemaId"],
   data() {
     return {
+      isLoading: false,
       pacientes: null,
       sistemaNombreLocal: "",
       mostrarAsignarMedico: false,
@@ -225,25 +237,25 @@ export default {
   },
   methods: {
     async getPacientesInternados() {
-      events.$emit("loading:show");
+      this.isLoading = true
       let sistemaId = this.sistemaId ? "?sistema=" + this.sistemaId : "";
       const pacientes = await axios.get(
         this.burl("/api/paciente/internados" + sistemaId)
       );
       this.pacientes = pacientes.data;
-      events.$emit("loading:hide");
+      this.isLoading = false
     },
     async getPacientesEgresados() {
-      events.$emit("loading:show");
+      this.isLoading = true
       const pacientes = await axios.get(this.burl("/api/paciente/egresados"));
       this.pacientes = pacientes.data;
-      events.$emit("loading:hide");
+      this.isLoading = false
     },
     async getPacientesFallecidos() {
-      events.$emit("loading:show");
+      this.isLoading = true
       const pacientes = await axios.get(this.burl("/api/paciente/fallecidos"));
       this.pacientes = pacientes.data;
-      events.$emit("loading:hide");
+      this.isLoading = false
     },
     getSistema(paciente) {
       return paciente.fecha_egreso || paciente.fecha_obito
@@ -270,7 +282,7 @@ export default {
       }
     },
     async getMedicosDelSistema(pacienteId) {
-      events.$emit("loading:show");
+      this.isLoading = true
       this.pacienteSeleccionado = pacienteId;
       let sistemaId = this.sistemaId ? "?sistema=" + this.sistemaId : "";
       const medicos = await axios.get(
@@ -278,7 +290,7 @@ export default {
       );
       this.medicosDelSistema = medicos.data;
       this.mostrarAsignarMedico = true;
-      events.$emit("loading:hide");
+      this.isLoading = false
     },
     cambiarEstado(estado, internacionId) {
       this.$swal
@@ -308,7 +320,7 @@ export default {
         });
     },
     async asignarMedico() {
-      events.$emit("loading:show");
+      this.isLoading = true
       let form = {
         pacienteId: this.pacienteSeleccionado,
         medicoId: this.medicoAsignado
@@ -318,7 +330,7 @@ export default {
         form
       );
       this.mostrarAsignarMedico = false;
-      events.$emit("loading:hide");
+      this.isLoading = false
       this.$swal.fire({
         icon: "success",
         text: "Médico asignado",

@@ -302,28 +302,28 @@ class User implements UserInterface
         return $this;
     }
 
-    public function hasPermit(Permiso $permit): bool
-    {
-        $ok = false;
-        $rs = $this->getRoles();
-        $i = 0;
-        while(!$ok && sizeof($rs) > $i){
-            $ok = $permit->hasRole($rs[$i]);
-            $i++;
-        }
-        return $ok;
-    }
+    // public function hasPermit(Permiso $permit): bool
+    // {
+    //     $ok = false;
+    //     $rs = $this->getRoles();
+    //     $i = 0;
+    //     while(!$ok && sizeof($rs) > $i){
+    //         $ok = $permit->hasRole($rs[$i]);
+    //         $i++;
+    //     }
+    //     return $ok;
+    // }
 
-    public function hasPermits(Array $permits): bool
-    {
-        $ok = true;
-        foreach($permits as $p){
-            $ok = ($ok && $this->hasPermit($p));
+    // public function hasPermits(Array $permits): bool
+    // {
+    //     $ok = true;
+    //     foreach($permits as $p){
+    //         $ok = ($ok && $this->hasPermit($p));
 
-        }
+    //     }
 
-        return $ok;
-    }
+    //     return $ok;
+    // }
 
     /**
     * @return Sistema
