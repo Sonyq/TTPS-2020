@@ -10,39 +10,15 @@ import axios from "axios";
 import {
   ValidationProvider,
   ValidationObserver,
-  extend,
   setInteractionMode
 } from "vee-validate";
-import { required, numeric, max, double } from "vee-validate/dist/rules";
-
-extend("required", {
-  ...required,
-  message: "No puede estar vacío"
-});
-
-extend("numeric", {
-  ...numeric,
-  message: "Debe ser un valor numérico"
-});
-
-extend("double", {
-  ...double,
-  message: "Debe ser un valor decimal"
-});
-
-extend("max", {
-  ...max,
-  validate(value, { length }) {
-    return value.length <= length;
-  },
-  params: ["length"],
-  message: "Máximo {length} caracteres"
-});
 
 setInteractionMode("eager");
 
 Vue.component("ValidationProvider", ValidationProvider);
 Vue.component("ValidationObserver", ValidationObserver);
+
+import "./vee-validate-rules.js"
 
 import VueSweetalert2 from "vue-sweetalert2";
 
@@ -224,15 +200,6 @@ new Vue({
     Chartist: Chartist,
     cancelSource: null,
     loading: null,
-    datePickerOptions: {
-      disabledDate(date) {
-        return date > new Date();
-      },
-      formatLocale: {
-        firstDayOfWeek: 1
-      },
-      monthBeforeYear: false
-    }
   },
   created() {
     axios.interceptors.response.use(

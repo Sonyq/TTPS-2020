@@ -6,166 +6,229 @@
         color='#4CAF50'>
     </loading>
 
-    <form>
-      <md-card>
-        <md-card-header data-background-color="green">
-          <h3 class="title" v-if="pacienteId">Editar Paciente</h3>
-          <h3 class="title" v-else>Nuevo Paciente</h3>
-        </md-card-header>
+    <md-card>
+      <md-card-header data-background-color="green">
+        <h3 class="title" v-if="pacienteId">Editar Paciente</h3>
+        <h3 class="title" v-else>Nuevo Paciente</h3>
+      </md-card-header>
 
-        <md-card-content>
-          <div class="md-layout">
-            <div class="md-layout-item md-small-size-50 md-size-50">
-              <span class="md-title">Datos filiatorios</span>
-              <div class="md-layout">
-                <div class="md-layout-item md-small-size-50 md-size-50">
-                  <md-field>
-                    <label>DNI</label>
-                    <md-input v-model="dni" disabled type="text"></md-input>
-                  </md-field>
-                </div>
+      <md-card-content>
+        <ValidationObserver v-slot="{ invalid }">
+          <form @submit.prevent="submit">
+            <div class="md-layout">
+              <div class="md-layout-item md-small-size-50 md-size-50">
+                <span class="md-title">Datos filiatorios</span>
+                <div class="md-layout">
 
-                <div
-                  class="md-layout-item md-small-size-50 md-size-50"
-                  style="margin-top: 23px"
-                >
-                  <datepicker
-                    v-model="fechaNacimiento"
-                    :lang="this.$root.datePickerOptions"
-                    placeholder="Fecha de nacimiento"
-                    :disabled-date="this.$root.datePickerOptions.disabledDate"
-                    format="DD/MM/YYYY"
+                  <div class="md-layout-item md-small-size-50 md-size-50">
+                    <md-field>
+                      <label>DNI</label>
+                      <md-input v-model="dni" disabled type="number"></md-input>
+                    </md-field>
+                  </div>
+
+                  <div
+                    class="md-layout-item md-small-size-50 md-size-50"
+                    style="margin-top: 23px"
                   >
-                  </datepicker>
-                </div>
-              </div>
-              <div class="md-layout">
-                <div class="md-layout-item md-small-size-50 md-size-50">
-                  <md-field>
-                    <label>Apellido</label>
-                    <md-input v-model="apellido" type="text"></md-input>
-                  </md-field>
-                </div>
-
-                <div class="md-layout-item md-small-size-50 md-size-50">
-                  <md-field>
-                    <label>Nombre</label>
-                    <md-input v-model="nombre" type="text"></md-input>
-                  </md-field>
-                </div>
-              </div>
-              <div class="md-layout">
-                <div class="md-layout-item md-small-size-50 md-size-50">
-                  <md-field>
-                    <label>Teléfono</label>
-                    <md-input v-model="telefono" type="text"></md-input>
-                  </md-field>
-                </div>
-
-                <div class="md-layout-item md-small-size-50 md-size-50">
-                  <md-field>
-                    <label>Domicilio</label>
-                    <md-input v-model="domicilio" type="text"></md-input>
-                  </md-field>
-                </div>
-              </div>
-              <div class="md-layout">
-                <div class="md-layout-item md-small-size-50 md-size-50">
-                  <md-field>
-                    <label>Email</label>
-                    <md-input v-model="email" type="email"></md-input>
-                  </md-field>
-                </div>
-
-                <div class="md-layout-item md-small-size-50 md-size-50">
-                  <!-- <md-field>
-                    <label>Obra social</label>
-                    <md-input v-model="obraSocial" type="text"></md-input>
-                  </md-field> -->
-
-                  <md-field>
-                    <label for="obraSocial">Obra Social</label>
-                    <md-select v-model="obraSocial" name="obraSocial" id="obraSocial" md-dense>
-                      <md-option value="APRES">APRES</md-option>
-                      <md-option value="IOMA">IOMA</md-option>
-                      <md-option value="OSDE">OSDE</md-option>
-                      <md-option value="OSPE">OSPE</md-option>
-                      <md-option value="PAMI">PAMI</md-option>
-                    </md-select>
-                  </md-field>
-                
-                </div>
-              </div>
-            </div>
-
-            <div class="md-layout-item md-small-size-100 md-size-50">
-              <span class="md-title">Datos de algún contacto</span>
-
-              <div class="md-layout">
-                <div class="md-layout-item md-small-size-50 md-size-50">
-                  <md-field>
-                    <label>Apellido</label>
-                    <md-input v-model="apellidoContacto" type="text"></md-input>
-                  </md-field>
-                </div>
-
-                <div class="md-layout-item md-small-size-50 md-size-50">
-                  <md-field>
-                    <label>Nombre</label>
-                    <md-input v-model="nombreContacto" type="text"></md-input>
-                  </md-field>
-                </div>
-              </div>
-              <div class="md-layout">
-                <div class="md-layout-item md-small-size-50 md-size-50">
-                  <md-field>
-                    <label>Teléfono</label>
-                    <md-input v-model="telefonoContacto" type="text"></md-input>
-                  </md-field>
-                </div>
-
-                <div class="md-layout-item md-small-size-50 md-size-50">
-                  <md-field>
-                    <label>Relación</label>
-                    <md-input v-model="relacionContacto" type="text"></md-input>
-                  </md-field>
-                </div>
-              </div>
-
-              <span class="md-title">Antecedentes personales</span>
-          
-              <div class="md-layout">
-                <div class="md-layout-item md-size-100 right">
-                  <md-field maxlength="5">
-                    <label
-                      >Ingrese un resumen de las enfermedades previas del
-                      paciente</label
+                    <ValidationProvider
+                      rules="required"
+                      v-slot="{ errors }"
                     >
-                    <md-textarea v-model="antecedentesPersonales"></md-textarea>
-                  </md-field>
+                      <datepicker
+                        v-model="fechaNacimiento"
+                        :lang="datePickerOptions"
+                        placeholder="Fecha de nacimiento"
+                        :disabled-date="datePickerOptions.disabledDate"
+                        format="DD/MM/YYYY"
+                      >
+                      </datepicker>
+                      <span class="field-error">{{ errors[0] }}</span>
+                    </ValidationProvider>
+                      
+                  </div>
+                </div>
+
+                <div class="md-layout">
+                  <div class="md-layout-item md-small-size-50 md-size-50">
+                    <md-field>
+                      <ValidationProvider
+                        rules="required|alpha_spaces"
+                        v-slot="{ errors }"
+                      >
+                        <label>Apellido</label>
+                        <md-input v-model="apellido" type="text"></md-input>
+                        <span
+                          class="field-error"
+                          v-for="error in errors"
+                          v-bind:key="error.id"
+                          >{{ error }}</span
+                        >
+                      </ValidationProvider>
+                    </md-field>
+                  </div>
+
+                  <div class="md-layout-item md-small-size-50 md-size-50">
+                    <md-field>
+                      <ValidationProvider
+                        rules="required|alpha_spaces"
+                        v-slot="{ errors }"
+                      >
+                        <label>Nombre</label>
+                        <md-input v-model="nombre" type="text"></md-input>
+                        <span
+                          class="field-error"
+                          v-for="error in errors"
+                          v-bind:key="error.id"
+                          >{{ error }}</span
+                        >
+                        </ValidationProvider>
+                    </md-field>
+                  </div>
+                </div>
+
+                <div class="md-layout">
+                  <div class="md-layout-item md-small-size-50 md-size-50">
+                    <md-field>
+                      <ValidationProvider
+                        rules="required"
+                        v-slot="{ errors }"
+                      >
+                        <label>Teléfono</label>
+                        <md-input v-model="telefono" type="text"></md-input>
+                        <span class="field-error">{{ errors[0] }}</span>
+                      </ValidationProvider>
+                    </md-field>
+                  </div>
+
+                  <div class="md-layout-item md-small-size-50 md-size-50">
+                    <md-field>
+                      <ValidationProvider
+                        rules="required"
+                        v-slot="{ errors }"
+                      >
+                        <label>Domicilio</label>
+                        <md-input v-model="domicilio" type="text"></md-input>
+                        <span class="field-error">{{ errors[0] }}</span>
+                      </ValidationProvider>
+                    </md-field>
+                  </div>
+                </div>
+                <div class="md-layout">
+                  <div class="md-layout-item md-small-size-50 md-size-50">
+                    <md-field>
+                      <ValidationProvider
+                        rules="required|email"
+                        v-slot="{ errors }"
+                      >
+                        <label>Email</label>
+                        <md-input v-model="email" type="email"></md-input>
+                        <span
+                          class="field-error"
+                          v-for="error in errors"
+                          v-bind:key="error.id"
+                          >{{ error }}</span
+                        >
+                      </ValidationProvider>
+                    </md-field>
+                  </div>
+
+                  <div class="md-layout-item md-small-size-50 md-size-50">
+                    <!-- <md-field>
+                      <label>Obra social</label>
+                      <md-input v-model="obraSocial" type="text"></md-input>
+                    </md-field> -->
+
+                    <md-field>
+                      <label for="obraSocial">Obra Social</label>
+                      <md-select v-model="obraSocial" name="obraSocial" md-dense>
+                        <md-option value="APRES">APRES</md-option>
+                        <md-option value="IOMA">IOMA</md-option>
+                        <md-option value="OSDE">OSDE</md-option>
+                        <md-option value="OSPE">OSPE</md-option>
+                        <md-option value="PAMI">PAMI</md-option>
+                      </md-select>
+                    </md-field>
+                  
+                  </div>
                 </div>
               </div>
-            </div>
 
-            <div class="md-layout-item md-size-100 text-right">
-              <md-button
-                class="md-raised md-success"
-                v-if="pacienteId"
-                v-on:click="editarPaciente()"
-                >Editar Paciente</md-button
-              >
+              <div class="md-layout-item md-small-size-100 md-size-50">
+                <span class="md-title">Datos de algún contacto</span>
 
-              <md-button
-                class="md-raised md-success"
-                v-else
-                v-on:click="agregarPaciente()"
-                >Agregar Paciente</md-button
-              >
+                <div class="md-layout">
+                  <div class="md-layout-item md-small-size-50 md-size-50">
+                    <md-field>
+                      <ValidationProvider
+                        rules="alpha_spaces"
+                        v-slot="{ errors }"
+                      >
+                        <label>Apellido</label>
+                        <md-input v-model="apellidoContacto" type="text"></md-input>
+                        <span class="field-error">{{ errors[0] }}</span>
+                      </ValidationProvider>
+                    </md-field>
+                  </div>
+
+                  <div class="md-layout-item md-small-size-50 md-size-50">
+                    <md-field>
+                      <label>Nombre</label>
+                      <md-input v-model="nombreContacto" type="text"></md-input>
+                    </md-field>
+                  </div>
+                </div>
+                <div class="md-layout">
+                  <div class="md-layout-item md-small-size-50 md-size-50">
+                    <md-field>
+                      <label>Teléfono</label>
+                      <md-input v-model="telefonoContacto" type="text"></md-input>
+                    </md-field>
+                  </div>
+
+                  <div class="md-layout-item md-small-size-50 md-size-50">
+                    <md-field>
+                      <ValidationProvider
+                        rules="alpha_spaces"
+                        v-slot="{ errors }"
+                      >         
+                        <label>Relación</label>
+                        <md-input v-model="relacionContacto" type="text"></md-input>
+                        <span class="field-error">{{ errors[0] }}</span>
+                      </ValidationProvider>
+                    </md-field>
+                  </div>
+                </div>
+
+                <span class="md-title">Antecedentes personales</span>
+            
+                <div class="md-layout">
+                  <div class="md-layout-item md-size-100 right">
+                    <md-field maxlength="5">
+                      <label
+                        >Ingrese un resumen de las enfermedades previas del
+                        paciente</label
+                      >
+                      <md-textarea v-model="antecedentesPersonales"></md-textarea>
+                    </md-field>
+                  </div>
+                </div>
+              </div>
+
+              <div class="md-layout-item md-size-50 text-right">
+                <md-button
+                  type="submit"
+                  class="md-raised md-success"
+                  :disabled="invalid"
+                  >Guardar</md-button
+                >
+              </div>
+
             </div>
-          </div>
-        </md-card-content>
-      </md-card>
-    </form>
+          </form>
+        </ValidationObserver>
+      </md-card-content>
+    </md-card>
   </div>
 </template>
 
@@ -200,6 +263,15 @@ export default {
       relacionContacto: null,
       antecedentesPersonales: null,
       isLoading: false,
+      datePickerOptions: {
+        disabledDate(date) {
+          return date > new Date();
+        },
+        formatLocale: {
+          firstDayOfWeek: 1
+        },
+        monthBeforeYear: false
+      }
     };
   },
   created() {
@@ -228,7 +300,7 @@ export default {
       this.antecedentesPersonales = response.data.antecedentes
       this.isLoading = false
     },
-    async agregarPaciente() {
+    async submit() {
       this.isLoading = true
       let formData = {
         dni: this.dni,
@@ -237,7 +309,7 @@ export default {
         direccion: this.domicilio,
         telefono: this.telefono,
         email: this.email,
-        fecha_nacimiento: this.formatDate(this.fechaNacimiento.toISOString()),
+        fecha_nacimiento: this.fechaNacimiento ? this.formatDate(this.fechaNacimiento.toISOString()) : null,
         obra_social: this.obraSocial,
         antecedentes: this.antecedentesPersonales,
         contacto_nombre: this.nombreContacto,
@@ -245,57 +317,29 @@ export default {
         contacto_telefono: this.telefonoContacto,
         contacto_parentesco: this.parentescoContacto
       };
+      let url = this.pacienteId ? "/api/paciente/update" : "/api/paciente/new"
       const response = await axios.post(
-        this.burl("/api/paciente/new"),
+        this.burl(url),
         formData
       );
       this.$swal
         .fire({
-          title: "Paciente creado",
+          title: this.pacienteId ? "Paciente actualizado" : "Paciente creado",
           icon: "success",
           timer: 2000,
           showConfirmButton: false
         })
         .then(() => {
-          this.$router.push({
-            path: "nuevaInternacion/" + response.data.id
-          });
-        });
-      this.isLoading = false
-    },
-    async editarPaciente() {
-      this.isLoading = true
-      let formData = {
-        dni: this.dni,
-        apellido: this.apellido,
-        nombre: this.nombre,
-        direccion: this.domicilio,
-        telefono: this.telefono,
-        email: this.email,
-        fecha_nacimiento: this.formatDate(this.fechaNacimiento.toISOString()),
-        obra_social: this.obraSocial,
-        antecedentes: this.antecedentesPersonales,
-        contacto_nombre: this.nombreContacto,
-        contacto_apellido: this.apellidoContacto,
-        contacto_telefono: this.telefonoContacto,
-        contacto_parentesco: this.parentescoContacto
-      };
-      const response = await axios.post(
-        this.burl("/api/paciente/update/" + this.pacienteId),
-        formData
-      );
-      this.$swal
-        .fire({
-          title: "Paciente actualizado",
-          icon: "success",
-          timer: 2000,
-          showConfirmButton: false
-        })
-        .then(() => {
-          this.$router.push({
-            name: "Ver Paciente",
-            params: { pacienteId: this.pacienteId }
-          });
+          if (this.pacienteId) {
+            this.$router.push({
+              name: "Ver Paciente",
+              params: { pacienteId: this.pacienteId }
+            })
+          } else {
+            this.$router.push({
+              path: "nuevaInternacion/" + response.data.id
+            });
+          }
         });
       this.isLoading = false
     },
@@ -316,12 +360,12 @@ export default {
               .post("api/paciente/existsWithDni", data)
               .then(response => {
                 if (response.status != 200) {
-                  throw new Error("Something went wrong");
+                  throw new Error("Algo salió mal");
                 }
                 return response.data;
               })
               .catch(error => {
-                this.$swal.showValidationMessage(`Request failed: ${error}`);
+                this.$swal.showValidationMessage(`Ocurrió un error: ${error}`);
               });
           },
           allowOutsideClick: () => !this.$swal.isLoading()
@@ -348,4 +392,8 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+.field-error {
+  color: red;
+}
+</style>
