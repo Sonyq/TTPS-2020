@@ -5,6 +5,8 @@ namespace App\Controller;
 use FOS\RestBundle\Controller\FOSRestController;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Paciente;
+use App\Entity\User;
+use App\Entity\UserPaciente;
 use App\Entity\Sistema;
 use App\Entity\Internacion;
 use App\Entity\InternacionCama;
@@ -94,10 +96,24 @@ class InternacionController extends FOSRestController
 
       $sistema->setCamasDisponibles($sistema->getCamasDisponibles() - 1);
       $sistema->setCamasOcupadas($sistema->getCamasOcupadas() + 1);
+
+      //busco al jefe del sistema para asignárselo al paciente (para las alertas...)
+      $users = $this->getDoctrine()->getRepository(User::class)
+            ->findBy(["sistema" => $sistema->getId()]);
+
+      foreach ($users as $user) {
+        if (in_array("ROLE_JEFE", $user->getRoles())) {
+          $jefeSistema = $user;
+          break;
+        };
+      }
+
+      $userPaciente = new UserPaciente($paciente, $jefeSistema);
+
+      $entityManager->persist($userPaciente);
       
       $entityManager->flush();
       $entityManager->getConnection()->commit();
-
       
     } catch (\Throwable $th) {
 
