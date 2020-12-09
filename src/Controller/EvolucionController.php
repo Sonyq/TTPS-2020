@@ -38,7 +38,7 @@ class EvolucionController extends FOSRestController
    */
   public function getEvoluciones(Request $request, ParamFetcher $pf): Response
   {
-    $evoluciones = $this->getDoctrine()->getRepository(Evolucion::class)->findAllEvoluciones($pf->get('id'));    
+    $evoluciones = $this->getDoctrine()->getRepository(Evolucion::class)->findAllEvoluciones($pf->get('id'));
 
     $serializer = $this->get('jms_serializer');    
     
@@ -149,6 +149,7 @@ class EvolucionController extends FOSRestController
       $evolucion->setPcrCovidTipo($pf->get('pcr_covid_tipo'));
       $evolucion->setPcrCovidDescrip($pf->get('pcr_covid_descrip'));
       $evolucion->setObservacion($pf->get('observacion'));
+      $evolucion->setSistema($this->getUser()->getSistema()->getId());
     
       $entityManager->persist($evolucion);
       $entityManager->flush();

@@ -347,7 +347,7 @@
                 >
               </div>
             </div>
-
+          
             <div
               v-show="
                 !(
@@ -357,59 +357,60 @@
               "
               class="md-layout"
             >
+         
               <div class="md-layout-item md-small-size-100 md-size-100">
                 <span class="md-title">Evoluciones</span>
+                  
+                  <md-button
+                    :to="{
+                      name: 'Nueva Evolución',
+                      params: {
+                        internacionId: ultimaInternacion.id,
+                        pacienteId: pacienteId
+                      }
+                    }"
+                    class="md-dense md-success"
+                    id="nuevaEvolucionButton"
+                    >Nueva evolución</md-button
+                  >
+                  <br>
+                  <br>
+                  <md-empty-state
+                    md-rounded
+                    md-icon="assignment"
+                    md-label="No hay evoluciones"
+                    md-description="Este paciente aún no registra evoluciones. Las evoluciones registradas se mostrarán aquí."
+                    v-if="evoluciones.length == 0">
+                  </md-empty-state>
+                 
+                  <div class="full-control">
+                    <div class="list">
+                      <md-list>
+                        <md-list-item md-expand v-for="(evol, sistema) in evoluciones" :key="sistema">
+                          <span class="md-list-item-text">{{ sistema }}</span>
+                          <md-list slot="md-expand">
+                            <md-list-item class="md-inset" v-for="(e, i) in evoluciones[sistema]" :key="i">
+                              Fecha: {{ formatDateTime(e.fecha_carga) }}
+                              <md-button class="md-dense" @click="verEvolucion(e.id)">Ver</md-button>
+                            </md-list-item>
+                          </md-list>
+                        </md-list-item>
+                      </md-list>
+                    </div>
+                  </div>
 
-                <vue-good-table
-                  :columns="columnas"
-                  :rows="evoluciones"
-                  :lineNumbers="true"
-                  :globalSearch="false"
-                  :pagination-options="{
-                    enabled: true,
-                    mode: 'records',
-                    perPage: 5,
-                    perPageDropdown: [5, 10],
-                    position: 'bottom',
-                    dropdownAllowAll: false,
-                    setCurrentPage: 1,
-                    nextLabel: 'siguiente',
-                    prevLabel: 'anterior',
-                    rowsPerPageLabel: 'Evoluciones por página',
-                    ofLabel: 'de'
-                  }"
-                  :search-options="{ enabled: true, placeholder: 'Buscar' }"
-                  styleClass="vgt-table"
-                >
-                  <div slot="emptystate" class="has-text-centered">
-                    <h3 class="h3">No hay evoluciones</h3>
-                  </div>
-                  <div v-if="ultimaInternacion" slot="table-actions">
-                    <md-button
-                      :to="{
-                        name: 'Nueva Evolución',
-                        params: {
-                          internacionId: ultimaInternacion.id,
-                          pacienteId: pacienteId
-                        }
-                      }"
-                      class="md-dense md-success"
-                      >Nueva evolución</md-button
-                    >
-                  </div>
-                  <template slot="table-row" slot-scope="props">
+                  <!-- <template slot="table-row" slot-scope="props">
 									  <span v-if="props.column.field == 'acciones'">
                       <md-button @click="verEvolucion(props.row.evolucionId)">Ver</md-button>
 									  </span>
-								  </template>
-                </vue-good-table>
+								  </template> -->
 
-                <ver-evolucion-modal v-if="evolucion"
-                  :mostrar="mostrarEvolucion"
-                  :data="evolucion"
-                  @cerrarEvolucionModal="mostrarEvolucion = false"
-                >
-                </ver-evolucion-modal>
+                  <ver-evolucion-modal v-if="evolucion"
+                    :mostrar="mostrarEvolucion"
+                    :data="evolucion"
+                    @cerrarEvolucionModal="mostrarEvolucion = false"
+                  >
+                  </ver-evolucion-modal>
 
                 
                 
@@ -423,14 +424,14 @@
 </template>
 
 <script>
-import "vue-good-table/dist/vue-good-table.css";
-import { VueGoodTable } from "vue-good-table";
+
 import VerEvolucionModal from "./../Evoluciones/VerEvolucionModal";
 
 export default {
   name: 'IconButtons',
+  name: 'ListExpansion',
+  name: 'EmptyStateRounded',
   components: {
-    VueGoodTable,
     VerEvolucionModal
   },
   props: ["pacienteId"],
@@ -447,30 +448,7 @@ export default {
       sistemasDestino: [],
       sistemaDestinoSelected: "",
       evolucion: null,
-      columnas: [
-        {
-          label: "id",
-          field: "id",
-          type: "number",
-          filterable: true
-        },
-        {
-          label: "Fecha de carga",
-          field: this.fechaCargaEvolucion,
-          type: "number",
-          filterable: true
-        },
-        {
-          label: "Sistema",
-          field: "sistema",
-          type: "string",
-          filterable: true
-        },
-        {
-          label: 'Acciones',
-          field: 'acciones',
-        }
-      ]
+      expandSingle: false
     };
   },
   created() {
@@ -496,7 +474,10 @@ export default {
         const evoluciones = await axios.get(
           this.burl("/api/evolucion/index?id=" + this.ultimaInternacion.id)
         );
-        this.evoluciones = evoluciones.data;
+        if(evoluciones.data){
+          this.evoluciones = evoluciones.data;
+          this.getEvolucionesIntercaladasConCambiosDeSistema();
+        }
       }
       events.$emit("loading:hide");
     },
@@ -590,21 +571,69 @@ export default {
           }
         });
     },
-    fechaCargaEvolucion(evolucion) {
-      return this.formatDateTime(evolucion.fecha_carga);
-    },
+    // fechaCargaEvolucion(evolucion) {
+    //   return this.formatDateTime(evolucion.fecha_carga);
+    // },
     async verEvolucion(evolucionId) {
       events.$emit("loading:show");
       const response = await axios.get(
         this.burl("/api/evolucion/show?id=" + evolucionId)
       );
-      this.evolucion= response.data
+      this.evolucion = response.data
       events.$emit("loading:hide");
       this.mostrarEvolucion = true
     },
     cerrarEvolucionModal() {
       this.$modal.hide('evolucion')
+    },
+    getHistorialDeSistemas() {
+      return [...new Set(this.evoluciones.map(({ sistema }) => sistema))];
+    },
+    getEvolucionesIntercaladasConCambiosDeSistema() {
+      let evolucionesIntercaladasConCambiosDeSistema = {};
+      let sistemas = this.getHistorialDeSistemas();
+      sistemas.forEach(sistema => {
+        evolucionesIntercaladasConCambiosDeSistema[sistema] = [];
+        this.evoluciones.forEach(evolucion => {
+          if (evolucion.sistema == sistema) {
+            evolucionesIntercaladasConCambiosDeSistema[sistema].push(evolucion);
+          }
+        });
+      });
+      this.evoluciones = evolucionesIntercaladasConCambiosDeSistema;
+      //console.log(this.evoluciones);
     }
-  }
+  },
 };
+
 </script>
+
+
+<style lang="scss" scoped>
+  $list-width: 100%;
+
+  .full-control {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap-reverse;
+  }
+
+  .list {
+    width: $list-width;
+  }
+
+  .full-control > .md-list {
+    width: $list-width;
+    max-width: 100%;
+    height: 400px;
+    display: inline-block;
+    overflow: auto;
+    border: 1px solid rgba(#000, .12);
+    vertical-align: top;
+  }
+
+  #nuevaEvolucionButton {
+    float: right;
+  }
+
+</style>

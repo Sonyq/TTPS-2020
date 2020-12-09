@@ -24,6 +24,12 @@ class Evolucion
     private $internacion;
 
     /**
+     * 
+     * @ORM\Column(type="integer")
+     */
+    private $sistema_id;
+
+    /**
      * @ORM\Column(type="datetime")
      */
     private $fecha_carga;
@@ -171,6 +177,18 @@ class Evolucion
     public function setInternacion(?Internacion $internacion): self
     {
         $this->internacion = $internacion;
+
+        return $this;
+    }
+
+    public function getSistema(): ?int
+    {
+        return $this->sistema_id;
+    }
+
+    public function setSistema(?int $sistema_id): self
+    {
+        $this->sistema_id = $sistema_id;
 
         return $this;
     }
