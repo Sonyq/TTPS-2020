@@ -46,6 +46,8 @@ class InternacionRepository extends ServiceEntityRepository
 			// ->innerJoin('App:Sala', 's', 'WITH', 's.id = c.sala')
 			// ->innerJoin('App:Sistema', 'sist', 'WITH', 'sist.id = s.sistema')
 				->where('i.paciente = :pacienteId')
+				->andWhere('i.fecha_egreso is not null')
+				->orWhere('i.fecha_obito is not null')
 				// ->andWhere("i.id NOT IN (".$idUltimaInternacion.")")
 				->setParameter('pacienteId', $pacienteId)
 				->orderBy('i.fecha_carga', 'DESC')

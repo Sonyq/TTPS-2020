@@ -1,5 +1,11 @@
 <template>
   <div>
+
+    <loading :active.sync="isLoading"
+      :is-full-page="true"
+      color='#4CAF50'>
+    </loading>
+
     <md-card>
       <md-card-header data-background-color="green">
         <h3 class="title">Nueva evolución</h3>
@@ -542,10 +548,18 @@
 </template>
 
 <script>
+import Loading from 'vue-loading-overlay';
+// Import stylesheet
+import 'vue-loading-overlay/dist/vue-loading.css';
+
 export default {
   props: ["internacionId", "pacienteId"],
+  components: {
+    Loading
+  },
   data() {
     return {
+      isLoading: false,
       temperatura: null,
       taSistolica: null,
       taDiastolica: null,
@@ -583,7 +597,7 @@ export default {
   },
   methods: {
     async submit() {
-      events.$emit("loading:show");
+      this.isLoading = true
       let form = {
         internacion_id: this.internacionId,
         temperatura: this.temperatura,
@@ -627,7 +641,7 @@ export default {
             params: { pacienteId: this.pacienteId }
           });
         });
-      events.$emit("loading:hide");
+      this.isLoading = false
     },
     volver() {
       this.$router.go(-1);

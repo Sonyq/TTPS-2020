@@ -8,7 +8,7 @@
         <md-icon>person</md-icon>
         <p>Iniciar sesión</p>
       </sidebar-link>
-      <sidebar-link v-if="jwtToken" to="/sistemas">
+      <sidebar-link v-if="jwtToken && esJefe" to="/sistemas">
         <md-icon>person</md-icon>
         <p>Sistemas</p>
       </sidebar-link>
@@ -56,8 +56,20 @@ export default {
   },
   data() {
     return {
-      sidebarBackground: "green"
+      sidebarBackground: "green",
+      usuarioLocalRoles: ""
     };
+  },
+  mounted() {
+    events.$on("loading_user:finish", () => (this.usuarioLocalRoles = this.loggedUser.roles));
+    events.$on("user:logout", () => (this.usuarioLocal = ""));
+  },
+  computed: {
+    esJefe() {
+      return (
+        this.usuarioLocalRoles.includes("ROLE_JEFE")
+      )
+    }
   }
 };
 </script>

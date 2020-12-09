@@ -307,7 +307,7 @@ export default {
         })
         .then(result => {
           if (result.isConfirmed) {
-            events.$emit("loading:show");
+            this.isLoading = true
             axios
               .get(
                 this.burl("/api/internacion/" + estado + "?id=" + internacionId)
@@ -315,7 +315,7 @@ export default {
               .then(response => {
                 this.getPacientes();
               });
-            events.$emit("loading:hide");
+            this.isLoading = false
           }
         });
     },

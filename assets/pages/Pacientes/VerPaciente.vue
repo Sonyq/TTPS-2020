@@ -1,5 +1,11 @@
 <template>
   <div>
+
+    <loading :active.sync="isLoading"
+      :is-full-page="true"
+      color='#4CAF50'>
+    </loading>
+
     <form>
       <md-card>
         <md-card-header data-background-color="green">
@@ -147,7 +153,7 @@
               <span class="md-title">Internación</span>
 
               <div
-                v-show="
+                v-if="
                   !(
                     ultimaInternacion.fecha_egreso ||
                     ultimaInternacion.fecha_obito
@@ -204,7 +210,7 @@
                 </div>
               </div>
 
-              <div v-show="ultimaInternacion.fecha_obito">
+              <div v-if="ultimaInternacion.fecha_obito">
                 <span class="md-body-1">El paciente falleció.</span>
                 <div class="md-layout">
                   <span class="md-body-1"
@@ -215,7 +221,7 @@
                 </div>
               </div>
 
-              <div v-show="ultimaInternacion.fecha_egreso">
+              <div v-if="ultimaInternacion.fecha_egreso">
                 <span class="md-body-1"
                   >No posee ninguna internación vigente</span
                 >
@@ -284,19 +290,23 @@
               </div>
 
               <div
-                v-show="
+                v-if="
                   ultimaInternacion.fecha_egreso &&
                     !ultimaInternacion.fecha_obito
                 "
               >
-                <md-button class="md-dense md-success"
+                <md-button :to="{
+                          name: 'Nueva Internación',
+                          params: { pacienteId: pacienteId }
+                        }"
+                        class="md-dense md-success"
                   >Nueva Internación</md-button
                 >
               </div>
             </div>
 
             <div
-              v-show="
+              v-if="
                 !(
                   ultimaInternacion.fecha_egreso ||
                   ultimaInternacion.fecha_obito
@@ -349,7 +359,7 @@
             </div>
           
             <div
-              v-show="
+              v-if="
                 !(
                   ultimaInternacion.fecha_egreso ||
                   ultimaInternacion.fecha_obito
@@ -426,17 +436,22 @@
 <script>
 
 import VerEvolucionModal from "./../Evoluciones/VerEvolucionModal";
+import Loading from 'vue-loading-overlay';
+// Import stylesheet
+import 'vue-loading-overlay/dist/vue-loading.css';
 
 export default {
   name: 'IconButtons',
   name: 'ListExpansion',
   name: 'EmptyStateRounded',
   components: {
-    VerEvolucionModal
+    VerEvolucionModal,
+    Loading
   },
   props: ["pacienteId"],
   data() {
     return {
+      isLoading: false,
       paciente: {},
       ultimaInternacion: "",
       internacionesPrevias: [],
@@ -465,7 +480,7 @@ export default {
         });
     },
     async getUltimaInternacionYEvoluciones() {
-      events.$emit("loading:show");
+      this.isLoading = true
       const ultimaInternacion = await axios.get(
         this.burl("/api/internacion/ultima?pacienteId=" + this.pacienteId)
       );
@@ -479,25 +494,25 @@ export default {
           this.getEvolucionesIntercaladasConCambiosDeSistema();
         }
       }
-      events.$emit("loading:hide");
+      this.isLoading = false
     },
     async getInternacionesPrevias() {
-      events.$emit("loading:show");
+      this.isLoading = true
       const internaciones = await axios.get(
         this.burl("/api/internacion/previas?pacienteId=" + this.pacienteId)
       );
       this.internacionesPrevias = internaciones.data;
       //si hay una internación vigente, a las previas le quito la 1ra (porque es la actual...)
-      if (
-        !(
-          this.ultimaInternacion.fecha_obito ||
-          this.ultimaInternacion.fecha_egreso
-        )
-      ) {
-        this.internacionesPrevias.shift();
-      }
+      // if (
+      //   !(
+      //     this.ultimaInternacion.fecha_obito ||
+      //     this.ultimaInternacion.fecha_egreso
+      //   )
+      // ) {
+      //   this.internacionesPrevias.shift();
+      // }
       this.mostrarPrevias = true;
-      events.$emit("loading:hide");
+      this.isLoading = false
     },
     async getSistemasDestino() {
       const response = await axios.get(
@@ -526,7 +541,7 @@ export default {
         })
         .then(result => {
           if (result.isConfirmed) {
-            events.$emit("loading:show");
+            this.isLoading = true
             axios
               .get(
                 this.burl(
@@ -539,7 +554,7 @@ export default {
               .then(response => {
                 this.$router.push("/pacientes");
               });
-            events.$emit("loading:hide");
+            this.isLoading = false
           }
         });
     },
@@ -556,7 +571,7 @@ export default {
         })
         .then(result => {
           if (result.isConfirmed) {
-            events.$emit("loading:show");
+            this.isLoading = true
             let form = {
               sistemaDestinoId: this.sistemaDestinoSelected,
               pacienteId: this.pacienteId,
@@ -567,20 +582,17 @@ export default {
               .then(response => {
                 this.$router.push("/pacientes");
               });
-            events.$emit("loading:hide");
+            this.isLoading = false
           }
         });
     },
-    // fechaCargaEvolucion(evolucion) {
-    //   return this.formatDateTime(evolucion.fecha_carga);
-    // },
     async verEvolucion(evolucionId) {
-      events.$emit("loading:show");
+      this.isLoading = true
       const response = await axios.get(
         this.burl("/api/evolucion/show?id=" + evolucionId)
       );
       this.evolucion = response.data
-      events.$emit("loading:hide");
+      this.isLoading = false
       this.mostrarEvolucion = true
     },
     cerrarEvolucionModal() {
@@ -601,7 +613,6 @@ export default {
         });
       });
       this.evoluciones = evolucionesIntercaladasConCambiosDeSistema;
-      //console.log(this.evoluciones);
     }
   },
 };
