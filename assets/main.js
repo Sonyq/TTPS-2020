@@ -356,7 +356,21 @@ new Vue({
         from.path !== "/login" &&
         to.path !== "/logout"
       ) {
-        this.fetchLoggedUser();
+        if (
+          (to.path === "/sistemas" && this.loggedUser.roles.includes("ROLE_JEFE")) ||
+
+          ((to.name === "Pacientes" && 
+           (this.$root.loggedUser.sistemaId === to.params.sistemaId) ||
+           this.loggedUser.roles.includes("ROLE_JEFE")))
+        ) {
+
+          this.fetchLoggedUser();
+        
+        } else {
+
+          this.$router.push({ name: "Pacientes" })
+        
+        }
       }
     }
   }
