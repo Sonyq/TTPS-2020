@@ -285,6 +285,19 @@ class PacienteController extends FOSRestController
         
       }
 
+      $relacionConJefeDeSistema = $this->getDoctrine()->getRepository(UserPaciente::class)
+                                       ->findOneBy(['user' => $this->getUser()->getId(), 
+                                                 'paciente' => $paciente,
+                                                 'fecha_hasta' => null]);
+
+      //si el paciente sigue relacionado al jefe del sistema hay que desvincularlo.
+      if ($relacionConJefeDeSistema) {
+
+        $relacionConJefeDeSistema->setFechaHasta(new \DateTime());
+        $entityManager->persist($relacionConJefeDeSistema);
+
+      }
+
       $userPaciente= new UserPaciente($paciente, $medico);
       
       $entityManager->persist($userPaciente);
@@ -292,6 +305,48 @@ class PacienteController extends FOSRestController
 
       return new Response($serializer->serialize($userPaciente, "json"), 200);
      
+    }
+
+    /**
+     * @Route("/desasignarMedico", name="desasignar_medico", methods={"POST"})
+     * @SWG\Response(response=200, description="Desasignar médico a paciente")
+     * @SWG\Tag(name="Paciente")
+     * @RequestParam(name="pacienteId", strict=true, nullable=false, allowBlank=false, description="Paciente Id")
+     * @RequestParam(name="medicoId", strict=true, nullable=false, allowBlank=false, description="Médico Id")
+     * 
+     * @param ParamFetcher $pf
+     */
+    public function desasignarMedico(Request $request, ParamFetcher $pf): Response
+    {
+      $entityManager = $this->getDoctrine()->getManager();
+
+      $paciente = $this->getDoctrine()->getRepository(Paciente::class)->find($pf->get('pacienteId'));
+      $medico = $this->getDoctrine()->getRepository(User::class)->find($pf->get('medicoId'));
+  
+      $userPaciente = $this->getDoctrine()->getRepository(UserPaciente::class)->findOneBy(['user' => $medico, 
+                                                                                           'paciente' => $paciente,
+                                                                                           'fecha_hasta' => null]);
+      
+      if ($userPaciente) {
+
+        $userPaciente->setFechaHasta(new \DateTime());
+        $entityManager->persist($userPaciente);
+        $entityManager->flush();
+
+      } else {
+        
+        $error = [
+          "message" => "No existe la relación entre ese paciente y ese médico",
+        ];
+        
+        return new Response($serializer->serialize($error, "json"), 400);
+
+      }
+
+      $serializer = $this->get('jms_serializer');
+
+      return new Response($serializer->serialize($userPaciente, "json"), 200);
+
     }
 
     /**
@@ -326,5 +381,128 @@ class PacienteController extends FOSRestController
       }
 
     }
+
+  /**
+   * @Route("/cambiarDeSistema", name="sistema_cambiar", methods={"POST"})
+   * @SWG\Response(response=200, description="Cambiar de sistema al paciente")
+   * @RequestParam(name="pacienteId", strict=true, nullable=false, allowBlank=false, description="Id del paciente")
+   * @RequestParam(name="sistemaDestinoId", strict=true, nullable=false, allowBlank=false, description="Id del sistema destino")
+   * @RequestParam(name="internacionId", strict=true, nullable=false, allowBlank=false, description="Id de la internación")
+   * @SWG\Tag(name="Cambiar de Sistema")
+   *      
+   * @param ParamFetcher $pf
+   */
+  public function cambiarDeSistema(Request $request, ParamFetcher $pf): Response
+  {
+    
+    $serializer = $this->get('jms_serializer');
+    
+    $paciente = $this->getDoctrine()->getRepository(Paciente::class)->find($pf->get('pacienteId'));
+    if (!$paciente) {
+
+      $error = [ 
+        "message" => "El paciente id '.$pacienteId.' no existe",
+      ];
+
+      return new Response($serializer->serialize($error, "json"), 404);
+    }
+
+    $sistemaDestino = $this->getDoctrine()->getRepository(Sistema::class)->find($pf->get('sistemaDestinoId'));
+    if ($sistemaDestino->getCamasDisponibles() == 0) {
+
+      $error = [ 
+        "message" => "No hay camas disponibles en el sistema destino",
+      ];
+
+      return new Response($serializer->serialize($error, "json"), 400);
+    }
+
+    try {
+      
+      $entityManager = $this->getDoctrine()->getManager();
+      $entityManager->getConnection()->beginTransaction();
+
+      $internacionActual = $this->getDoctrine()->getRepository(Internacion::class)->find($pf->get('internacionId'));
+  
+      //a partir de acá seteo todo lo del sistema destino
+      if ($sistemaDestino->getNombre() == 'DOMICILIO') {
+  
+        //si el destino es domicilio creo una cama nueva para la única sala que hay para DOMICILIO y le pongo estado 'ocupada'.
+        $salaDomicilio = $this->getDoctrine()->getRepository(Sala::class)->findOneBy(['sistema' => $sistemaDestino]);
+
+        if (!$salaDomicilio) {
+
+          $error = [ 
+            "message" => "Se produjo un error al intentar el cambio de sistema: no hay sala para el sistema Domicilio",
+          ];
+    
+          return new Response($serializer->serialize($error, "json"), 400);
+        }
+
+        $cama = new Cama();
+        $cama->setSala($salaDomicilio);
+        $cama->setEstado('ocupada');
+
+        //algo hay que poner (la columna es not null)
+        $cama->setNumero(1);
+    
+      } else {
+  
+        //si el destino no es domicilio busco la 1er cama libre que haya y le pongo ocupada.
+        //seteo los nros.del sistema destino.
+        $cama = $this->getDoctrine()->getRepository(Cama::class)->findPrimerCamaLibre($sistemaDestino->getId());
+        $cama->setEstado('ocupada');
+        
+        $sistemaDestino->setCamasDisponibles($sistemaDestino->getCamasDisponibles() - 1);
+        $sistemaDestino->setCamasOcupadas($sistemaDestino->getCamasOcupadas() + 1);
+      
+      }
+  
+      //esto es igual para cualquier sistema destino, ya sea Domicilo u otro.
+      $internacionCamaNueva = new InternacionCama();
+      $internacionCamaNueva->setInternacion($internacionActual);
+      $internacionCamaNueva->setCama($cama);
+
+      $entityManager->persist($cama);
+      $entityManager->persist($internacionCamaNueva);
+      //hasta acá todo lo del sistema destino
+  
+      //a partir de acá modifico todo lo del sistema Origen
+      $sistemaOrigen = $this->getUser()->getSistema();
+  
+      //si el origen no es domicilio seteo los nros.del sistema.
+      if ($sistemaOrigen->getNombre() != 'DOMICILIO') {
+  
+        $sistemaOrigen->setCamasDisponibles($sistemaOrigen->getCamasDisponibles() + 1);
+        $sistemaOrigen->setCamasOcupadas($sistemaOrigen->getCamasOcupadas() - 1);
+      
+      }
+  
+      $internacionCamaActual = $this->getDoctrine()->getRepository(InternacionCama::class)
+                        ->findBy(["internacion" => $internacionActual, "fecha_hasta" => null])[0];
+  
+      $internacionCamaActual->setFechaHasta(new \DateTime());
+      $internacionCamaActual->getCama()->setEstado('libre');
+      //hasta acá todo lo del Origen
+  
+      $entityManager->flush();
+      $entityManager->getConnection()->commit();
+
+
+    } catch (\Exception $e) {
+
+      $entityManager->getConnection()->rollBack();
+
+      $error = [ 
+        "message" => "Se produjo un error al intentar el cambio de sistema",
+      ];
+
+      return new Response($serializer->serialize($error, "json"), 500);
+
+    } 
+
+    return new Response($serializer->serialize($internacionCamaActual, "json"), 200);
+
+  }
 
 }

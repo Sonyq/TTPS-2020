@@ -21,13 +21,13 @@ class UserRepository extends ServiceEntityRepository
         parent::__construct($registry, User::class);
     }    
     
-    public function findMedicosDeUnSistema($sistemId)
+    public function findUsersBySistema($sistemaId)
     {
         return $this->createQueryBuilder('u')
-            ->select('u.id, u.first_name, u.last_name')    
+            ->select('u.id, u.first_name, u.last_name, u.legajo, u.roles')
             ->where('u.sistema = :sistemaId')
             ->andWhere('u.activo = true')
-            ->setParameter('sistemaId', $sistemId)
+            ->setParameter('sistemaId', $sistemaId)
             ->getQuery()
             ->getResult()
         ;

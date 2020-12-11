@@ -590,7 +590,7 @@ export default {
               internacionId: this.ultimaInternacion.id
             };
             axios
-              .post(this.burl("/api/sistemas/cambiar"), form)
+              .post(this.burl("/api/paciente/cambiarDeSistema"), form)
               .then(response => {
                 this.$router.push("/pacientes");
               });

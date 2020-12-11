@@ -270,7 +270,7 @@ new Vue({
       if (window.location.hash != "#/login" && 401 === error.response.status) {
         this.cancelSource.cancel("sesión expiró");
         this.newCancelToken();
-        events.$emit("loading:hide");
+        // events.$emit("loading:hide");
         this.$swal
           .fire({
             title: "La sesión expiró",

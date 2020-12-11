@@ -98,7 +98,7 @@
                           !(props.row.fecha_obito || props.row.fecha_egreso) && loggedUser.roles.includes('ROLE_JEFE')
                         "
                         @click="getMedicosDelSistema(props.row.id)"
-                        >Asignar médico</md-menu-item
+                        >Gestionar médicos</md-menu-item
                       >
                       <md-menu-item
                         v-if="
@@ -127,31 +127,51 @@
     </md-card>
 
     <div>
-      <md-dialog :md-active.sync="mostrarAsignarMedico">
-        <md-dialog-title>Asignar Médico</md-dialog-title>
+      <md-dialog :md-active.sync="mostrarAsignarMedico" style="max-width: 100%;">
+        <md-dialog-title>Gestionar médicos</md-dialog-title>
 
         <md-dialog-content>
-          <div class="md-layout-item md-small-size-100 md-size-100">
-            <md-field>
-              <label for="medicosDelSistema">Médicos</label>
-              <md-select v-model="medicoAsignado" name="medicosDelSistema">
-                <md-option
-                  v-for="medico in medicosDelSistema"
-                  :key="medico.id"
-                  :value="medico.id"
-                  >{{ medico.first_name + " " + medico.last_name }}</md-option
-                >
-              </md-select>
-            </md-field>
-          </div>
+
+          <md-table
+              md-card
+              v-if="medicosDelSistema"
+              class="md-body"
+            >
+              <md-table-row>
+                <md-table-head>Nombre</md-table-head>
+                <md-table-head>Nro. Legajo</md-table-head>
+                <md-table-head>Acciones</md-table-head>
+              </md-table-row>
+
+              <md-table-row
+                v-for="medico in medicosDelSistema"
+                :key="medico.id"
+              >
+                <md-table-cell>{{ medico.first_name + " " + medico.last_name }}</md-table-cell>
+
+                <md-table-cell>{{ medico.legajo }}</md-table-cell>
+
+                <md-table-cell>
+                  <md-button v-if="medico.asignado" class="md-success" @click="desasignarMedico(medico.id)">
+                    Desasignar
+                  </md-button>
+                  <md-button v-else class="md-success" @click="asignarMedico(medico.id)">
+                    Asignar
+                  </md-button>
+                </md-table-cell>               
+
+              </md-table-row>
+            </md-table>
+
+            <span v-else class="md-body"
+              >No hay médicos en el sistema</span
+            >
+
         </md-dialog-content>
 
         <md-dialog-actions>
           <md-button class="md-success" @click="mostrarAsignarMedico = false"
             >Cerrar</md-button
-          >
-          <md-button class="md-success" @click="asignarMedico()"
-            >Guardar</md-button
           >
         </md-dialog-actions>
       </md-dialog>
@@ -178,8 +198,8 @@ export default {
       pacientes: null,
       sistemaNombreLocal: "",
       mostrarAsignarMedico: false,
-      medicosDelSistema: [],
-      medicoAsignado: "",
+      medicosDelSistema: null,
+      medicoAsignado: false,
       pacienteSeleccionado: "",
       columnas: [
         {
@@ -286,7 +306,7 @@ export default {
       this.pacienteSeleccionado = pacienteId;
       let sistemaId = this.sistemaId ? "?sistema=" + this.sistemaId : "";
       const medicos = await axios.get(
-        this.burl("/api/sistemas/medicos" + sistemaId)
+        this.burl("/api/sistemas/medicos" + sistemaId + "?paciente=" + pacienteId)
       );
       this.medicosDelSistema = medicos.data;
       this.mostrarAsignarMedico = true;
@@ -319,21 +339,40 @@ export default {
           }
         });
     },
-    async asignarMedico() {
-      this.isLoading = true
+    async asignarMedico(medicoId) {
+      // this.isLoading = true
       let form = {
         pacienteId: this.pacienteSeleccionado,
-        medicoId: this.medicoAsignado
+        medicoId: medicoId
       };
       const response = await axios.post(
         this.burl("/api/paciente/asignarMedico"),
         form
       );
-      this.mostrarAsignarMedico = false;
-      this.isLoading = false
+      this.getMedicosDelSistema(this.pacienteSeleccionado)
+      // this.isLoading = false
       this.$swal.fire({
         icon: "success",
         text: "Médico asignado",
+        cancelButtonColor: "#47A44B"
+      });
+    },
+    async desasignarMedico(medicoId) {
+      console.log(medicoId)
+      // this.isLoading = true
+      let form = {
+        pacienteId: this.pacienteSeleccionado,
+        medicoId: medicoId
+      };
+      const response = await axios.post(
+        this.burl("/api/paciente/desasignarMedico"),
+        form
+      );
+      this.getMedicosDelSistema(this.pacienteSeleccionado)
+      // this.isLoading = false
+      this.$swal.fire({
+        icon: "success",
+        text: "Médico desasignado",
         cancelButtonColor: "#47A44B"
       });
     }

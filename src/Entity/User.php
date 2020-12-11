@@ -78,6 +78,11 @@ class User implements UserInterface
     private $last_name;
 
     /**
+     * @ORM\Column(type="string", length=191, nullable=true)
+     */
+    private $legajo;
+
+    /**
      * @ORM\Column(type="boolean")
      */
     private $activo = 1;

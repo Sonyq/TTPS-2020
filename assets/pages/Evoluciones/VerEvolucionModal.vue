@@ -6,7 +6,7 @@
       <md-dialog-content>
         
         <div class="md-layout">
-          <div class="md-layout-item md-small-size-100 md-large-size-100 md-large-size-100">
+          <div class="md-layout-item md-small-size-100 md-large-size-100 md-medium-size-100">
             <h4>Signos vitales</h4>
 
               <div class="md-layout-item">
