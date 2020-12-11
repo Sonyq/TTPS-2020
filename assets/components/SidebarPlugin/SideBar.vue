@@ -6,19 +6,11 @@
     :style="sidebarStyle"
   >
     <div class="logo">
-      <a href="#" class="simple-text logo-mini">
-        <div class="logo-img">
-          <img :src="imgLogo" alt="" />
-        </div>
-      </a>
+     
 
-      <a
-        href="https://www.creative-tim.com/product/vue-material-dashboard"
-        target="_blank"
-        class="simple-text logo-normal"
-      >
+      <h3 class="simple-text logo-normal">
         {{ title }}
-      </a>
+      </h3>
     </div>
     <div class="sidebar-wrapper">
       <slot name="content"></slot>
@@ -94,5 +86,8 @@ export default {
   .nav-mobile-menu {
     display: none;
   }
+}
+h3{
+  text-align: center;
 }
 </style>

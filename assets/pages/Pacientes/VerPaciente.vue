@@ -241,6 +241,7 @@
                         <md-table-head>Fecha ingreso</md-table-head>
                         <md-table-head>Fecha egreso</md-table-head>
                         <md-table-head>Fecha óbito</md-table-head>
+                        <md-table-head>Acciones</md-table-head>
                       </md-table-row>
 
                       <md-table-row
@@ -258,12 +259,23 @@
                             formatDateTime(internacion.fecha_egreso)
                           }}.hs</md-table-cell
                         >
-                        <md-table-cell v-else></md-table-cell>
+                        <md-table-cell v-else> - </md-table-cell>
                         <md-table-cell v-if="internacion.fecha_obito"
                           >{{
                             formatDateTime(internacion.fecha_obito)
                           }}.hs</md-table-cell
                         >
+                        <md-table-cell v-else> - </md-table-cell>
+                        <md-table-cell>
+                          <md-button :to="{
+                                      name: 'Ver Internación',
+                                      params: { internacionId: internacion.id }
+                                    }"
+                                    class="md-dense md-success"
+                          >
+                            Ver
+                          </md-button>
+                        </md-table-cell>
                       </md-table-row>
                     </md-table>
                     <span v-else class="md-body"

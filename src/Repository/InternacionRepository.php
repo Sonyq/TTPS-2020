@@ -40,10 +40,9 @@ class InternacionRepository extends ServiceEntityRepository
     public function findAllInternaciones($pacienteId)
     {
 			return $this->createQueryBuilder('i')
-    		->select('i.id, i.fecha_inicio_sintomas, i.fecha_diagnostico, i.fecha_carga, i.fecha_egreso, i.fecha_obito')
+				->select('i.id, i.fecha_inicio_sintomas, i.fecha_diagnostico, i.fecha_carga, i.fecha_egreso, i.fecha_obito')
 				->where('i.paciente = :pacienteId')
-				->andWhere('i.fecha_egreso is not null')
-				->orWhere('i.fecha_obito is not null')
+				->andWhere('i.fecha_egreso is not null OR i.fecha_obito is not null')
 				->setParameter('pacienteId', $pacienteId)
 				->orderBy('i.fecha_carga', 'DESC')
 				->getQuery()
