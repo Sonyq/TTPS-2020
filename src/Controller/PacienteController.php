@@ -9,6 +9,9 @@ use App\Entity\UserPaciente;
 use App\Entity\User;
 use App\Entity\Sistema;
 use App\Entity\Internacion;
+use App\Entity\InternacionCama;
+use App\Entity\Sala;
+use App\Entity\Cama;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\Annotations\RequestParam;
 use FOS\RestBundle\Controller\Annotations\QueryParam;
@@ -286,7 +289,7 @@ class PacienteController extends FOSRestController
       }
 
       $relacionConJefeDeSistema = $this->getDoctrine()->getRepository(UserPaciente::class)
-                                       ->findOneBy(['user' => $this->getUser()->getId(), 
+                                       ->findOneBy(['user' => $this->getUser()->getId(),
                                                  'paciente' => $paciente,
                                                  'fecha_hasta' => null]);
 
@@ -484,6 +487,33 @@ class PacienteController extends FOSRestController
       $internacionCamaActual->setFechaHasta(new \DateTime());
       $internacionCamaActual->getCama()->setEstado('libre');
       //hasta acá todo lo del Origen
+
+      //desasignar todos los médicos para ese paciente en el sistema origen.
+      $usersPacientes = $this->getDoctrine()->getRepository(UserPaciente::class)
+                             ->findBy(["paciente" => $paciente, "fecha_hasta" => null]);
+
+      if ($usersPacientes) {
+
+        foreach ($usersPacientes as $userPaciente) {
+          $userPaciente->setFechaHasta(new \DateTime);
+          $entityManager->persist($userPaciente);
+        }
+
+      }
+
+      //busco al jefe del sistema para asignárselo al paciente (para las alertas...)
+      $users = $this->getDoctrine()->getRepository(User::class)
+                    ->findBy(["sistema" => $sistemaDestino->getId()]);
+
+      foreach ($users as $user) {
+        if (in_array("ROLE_JEFE", $user->getRoles())) {
+          $jefeSistema = $user;
+          break;
+        };
+      }
+
+      $jefePaciente = new UserPaciente($paciente, $jefeSistema);
+      $entityManager->persist($jefePaciente);
   
       $entityManager->flush();
       $entityManager->getConnection()->commit();
@@ -494,7 +524,7 @@ class PacienteController extends FOSRestController
       $entityManager->getConnection()->rollBack();
 
       $error = [ 
-        "message" => "Se produjo un error al intentar el cambio de sistema",
+        "message" => "Se produjo un error al intentar el cambio de sistema".$e->getMessage(),
       ];
 
       return new Response($serializer->serialize($error, "json"), 500);
