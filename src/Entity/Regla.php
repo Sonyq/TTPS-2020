@@ -32,6 +32,17 @@ class Regla
      */
     private $accion;
 
+    public function __construct($evento, 
+                                $texto, 
+                                $accion
+    )     
+    {
+
+        $this->evento = $evento;
+        $this->expresion = $texto;
+        $this->accion = $accion;
+    }
+
     public function getId(): ?int
     {
         return $this->id;

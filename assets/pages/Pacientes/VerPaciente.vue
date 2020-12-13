@@ -1,6 +1,10 @@
 <template>
   <div>
-    <loading :active.sync="isLoading" :is-full-page="true" color="#4CAF50">
+
+    <loading :active.sync="isLoading"
+      :is-full-page="true"
+      :opacity="1"
+      color='#4CAF50'>
     </loading>
 
     <form>
@@ -356,7 +360,9 @@
               </div>
 
               <div>
-                <md-button class="md-dense md-success" @click="declararEgreso()"
+                <md-button 
+                  v-if="puedeDeclararEgreso"
+                  class="md-dense md-success" @click="declararEgreso()"
                   >Declarar egreso</md-button
                 >
               </div>
@@ -632,6 +638,13 @@ export default {
         });
       });
       this.evoluciones = evolucionesIntercaladasConCambiosDeSistema;
+    }
+  },
+  computed: {
+    puedeDeclararEgreso() {
+      return (this.loggedUser.sistemaNombre == 'Piso Covid' ||  
+              this.loggedUser.sistemaNombre == 'Domicilio' || 
+              this.loggedUser.sistemaNombre == 'Hotel')
     }
   }
 };

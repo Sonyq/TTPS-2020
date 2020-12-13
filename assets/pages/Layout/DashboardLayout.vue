@@ -9,7 +9,7 @@
         <p>Iniciar sesión</p>
       </sidebar-link>
       <sidebar-link v-if="jwtToken && esJefe" to="/sistemas">
-        <md-icon>person</md-icon>
+        <md-icon>local_hospital</md-icon>
         <p>Sistemas</p>
       </sidebar-link>
       <sidebar-link
@@ -25,8 +25,12 @@
         <md-icon>person</md-icon>
         <p>Pacientes</p>
       </sidebar-link>
+      <sidebar-link v-if="jwtToken && esJefe" to="/reglas">
+        <md-icon>rule</md-icon>
+        <p>Reglas del Sistema</p>
+      </sidebar-link>
       <sidebar-link v-if="jwtToken" to="/logout">
-        <md-icon>person</md-icon>
+        <md-icon>keyboard_backspace</md-icon>
         <p>Cerrar sesión</p>
       </sidebar-link>
     </side-bar>

@@ -10,6 +10,9 @@ import NuevaInternacion from "@/pages/Internaciones/NuevaInternacion.vue";
 import VerInternacion from "@/pages/Internaciones/VerInternacion.vue";
 import Sistemas from "@/pages/Sistemas/Sistemas.vue";
 import Logout from "@/pages/Logout.vue";
+import Reglas from "@/pages/Reglas/Reglas.vue";
+import NuevaRegla from "@/pages/Reglas/NuevaRegla.vue";
+
 
 /*
 Si no quiero agregar el footer poner la opcion   hideFooter: true ejemplo: 
@@ -82,6 +85,18 @@ const routes = [
         path: "verInternacion/:internacionId",
         name: "Ver Internación",
         component: VerInternacion,
+        props: true
+      },
+      {
+        path: "reglas",
+        name: "Reglas",
+        component: Reglas,
+        props: true
+      },
+      {
+        path: "regla/:reglaId?",
+        name: "Nueva Regla",
+        component: NuevaRegla,
         props: true
       }
     ]

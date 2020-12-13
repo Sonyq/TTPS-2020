@@ -98,7 +98,7 @@
                         >Gestionar médicos</md-menu-item
                       >
                       <md-menu-item
-                        v-if="
+                        v-if="puedeDeclararEgreso &&
                           !(props.row.fecha_obito || props.row.fecha_egreso)
                         "
                         @click="
@@ -380,6 +380,11 @@ export default {
   computed: {
     nombreSistemaComp() {
       return this.sistemaNombre ? this.sistemaNombre : this.sistemaNombreLocal;
+    },
+    puedeDeclararEgreso() {
+      return (this.sistemaNombreLocal == 'Piso Covid' ||  
+              this.sistemaNombreLocal == 'Domicilio' || 
+              this.sistemaNombreLocal == 'Hotel')
     }
   }
 };
