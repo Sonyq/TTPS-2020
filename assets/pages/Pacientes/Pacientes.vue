@@ -1,13 +1,9 @@
 <template>
   <div>
-
-    <loading :active.sync="isLoading"
-      :is-full-page="true"
-      color='#4CAF50'>
+    <loading :active.sync="isLoading" :is-full-page="true" color="#4CAF50">
     </loading>
 
-    <md-card v-if="pacientes">     
-      
+    <md-card v-if="pacientes">
       <md-card-header data-background-color="green">
         <span class="md-title">Pacientes en {{ nombreSistemaComp }}</span>
       </md-card-header>
@@ -95,7 +91,8 @@
 
                       <md-menu-item
                         v-if="
-                          !(props.row.fecha_obito || props.row.fecha_egreso) && loggedUser.roles.includes('ROLE_JEFE')
+                          !(props.row.fecha_obito || props.row.fecha_egreso) &&
+                            loggedUser.roles.includes('ROLE_JEFE')
                         "
                         @click="getMedicosDelSistema(props.row.id)"
                         >Gestionar médicos</md-menu-item
@@ -127,46 +124,47 @@
     </md-card>
 
     <div>
-      <md-dialog :md-active.sync="mostrarAsignarMedico" style="max-width: 100%;">
+      <md-dialog
+        :md-active.sync="mostrarAsignarMedico"
+        style="max-width: 100%;"
+      >
         <md-dialog-title>Gestionar médicos</md-dialog-title>
 
         <md-dialog-content>
+          <md-table md-card v-if="medicosDelSistema" class="md-body">
+            <md-table-row>
+              <md-table-head>Nombre</md-table-head>
+              <md-table-head>Nro. Legajo</md-table-head>
+              <md-table-head>Acciones</md-table-head>
+            </md-table-row>
 
-          <md-table
-              md-card
-              v-if="medicosDelSistema"
-              class="md-body"
-            >
-              <md-table-row>
-                <md-table-head>Nombre</md-table-head>
-                <md-table-head>Nro. Legajo</md-table-head>
-                <md-table-head>Acciones</md-table-head>
-              </md-table-row>
+            <md-table-row v-for="medico in medicosDelSistema" :key="medico.id">
+              <md-table-cell>{{
+                medico.first_name + " " + medico.last_name
+              }}</md-table-cell>
 
-              <md-table-row
-                v-for="medico in medicosDelSistema"
-                :key="medico.id"
-              >
-                <md-table-cell>{{ medico.first_name + " " + medico.last_name }}</md-table-cell>
+              <md-table-cell>{{ medico.legajo }}</md-table-cell>
 
-                <md-table-cell>{{ medico.legajo }}</md-table-cell>
+              <md-table-cell>
+                <md-button
+                  v-if="medico.asignado"
+                  class="md-success"
+                  @click="desasignarMedico(medico.id)"
+                >
+                  Desasignar
+                </md-button>
+                <md-button
+                  v-else
+                  class="md-success"
+                  @click="asignarMedico(medico.id)"
+                >
+                  Asignar
+                </md-button>
+              </md-table-cell>
+            </md-table-row>
+          </md-table>
 
-                <md-table-cell>
-                  <md-button v-if="medico.asignado" class="md-success" @click="desasignarMedico(medico.id)">
-                    Desasignar
-                  </md-button>
-                  <md-button v-else class="md-success" @click="asignarMedico(medico.id)">
-                    Asignar
-                  </md-button>
-                </md-table-cell>               
-
-              </md-table-row>
-            </md-table>
-
-            <span v-else class="md-body"
-              >No hay médicos en el sistema</span
-            >
-
+          <span v-else class="md-body">No hay médicos en el sistema</span>
         </md-dialog-content>
 
         <md-dialog-actions>
@@ -182,9 +180,9 @@
 <script>
 import "vue-good-table/dist/vue-good-table.css";
 import { VueGoodTable } from "vue-good-table";
-import Loading from 'vue-loading-overlay';
+import Loading from "vue-loading-overlay";
 // Import stylesheet
-import 'vue-loading-overlay/dist/vue-loading.css';
+import "vue-loading-overlay/dist/vue-loading.css";
 
 export default {
   components: {
@@ -257,25 +255,25 @@ export default {
   },
   methods: {
     async getPacientesInternados() {
-      this.isLoading = true
+      this.isLoading = true;
       let sistemaId = this.sistemaId ? "?sistema=" + this.sistemaId : "";
       const pacientes = await axios.get(
         this.burl("/api/paciente/internados" + sistemaId)
       );
       this.pacientes = pacientes.data;
-      this.isLoading = false
+      this.isLoading = false;
     },
     async getPacientesEgresados() {
-      this.isLoading = true
+      this.isLoading = true;
       const pacientes = await axios.get(this.burl("/api/paciente/egresados"));
       this.pacientes = pacientes.data;
-      this.isLoading = false
+      this.isLoading = false;
     },
     async getPacientesFallecidos() {
-      this.isLoading = true
+      this.isLoading = true;
       const pacientes = await axios.get(this.burl("/api/paciente/fallecidos"));
       this.pacientes = pacientes.data;
-      this.isLoading = false
+      this.isLoading = false;
     },
     getSistema(paciente) {
       return paciente.fecha_egreso || paciente.fecha_obito
@@ -302,15 +300,17 @@ export default {
       }
     },
     async getMedicosDelSistema(pacienteId) {
-      this.isLoading = true
+      this.isLoading = true;
       this.pacienteSeleccionado = pacienteId;
       let sistemaId = this.sistemaId ? "?sistema=" + this.sistemaId : "";
       const medicos = await axios.get(
-        this.burl("/api/sistemas/medicos" + sistemaId + "?paciente=" + pacienteId)
+        this.burl(
+          "/api/sistemas/medicos" + sistemaId + "?paciente=" + pacienteId
+        )
       );
       this.medicosDelSistema = medicos.data;
       this.mostrarAsignarMedico = true;
-      this.isLoading = false
+      this.isLoading = false;
     },
     cambiarEstado(estado, internacionId) {
       this.$swal
@@ -327,7 +327,7 @@ export default {
         })
         .then(result => {
           if (result.isConfirmed) {
-            this.isLoading = true
+            this.isLoading = true;
             axios
               .get(
                 this.burl("/api/internacion/" + estado + "?id=" + internacionId)
@@ -335,7 +335,7 @@ export default {
               .then(response => {
                 this.getPacientes();
               });
-            this.isLoading = false
+            this.isLoading = false;
           }
         });
     },
@@ -349,7 +349,7 @@ export default {
         this.burl("/api/paciente/asignarMedico"),
         form
       );
-      this.getMedicosDelSistema(this.pacienteSeleccionado)
+      this.getMedicosDelSistema(this.pacienteSeleccionado);
       // this.isLoading = false
       this.$swal.fire({
         icon: "success",
@@ -358,7 +358,7 @@ export default {
       });
     },
     async desasignarMedico(medicoId) {
-      console.log(medicoId)
+      console.log(medicoId);
       // this.isLoading = true
       let form = {
         pacienteId: this.pacienteSeleccionado,
@@ -368,7 +368,7 @@ export default {
         this.burl("/api/paciente/desasignarMedico"),
         form
       );
-      this.getMedicosDelSistema(this.pacienteSeleccionado)
+      this.getMedicosDelSistema(this.pacienteSeleccionado);
       // this.isLoading = false
       this.$swal.fire({
         icon: "success",

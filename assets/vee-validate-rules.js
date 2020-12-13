@@ -1,8 +1,13 @@
-import {
-  extend,
-} from "vee-validate";
+import { extend } from "vee-validate";
 
-import { required, numeric, max, double, alpha_spaces, email } from "vee-validate/dist/rules";
+import {
+  required,
+  numeric,
+  max,
+  double,
+  alpha_spaces,
+  email
+} from "vee-validate/dist/rules";
 
 extend("required", {
   ...required,

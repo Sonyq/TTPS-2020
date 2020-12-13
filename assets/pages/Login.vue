@@ -11,7 +11,11 @@
 
         <md-field>
           <label>Contraseña</label>
-          <md-input v-model="password" @keyup.enter="login" type="password"></md-input>
+          <md-input
+            v-model="password"
+            @keyup.enter="login"
+            type="password"
+          ></md-input>
         </md-field>
 
         <md-button class="md-success" @click="login" :disabled="canSubmit"

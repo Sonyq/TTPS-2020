@@ -1,14 +1,10 @@
 <template>
   <div>
-
-    <loading :active.sync="isLoading"
-          :is-full-page="true"
-          color='#4CAF50'>
+    <loading :active.sync="isLoading" :is-full-page="true" color="#4CAF50">
     </loading>
-    
+
     <div class="content">
       <div class="md-layout">
-
         <div
           v-for="sistema in sistemas"
           :key="sistema.id"
@@ -57,9 +53,9 @@
 
 <script>
 import StatsCard from "../../components/Cards/StatsCard.vue";
-import Loading from 'vue-loading-overlay';
+import Loading from "vue-loading-overlay";
 // Import stylesheet
-import 'vue-loading-overlay/dist/vue-loading.css';
+import "vue-loading-overlay/dist/vue-loading.css";
 
 export default {
   components: {
@@ -77,10 +73,10 @@ export default {
   },
   methods: {
     async getSistemas() {
-      this.isLoading = true
+      this.isLoading = true;
       const sistemas = await axios.get(this.burl("/api/sistemas/index"));
       this.sistemas = sistemas.data;
-      this.isLoading = false
+      this.isLoading = false;
     }
   }
 };

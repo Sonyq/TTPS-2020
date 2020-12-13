@@ -2,7 +2,9 @@
   <md-toolbar md-elevation="0" class="md-transparent">
     <div class="md-toolbar-row">
       <div v-if="usuarioLocal" class="md-toolbar-section-start">
-        <h3 class="md-title">{{ nombreUsuario }}, {{ rolUsuario }} de {{ sistemaUsuario }}</h3>
+        <h3 class="md-title">
+          {{ nombreUsuario }}, {{ rolUsuario }} de {{ sistemaUsuario }}
+        </h3>
       </div>
       <div class="md-toolbar-section-end">
         <md-button
@@ -80,13 +82,13 @@ export default {
   },
   computed: {
     nombreUsuario() {
-     return this.usuarioLocal.first_name + " " + this.usuarioLocal.last_name 
+      return this.usuarioLocal.first_name + " " + this.usuarioLocal.last_name;
     },
     rolUsuario() {
-      return this.usuarioLocal.roles.includes("ROLE_JEFE") ? "Jefe" : "Médico"
+      return this.usuarioLocal.roles.includes("ROLE_JEFE") ? "Jefe" : "Médico";
     },
     sistemaUsuario() {
-      return this.usuarioLocal.sistemaNombre
+      return this.usuarioLocal.sistemaNombre;
     }
   }
 };

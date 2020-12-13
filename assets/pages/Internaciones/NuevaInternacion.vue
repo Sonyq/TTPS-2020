@@ -1,9 +1,6 @@
 <template>
   <div>
-
-    <loading :active.sync="isLoading"
-        :is-full-page="false"
-        color='#4CAF50'>
+    <loading :active.sync="isLoading" :is-full-page="false" color="#4CAF50">
     </loading>
 
     <md-card>
@@ -15,15 +12,11 @@
         <ValidationObserver v-slot="{ invalid }">
           <form @submit.prevent="submit">
             <div class="md-layout">
-
               <div
                 class="md-layout-item md-small-size-100 md-size-100"
                 style="margin-top: 20px"
               >
-                <ValidationProvider
-                  rules="required"
-                  v-slot="{ errors }"
-                >
+                <ValidationProvider rules="required" v-slot="{ errors }">
                   <datepicker
                     v-model="fechaInicioSintomas"
                     :lang="datePickerOptions"
@@ -40,10 +33,7 @@
                 class="md-layout-item md-small-size-100 md-size-100"
                 style="margin-top: 20px; margin-bottom: 10px;"
               >
-                <ValidationProvider
-                  rules="required"
-                  v-slot="{ errors }"
-                >
+                <ValidationProvider rules="required" v-slot="{ errors }">
                   <datepicker
                     v-model="fechaDiagnostico"
                     :lang="datePickerOptions"
@@ -58,10 +48,7 @@
 
               <div class="md-layout-item md-size-100">
                 <md-field>
-                  <ValidationProvider
-                    rules="required"
-                    v-slot="{ errors }"
-                  >
+                  <ValidationProvider rules="required" v-slot="{ errors }">
                     <label>Descripción</label>
                     <md-textarea v-model="descripcion"></md-textarea>
                     <span class="field-error">{{ errors[0] }}</span>
@@ -77,7 +64,6 @@
                   >Guardar</md-button
                 >
               </div>
-
             </div>
           </form>
         </ValidationObserver>
@@ -90,9 +76,9 @@
 import Datepicker from "vue2-datepicker";
 import "vue2-datepicker/index.css";
 import "vue2-datepicker/locale/es";
-import Loading from 'vue-loading-overlay';
+import Loading from "vue-loading-overlay";
 // Import stylesheet
-import 'vue-loading-overlay/dist/vue-loading.css';
+import "vue-loading-overlay/dist/vue-loading.css";
 
 export default {
   components: {
@@ -119,7 +105,7 @@ export default {
   },
   methods: {
     async submit() {
-      this.isLoading = true
+      this.isLoading = true;
       let formData = {
         fecha_inicio_sintomas: this.formatDate(
           this.fechaInicioSintomas.toISOString()
@@ -145,7 +131,7 @@ export default {
             params: { pacienteId: this.pacienteId }
           });
         });
-      this.isLoading = false
+      this.isLoading = false;
     }
   }
 };

@@ -1,9 +1,6 @@
 <template>
   <div>
-
-    <loading :active.sync="isLoading"
-      :is-full-page="true"
-      color='#4CAF50'>
+    <loading :active.sync="isLoading" :is-full-page="true" color="#4CAF50">
     </loading>
 
     <form>
@@ -146,7 +143,6 @@
                 }"
                 >Editar Paciente
               </md-button>
-
             </div>
 
             <div class="md-layout-item md-small-size-100 md-size-33">
@@ -267,11 +263,12 @@
                         >
                         <md-table-cell v-else> - </md-table-cell>
                         <md-table-cell>
-                          <md-button :to="{
-                                      name: 'Ver Internación',
-                                      params: { internacionId: internacion.id }
-                                    }"
-                                    class="md-dense md-success"
+                          <md-button
+                            :to="{
+                              name: 'Ver Internación',
+                              params: { internacionId: internacion.id }
+                            }"
+                            class="md-dense md-success"
                           >
                             Ver
                           </md-button>
@@ -307,11 +304,12 @@
                     !ultimaInternacion.fecha_obito
                 "
               >
-                <md-button :to="{
-                          name: 'Nueva Internación',
-                          params: { pacienteId: pacienteId }
-                        }"
-                        class="md-dense md-success"
+                <md-button
+                  :to="{
+                    name: 'Nueva Internación',
+                    params: { pacienteId: pacienteId }
+                  }"
+                  class="md-dense md-success"
                   >Nueva Internación</md-button
                 >
               </div>
@@ -369,7 +367,7 @@
                 >
               </div>
             </div>
-          
+
             <div
               v-if="
                 !(
@@ -379,63 +377,73 @@
               "
               class="md-layout"
             >
-         
               <div class="md-layout-item md-small-size-100 md-size-100">
                 <span class="md-title">Evoluciones</span>
-                  
-                  <md-button
-                    :to="{
-                      name: 'Nueva Evolución',
-                      params: {
-                        internacionId: ultimaInternacion.id,
-                        pacienteId: pacienteId
-                      }
-                    }"
-                    class="md-dense md-success"
-                    id="nuevaEvolucionButton"
-                    >Nueva evolución</md-button
-                  >
-                  <br>
-                  <br>
-                  <md-empty-state
-                    md-rounded
-                    md-icon="assignment"
-                    md-label="No hay evoluciones"
-                    md-description="Este paciente aún no registra evoluciones. Las evoluciones registradas se mostrarán aquí."
-                    v-if="evoluciones.length == 0">
-                  </md-empty-state>
-                 
-                  <div class="full-control">
-                    <div class="list">
-                      <md-list>
-                        <md-list-item md-expand v-for="(evol, sistema) in evoluciones" :key="sistema">
-                          <span class="md-list-item-text">{{ sistema }}</span>
-                          <md-list slot="md-expand">
-                            <md-list-item class="md-inset" v-for="(e, i) in evoluciones[sistema]" :key="i">
-                              Fecha: {{ formatDateTime(e.fecha_carga) }}
-                              <md-button class="md-dense" @click="verEvolucion(e.id)">Ver</md-button>
-                            </md-list-item>
-                          </md-list>
-                        </md-list-item>
-                      </md-list>
-                    </div>
-                  </div>
 
-                  <!-- <template slot="table-row" slot-scope="props">
+                <md-button
+                  :to="{
+                    name: 'Nueva Evolución',
+                    params: {
+                      internacionId: ultimaInternacion.id,
+                      pacienteId: pacienteId
+                    }
+                  }"
+                  class="md-dense md-success"
+                  id="nuevaEvolucionButton"
+                  >Nueva evolución</md-button
+                >
+                <br />
+                <br />
+                <md-empty-state
+                  md-rounded
+                  md-icon="assignment"
+                  md-label="No hay evoluciones"
+                  md-description="Este paciente aún no registra evoluciones. Las evoluciones registradas se mostrarán aquí."
+                  v-if="evoluciones.length == 0"
+                >
+                </md-empty-state>
+
+                <div class="full-control">
+                  <div class="list">
+                    <md-list>
+                      <md-list-item
+                        md-expand
+                        v-for="(evol, sistema) in evoluciones"
+                        :key="sistema"
+                      >
+                        <span class="md-list-item-text">{{ sistema }}</span>
+                        <md-list slot="md-expand">
+                          <md-list-item
+                            class="md-inset"
+                            v-for="(e, i) in evoluciones[sistema]"
+                            :key="i"
+                          >
+                            Fecha: {{ formatDateTime(e.fecha_carga) }}
+                            <md-button
+                              class="md-dense"
+                              @click="verEvolucion(e.id)"
+                              >Ver</md-button
+                            >
+                          </md-list-item>
+                        </md-list>
+                      </md-list-item>
+                    </md-list>
+                  </div>
+                </div>
+
+                <!-- <template slot="table-row" slot-scope="props">
 									  <span v-if="props.column.field == 'acciones'">
                       <md-button @click="verEvolucion(props.row.evolucionId)">Ver</md-button>
 									  </span>
 								  </template> -->
 
-                  <ver-evolucion-modal v-if="evolucion"
-                    :mostrar="mostrarEvolucion"
-                    :data="evolucion"
-                    @cerrarEvolucionModal="mostrarEvolucion = false"
-                  >
-                  </ver-evolucion-modal>
-
-                
-                
+                <ver-evolucion-modal
+                  v-if="evolucion"
+                  :mostrar="mostrarEvolucion"
+                  :data="evolucion"
+                  @cerrarEvolucionModal="mostrarEvolucion = false"
+                >
+                </ver-evolucion-modal>
               </div>
             </div>
           </div>
@@ -446,16 +454,15 @@
 </template>
 
 <script>
-
 import VerEvolucionModal from "./../Evoluciones/VerEvolucionModal";
-import Loading from 'vue-loading-overlay';
+import Loading from "vue-loading-overlay";
 // Import stylesheet
-import 'vue-loading-overlay/dist/vue-loading.css';
+import "vue-loading-overlay/dist/vue-loading.css";
 
 export default {
-  name: 'IconButtons',
-  name: 'ListExpansion',
-  name: 'EmptyStateRounded',
+  name: "IconButtons",
+  name: "ListExpansion",
+  name: "EmptyStateRounded",
   components: {
     VerEvolucionModal,
     Loading
@@ -492,7 +499,7 @@ export default {
         });
     },
     async getUltimaInternacionYEvoluciones() {
-      this.isLoading = true
+      this.isLoading = true;
       const ultimaInternacion = await axios.get(
         this.burl("/api/internacion/ultima?pacienteId=" + this.pacienteId)
       );
@@ -501,15 +508,15 @@ export default {
         const evoluciones = await axios.get(
           this.burl("/api/evolucion/index?id=" + this.ultimaInternacion.id)
         );
-        if(evoluciones.data){
+        if (evoluciones.data) {
           this.evoluciones = evoluciones.data;
           this.getEvolucionesIntercaladasConCambiosDeSistema();
         }
       }
-      this.isLoading = false
+      this.isLoading = false;
     },
     async getInternacionesPrevias() {
-      this.isLoading = true
+      this.isLoading = true;
       const internaciones = await axios.get(
         this.burl("/api/internacion/previas?pacienteId=" + this.pacienteId)
       );
@@ -524,7 +531,7 @@ export default {
       //   this.internacionesPrevias.shift();
       // }
       this.mostrarPrevias = true;
-      this.isLoading = false
+      this.isLoading = false;
     },
     async getSistemasDestino() {
       const response = await axios.get(
@@ -553,7 +560,7 @@ export default {
         })
         .then(result => {
           if (result.isConfirmed) {
-            this.isLoading = true
+            this.isLoading = true;
             axios
               .get(
                 this.burl(
@@ -566,7 +573,7 @@ export default {
               .then(response => {
                 this.$router.push("/pacientes");
               });
-            this.isLoading = false
+            this.isLoading = false;
           }
         });
     },
@@ -583,7 +590,7 @@ export default {
         })
         .then(result => {
           if (result.isConfirmed) {
-            this.isLoading = true
+            this.isLoading = true;
             let form = {
               sistemaDestinoId: this.sistemaDestinoSelected,
               pacienteId: this.pacienteId,
@@ -594,21 +601,21 @@ export default {
               .then(response => {
                 this.$router.push("/pacientes");
               });
-            this.isLoading = false
+            this.isLoading = false;
           }
         });
     },
     async verEvolucion(evolucionId) {
-      this.isLoading = true
+      this.isLoading = true;
       const response = await axios.get(
         this.burl("/api/evolucion/show?id=" + evolucionId)
       );
-      this.evolucion = response.data
-      this.isLoading = false
-      this.mostrarEvolucion = true
+      this.evolucion = response.data;
+      this.isLoading = false;
+      this.mostrarEvolucion = true;
     },
     cerrarEvolucionModal() {
-      this.$modal.hide('evolucion')
+      this.$modal.hide("evolucion");
     },
     getHistorialDeSistemas() {
       return [...new Set(this.evoluciones.map(({ sistema }) => sistema))];
@@ -626,37 +633,34 @@ export default {
       });
       this.evoluciones = evolucionesIntercaladasConCambiosDeSistema;
     }
-  },
+  }
 };
-
 </script>
 
-
 <style lang="scss" scoped>
-  $list-width: 100%;
+$list-width: 100%;
 
-  .full-control {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap-reverse;
-  }
+.full-control {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap-reverse;
+}
 
-  .list {
-    width: $list-width;
-  }
+.list {
+  width: $list-width;
+}
 
-  .full-control > .md-list {
-    width: $list-width;
-    max-width: 100%;
-    height: 400px;
-    display: inline-block;
-    overflow: auto;
-    border: 1px solid rgba(#000, .12);
-    vertical-align: top;
-  }
+.full-control > .md-list {
+  width: $list-width;
+  max-width: 100%;
+  height: 400px;
+  display: inline-block;
+  overflow: auto;
+  border: 1px solid rgba(#000, 0.12);
+  vertical-align: top;
+}
 
-  #nuevaEvolucionButton {
-    float: right;
-  }
-
+#nuevaEvolucionButton {
+  float: right;
+}
 </style>

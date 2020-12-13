@@ -6,8 +6,6 @@
     :style="sidebarStyle"
   >
     <div class="logo">
-     
-
       <h3 class="simple-text logo-normal">
         {{ title }}
       </h3>
@@ -87,7 +85,7 @@ export default {
     display: none;
   }
 }
-h3{
+h3 {
   text-align: center;
 }
 </style>

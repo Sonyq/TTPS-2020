@@ -19,7 +19,7 @@ use Nelmio\ApiDocBundle\Annotation\Model;
 use Swagger\Annotations as SWG;
 use Symfony\Component\Validator\Constraints\DateTime;
 use Symfony\Component\Validator\Constraints;
-
+use App\Entity\SistemaReglas;
 /**
  * Class Evolución Controller
  *
@@ -150,7 +150,7 @@ class EvolucionController extends FOSRestController
       $evolucion->setPcrCovidDescrip($pf->get('pcr_covid_descrip'));
       $evolucion->setObservacion($pf->get('observacion'));
       $evolucion->setSistema($this->getUser()->getSistema()->getId());
-    
+
       $entityManager->persist($evolucion);
       $entityManager->flush();
 
@@ -168,6 +168,8 @@ class EvolucionController extends FOSRestController
 
     }
 
+    $sr = new SistemaReglas($entityManager);
+    $sr->evaluar('NUEVA EVOLUCION',['evolucion' => $evolucion]);
     return new Response('Evolución creada', 200);
     
   }

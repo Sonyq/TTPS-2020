@@ -1,9 +1,6 @@
 <template>
   <div>
-
-    <loading :active.sync="isLoading"
-      :is-full-page="true"
-      color='#4CAF50'>
+    <loading :active.sync="isLoading" :is-full-page="true" color="#4CAF50">
     </loading>
 
     <md-card>
@@ -548,9 +545,9 @@
 </template>
 
 <script>
-import Loading from 'vue-loading-overlay';
+import Loading from "vue-loading-overlay";
 // Import stylesheet
-import 'vue-loading-overlay/dist/vue-loading.css';
+import "vue-loading-overlay/dist/vue-loading.css";
 
 export default {
   props: ["internacionId", "pacienteId"],
@@ -597,7 +594,7 @@ export default {
   },
   methods: {
     async submit() {
-      this.isLoading = true
+      this.isLoading = true;
       let form = {
         internacion_id: this.internacionId,
         temperatura: this.temperatura,
@@ -641,7 +638,7 @@ export default {
             params: { pacienteId: this.pacienteId }
           });
         });
-      this.isLoading = false
+      this.isLoading = false;
     },
     volver() {
       this.$router.go(-1);

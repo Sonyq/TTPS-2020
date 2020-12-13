@@ -18,7 +18,7 @@ setInteractionMode("eager");
 Vue.component("ValidationProvider", ValidationProvider);
 Vue.component("ValidationObserver", ValidationObserver);
 
-import "./vee-validate-rules.js"
+import "./vee-validate-rules.js";
 
 import VueSweetalert2 from "vue-sweetalert2";
 
@@ -199,7 +199,7 @@ new Vue({
     store_user: {},
     Chartist: Chartist,
     cancelSource: null,
-    loading: null,
+    loading: null
   },
   created() {
     axios.interceptors.response.use(
@@ -357,41 +357,26 @@ new Vue({
         to.path !== "/logout"
       ) {
         if (
-          
-          ( 
-            !this.loggedUser.roles.includes("ROLE_JEFE") && 
-            (to.name !== "Ver Paciente" || 
-             to.name !== "Nueva Internación" ||
-             to.name !== "Nueva Evolución" ||
-             to.name !== "Paciente"
-            ) 
-          )
-          
-          &&
-
-          ( 
-            to.path === "/sistemas" ||
-
-            (
-              to.name === "Pacientes" && 
-              this.$root.loggedUser.sistemaId !== to.params.sistemaId
-            )
-
-          )
-         
+          !this.loggedUser.roles.includes("ROLE_JEFE") &&
+          (to.name !== "Ver Paciente" ||
+            to.name !== "Nueva Internación" ||
+            to.name !== "Nueva Evolución" ||
+            to.name !== "Paciente") &&
+          (to.path === "/sistemas" ||
+            (to.name === "Pacientes" &&
+              this.$root.loggedUser.sistemaId !== to.params.sistemaId))
         ) {
           //la idea no es tirar ningún error sinó directamente mandarlo al listado de pacientes
           //que es una ruta a la que pueden acceder todos.
-          this.$router.push({ name: "Pacientes", 
-                              params: { sistemaId: this.loggedUser.sistemaId, 
-                                        sistemaNombre: this.loggedUser.sistemaNombre 
-                                      } 
-                            })
-          
+          this.$router.push({
+            name: "Pacientes",
+            params: {
+              sistemaId: this.loggedUser.sistemaId,
+              sistemaNombre: this.loggedUser.sistemaNombre
+            }
+          });
         } else {
-          
           this.fetchLoggedUser();
-        
         }
       }
     }

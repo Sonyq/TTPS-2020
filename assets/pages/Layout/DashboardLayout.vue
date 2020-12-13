@@ -61,14 +61,15 @@ export default {
     };
   },
   mounted() {
-    events.$on("loading_user:finish", () => (this.usuarioLocalRoles = this.loggedUser.roles));
+    events.$on(
+      "loading_user:finish",
+      () => (this.usuarioLocalRoles = this.loggedUser.roles)
+    );
     events.$on("user:logout", () => (this.usuarioLocal = ""));
   },
   computed: {
     esJefe() {
-      return (
-        this.usuarioLocalRoles.includes("ROLE_JEFE")
-      )
+      return this.usuarioLocalRoles.includes("ROLE_JEFE");
     }
   }
 };
