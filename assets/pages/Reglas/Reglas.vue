@@ -1,0 +1,130 @@
+<template>
+  <div>
+
+    <loading :active.sync="isLoading"
+      :is-full-page="true"
+      color='#4CAF50'>
+    </loading>
+
+    <md-card>     
+      
+      <md-card-header data-background-color="green">
+        <span class="md-title">Reglas del Sistema</span>
+      </md-card-header>
+
+      <md-card-content>
+        <div class="md-layout">
+
+          <div class="md-layout-item md-size-50">
+            &nbsp;
+          </div>
+
+          <div class="md-layout-item md-size-50 text-right">
+            <md-button to="/regla" class="md-success"
+              >Agregar Regla</md-button
+            >
+          </div>
+
+          <div
+            class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-100"
+          >
+            <vue-good-table
+              :columns="columnas"
+              :rows="reglas"
+              :lineNumbers="true"
+              :globalSearch="false"
+              :pagination-options="{
+                enabled: true,
+                mode: 'records',
+                perPage: 10,
+                perPageDropdown: [10, 20],
+                position: 'bottom',
+                dropdownAllowAll: false,
+                setCurrentPage: 1,
+                nextLabel: 'siguiente',
+                prevLabel: 'anterior',
+                rowsPerPageLabel: 'Reglas por página',
+                ofLabel: 'de'
+              }"
+              :search-options="{ enabled: true, placeholder: 'Buscar' }"
+              styleClass="vgt-table"
+            >
+              <div slot="emptystate" class="has-text-centered">
+                <h3 class="h3">No hay reglas para mostrar</h3>
+              </div>
+              <template slot="table-row" slot-scope="props">
+                <span v-if="props.column.field == 'acciones'">
+
+                  <md-button
+                    class="md-success"
+                    style="height: 30px"
+                    :to="{
+                          name: 'Nueva Regla',
+                          params: { reglaId: props.row.id }
+                    }"
+                  >
+                    <md-icon>edit</md-icon>
+                  </md-button>
+
+                </span>
+              </template>
+            </vue-good-table>
+          </div>
+        </div>
+      </md-card-content>
+    </md-card>
+  </div>
+</template>
+
+<script>
+import "vue-good-table/dist/vue-good-table.css";
+import { VueGoodTable } from "vue-good-table";
+import Loading from 'vue-loading-overlay';
+// Import stylesheet
+import 'vue-loading-overlay/dist/vue-loading.css';
+
+export default {
+  components: {
+    VueGoodTable,
+    Loading
+  },
+  data() {
+    return {
+      isLoading: false,
+      reglas: [],
+      columnas: [
+        {
+          label: "Evento",
+          field: "evento",
+        },
+        {
+          label: "Expresión",
+          field: "expresion",
+        },
+        {
+          label: "Acción",
+          field: "accion",
+          width: "150px"
+        },
+        {
+          label: "Opciones",
+          field: "acciones",
+        }
+      ]
+    };
+  },
+  created() {
+    this.getReglas();
+  },
+  methods: {
+    async getReglas() {
+      this.isLoading = true
+      const response = await axios.get(
+        this.burl("/api/reglas/index")
+      );
+      this.reglas = response.data;
+      this.isLoading = false
+    }
+  }
+};
+</script>

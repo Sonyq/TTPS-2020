@@ -98,9 +98,15 @@ class User implements UserInterface
      */
     private $sistema;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Aviso::class, mappedBy="usuario")
+     */
+    private $avisos;
+
     public function __construct()
     {
         // $this->userPacientes = new ArrayCollection();
+        $this->avisos = new ArrayCollection();
     }
 
     /**
@@ -373,6 +379,36 @@ class User implements UserInterface
 
     //     return $this;
     // }
+
+    /**
+     * @return Collection|Aviso[]
+     */
+    public function getAvisos(): Collection
+    {
+        return $this->avisos;
+    }
+
+    public function addAviso(Aviso $aviso): self
+    {
+        if (!$this->avisos->contains($aviso)) {
+            $this->avisos[] = $aviso;
+            $aviso->setUsuario($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAviso(Aviso $aviso): self
+    {
+        if ($this->avisos->removeElement($aviso)) {
+            // set the owning side to null (unless already changed)
+            if ($aviso->getUsuario() === $this) {
+                $aviso->setUsuario(null);
+            }
+        }
+
+        return $this;
+    }
 
 
 }

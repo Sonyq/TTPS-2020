@@ -371,7 +371,7 @@ new Vue({
 
           ( 
             to.path === "/sistemas" ||
-
+            to.path === "/reglas" ||
             (
               to.name === "Pacientes" && 
               this.$root.loggedUser.sistemaId !== to.params.sistemaId
