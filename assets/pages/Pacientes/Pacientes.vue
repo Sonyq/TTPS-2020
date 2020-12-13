@@ -23,7 +23,8 @@
           </div>
 
           <div class="md-layout-item md-size-50 text-right">
-            <md-button to="/paciente" class="md-success"
+            <md-button 
+              v-if="nombreSistemaComp == 'Guardia'" to="/paciente" class="md-success"
               >Agregar Paciente</md-button
             >
           </div>
