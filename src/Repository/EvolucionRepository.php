@@ -32,4 +32,18 @@ class EvolucionRepository extends ServiceEntityRepository
         ->getResult();
     }
 
+    public function findUltimaEvolucion($internacionId)
+    {
+        return $this->createQueryBuilder('e')
+        ->select('e.id, e.fecha_carga, e.saturacion_oxigeno, e.canula_nasal_oxigeno, e.mascara_con_reservorio,
+                  e.pafi, e.prono_vigil, e.tos, e.disnea, e.estabilidad_desaparicion_sintomas_resp')
+        ->innerJoin('App:Internacion', 'i', 'WITH', 'i.id = e.internacion')
+        ->where('i.id = :internacionId')
+        ->setParameter('internacionId', $internacionId)
+        ->orderBy('e.fecha_carga', 'DESC')
+        ->setMaxResults(1)
+		->getQuery()
+		->getOneOrNullResult();
+    }
+
 }

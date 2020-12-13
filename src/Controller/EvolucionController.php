@@ -64,6 +64,25 @@ class EvolucionController extends FOSRestController
   }
 
   /**
+   * @Route("/ultima", name="evolucion_ultima", methods={"GET"})
+   * @SWG\Response(response=200, description="Ver Evolución")
+   * @SWG\Tag(name="Evolución")
+   * @QueryParam(name="internacionId", strict=true, nullable=false, allowBlank=false, description="Internación Id")
+   *      
+   * @param ParamFetcher $pf
+   */
+  public function getUltimaEvolucion(Request $request, ParamFetcher $pf): Response
+  {
+    $evolucion = $this->getDoctrine()->getRepository(Evolucion::class)->findUltimaEvolucion($pf->get('internacionId'));    
+
+    $serializer = $this->get('jms_serializer');
+
+    $result = $evolucion ? $serializer->serialize($evolucion, "json") : null;
+    
+    return new Response($result, 200);
+  }
+
+  /**
    * @Route("/new", name="evolucion_new", methods={"POST"})
    * @SWG\Response(response=200, description="Evolución creada exitosamente")
    * @SWG\Tag(name="Evolución")
