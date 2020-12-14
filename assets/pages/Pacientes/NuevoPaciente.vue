@@ -5,8 +5,8 @@
 
     <md-card>
       <md-card-header data-background-color="green">
-        <h3 class="title" v-if="pacienteId">Editar Paciente</h3>
-        <h3 class="title" v-else>Nuevo Paciente</h3>
+        <span class="md-title" v-if="pacienteId">Editar Paciente</span>
+        <span class="md-title" v-else>Nuevo Paciente</span>
       </md-card-header>
 
       <md-card-content>
@@ -213,6 +213,10 @@
                     </md-field>
                   </div>
                 </div>
+              </div>
+
+              <div class="md-layout-item md-size-50 text-right">
+                &nbsp;
               </div>
 
               <div class="md-layout-item md-size-50 text-right">

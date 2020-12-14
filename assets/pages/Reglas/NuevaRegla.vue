@@ -52,19 +52,16 @@
                     <span class="field-error">{{ errors[0] }}</span>
                   </ValidationProvider>
                 </md-field>
-              </div>
+              </div>        
+            </div>
+
+            <div class="md-layout">
 
               <div class="md-layout-item md-size-40">
                 &nbsp;
               </div>
 
               <div class="md-layout">
-                <div class="md-layout-item md-size-30 text-left">
-                  <md-button class="md-raised md-success" @click="volver()"
-                    >Volver</md-button
-                  >
-                </div>
-
                 <div class="md-layout-item md-size-30 text-right">
                   <md-button
                     type="submit"
@@ -75,6 +72,7 @@
                 </div>
               </div>
             </div>
+
           </form>
         </ValidationObserver>
       </md-card-content>
@@ -141,9 +139,6 @@ export default {
         });
       this.isLoading = false;
     }
-  },
-  volver() {
-    this.$router.go(-1);
   }
 };
 </script>

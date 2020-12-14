@@ -25,7 +25,6 @@
               :columns="columnas"
               :rows="reglas"
               :lineNumbers="true"
-              :globalSearch="false"
               :pagination-options="{
                 enabled: true,
                 mode: 'records',
@@ -39,7 +38,6 @@
                 rowsPerPageLabel: 'Reglas por página',
                 ofLabel: 'de'
               }"
-              :search-options="{ enabled: true, placeholder: 'Buscar' }"
               styleClass="vgt-table"
             >
               <div slot="emptystate" class="has-text-centered">
@@ -48,8 +46,9 @@
               <template slot="table-row" slot-scope="props">
                 <span v-if="props.column.field == 'acciones'">
                   <md-button
-                    class="md-success"
+                    class="md-success md-just-icon"
                     style="height: 30px"
+                    title="Editar"
                     :to="{
                       name: 'Nueva Regla',
                       params: { reglaId: props.row.id }
@@ -86,19 +85,21 @@ export default {
       columnas: [
         {
           label: "Evento",
-          field: "evento"
+          field: "evento",
+          width: "280px"
         },
         {
           label: "Expresión",
-          field: "expresion"
+          field: "expresion",
+          width: "350px"
         },
         {
           label: "Acción",
           field: "accion",
-          width: "150px"
+          width: "305px"
         },
         {
-          label: "Opciones",
+          label: "",
           field: "acciones"
         }
       ]

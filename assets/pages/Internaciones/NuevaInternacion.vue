@@ -46,7 +46,7 @@
                 </ValidationProvider>
               </div>
 
-              <div class="md-layout-item md-size-100">
+              <div class="md-layout-item md-size-20">
                 <md-field>
                   <ValidationProvider rules="required" v-slot="{ errors }">
                     <label>Descripción</label>
@@ -54,6 +54,10 @@
                     <span class="field-error">{{ errors[0] }}</span>
                   </ValidationProvider>
                 </md-field>
+              </div>
+
+              <div class="md-layout-item md-size-80">
+                &nbsp;
               </div>
 
               <div class="md-layout-item md-size-50">

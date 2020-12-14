@@ -19,15 +19,6 @@
             <div class="md-layout-item md-small-size-100 md-size-33">
               <span class="md-title">Datos filiatorios</span>
 
-              <!-- <md-button
-                class="md-fab md-success md-icon-button"
-                :to="{
-                  name: 'Editar Paciente',
-                  params: { pacienteId: pacienteId }
-                }"
-                ><md-icon>edit</md-icon>
-              </md-button> -->
-
               <div class="md-layout-item">
                 <span class="md-body-1">Dni: {{ paciente.dni }}</span>
               </div>
