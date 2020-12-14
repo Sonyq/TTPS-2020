@@ -26,7 +26,6 @@
               :columns="columnas"
               :rows="alertas"
               :lineNumbers="true"
-              :globalSearch="false"
               :pagination-options="{
                 enabled: true,
                 mode: 'records',
@@ -40,7 +39,6 @@
                 rowsPerPageLabel: 'Avisos por página',
                 ofLabel: 'de'
               }"
-              :search-options="{ enabled: true, placeholder: 'Buscar' }"
               styleClass="vgt-table"
             >
               <div slot="emptystate" class="has-text-centered">
@@ -49,8 +47,8 @@
               <template slot="table-row" slot-scope="props">
                 <span v-if="props.column.field == 'acciones'">
 
-                  <md-button
-                    class="md-primary md-just-icon"
+                  <md-button v-if="!props.row.leido"
+                    class="md-success md-just-icon"
                     style="height: 30px;"
                     title="Marcar como leída"
                     @click="marcarComoLeida(props.row.id)"
@@ -88,17 +86,20 @@ export default {
         {
           label: "Evento",
           field: "evento",
-          width: "240px"
+          width: "240px",
+          tdClass: this.tdClassFunc
         },
         {
           label: "Mensaje",
           field: "mensaje",
-          width: "400px"
+          width: "400px",
+          tdClass: this.tdClassFunc
         },
         {
           label: "Detalle",
           field: "detalle",
-          width: "300px"
+          width: "300px",
+          tdClass: this.tdClassFunc
         },
         {
           label: "",
@@ -126,7 +127,19 @@ export default {
       );
       this.alertas = response.data;
       this.getAlertas()
+    },
+    tdClassFunc(row) {
+      return row.leido ? '' : 'no-leido'
     }
   }
 };
 </script>
+
+<style>
+  
+.no-leido {
+  background-color: red;
+  color: white !important ;
+}
+
+</style>
