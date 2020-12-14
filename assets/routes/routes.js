@@ -13,7 +13,6 @@ import Logout from "@/pages/Logout.vue";
 import Reglas from "@/pages/Reglas/Reglas.vue";
 import NuevaRegla from "@/pages/Reglas/NuevaRegla.vue";
 
-
 /*
 Si no quiero agregar el footer poner la opcion   hideFooter: true ejemplo: 
 {

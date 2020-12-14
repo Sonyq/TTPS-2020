@@ -23,8 +23,10 @@
           </div>
 
           <div class="md-layout-item md-size-50 text-right">
-            <md-button 
-              v-if="nombreSistemaComp == 'Guardia'" to="/paciente" class="md-success"
+            <md-button
+              v-if="nombreSistemaComp == 'Guardia'"
+              to="/paciente"
+              class="md-success"
               >Agregar Paciente</md-button
             >
           </div>
@@ -99,8 +101,9 @@
                         >Gestionar médicos</md-menu-item
                       >
                       <md-menu-item
-                        v-if="puedeDeclararEgreso &&
-                          !(props.row.fecha_obito || props.row.fecha_egreso)
+                        v-if="
+                          puedeDeclararEgreso &&
+                            !(props.row.fecha_obito || props.row.fecha_egreso)
                         "
                         @click="
                           cambiarEstado('egreso', props.row.internacionId)
@@ -383,9 +386,11 @@ export default {
       return this.sistemaNombre ? this.sistemaNombre : this.sistemaNombreLocal;
     },
     puedeDeclararEgreso() {
-      return (this.sistemaNombreLocal == 'Piso Covid' ||  
-              this.sistemaNombreLocal == 'Domicilio' || 
-              this.sistemaNombreLocal == 'Hotel')
+      return (
+        this.sistemaNombreLocal == "Piso Covid" ||
+        this.sistemaNombreLocal == "Domicilio" ||
+        this.sistemaNombreLocal == "Hotel"
+      );
     }
   }
 };

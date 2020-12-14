@@ -1,28 +1,21 @@
 <template>
   <div>
-
-    <loading :active.sync="isLoading"
-      :is-full-page="true"
-      color='#4CAF50'>
+    <loading :active.sync="isLoading" :is-full-page="true" color="#4CAF50">
     </loading>
 
-    <md-card>     
-      
+    <md-card>
       <md-card-header data-background-color="green">
         <span class="md-title">Reglas del Sistema</span>
       </md-card-header>
 
       <md-card-content>
         <div class="md-layout">
-
           <div class="md-layout-item md-size-50">
             &nbsp;
           </div>
 
           <div class="md-layout-item md-size-50 text-right">
-            <md-button to="/regla" class="md-success"
-              >Agregar Regla</md-button
-            >
+            <md-button to="/regla" class="md-success">Agregar Regla</md-button>
           </div>
 
           <div
@@ -54,18 +47,16 @@
               </div>
               <template slot="table-row" slot-scope="props">
                 <span v-if="props.column.field == 'acciones'">
-
                   <md-button
                     class="md-success"
                     style="height: 30px"
                     :to="{
-                          name: 'Nueva Regla',
-                          params: { reglaId: props.row.id }
+                      name: 'Nueva Regla',
+                      params: { reglaId: props.row.id }
                     }"
                   >
                     <md-icon>edit</md-icon>
                   </md-button>
-
                 </span>
               </template>
             </vue-good-table>
@@ -79,9 +70,9 @@
 <script>
 import "vue-good-table/dist/vue-good-table.css";
 import { VueGoodTable } from "vue-good-table";
-import Loading from 'vue-loading-overlay';
+import Loading from "vue-loading-overlay";
 // Import stylesheet
-import 'vue-loading-overlay/dist/vue-loading.css';
+import "vue-loading-overlay/dist/vue-loading.css";
 
 export default {
   components: {
@@ -95,11 +86,11 @@ export default {
       columnas: [
         {
           label: "Evento",
-          field: "evento",
+          field: "evento"
         },
         {
           label: "Expresión",
-          field: "expresion",
+          field: "expresion"
         },
         {
           label: "Acción",
@@ -108,7 +99,7 @@ export default {
         },
         {
           label: "Opciones",
-          field: "acciones",
+          field: "acciones"
         }
       ]
     };
@@ -118,12 +109,10 @@ export default {
   },
   methods: {
     async getReglas() {
-      this.isLoading = true
-      const response = await axios.get(
-        this.burl("/api/reglas/index")
-      );
+      this.isLoading = true;
+      const response = await axios.get(this.burl("/api/reglas/index"));
       this.reglas = response.data;
-      this.isLoading = false
+      this.isLoading = false;
     }
   }
 };

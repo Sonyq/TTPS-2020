@@ -1,10 +1,11 @@
 <template>
   <div>
-
-    <loading :active.sync="isLoading"
+    <loading
+      :active.sync="isLoading"
       :is-full-page="true"
       :opacity="1"
-      color='#4CAF50'>
+      color="#4CAF50"
+    >
     </loading>
 
     <form>
@@ -360,9 +361,10 @@
               </div>
 
               <div>
-                <md-button 
+                <md-button
                   v-if="puedeDeclararEgreso"
-                  class="md-dense md-success" @click="declararEgreso()"
+                  class="md-dense md-success"
+                  @click="declararEgreso()"
                   >Declarar egreso</md-button
                 >
               </div>
@@ -642,9 +644,11 @@ export default {
   },
   computed: {
     puedeDeclararEgreso() {
-      return (this.loggedUser.sistemaNombre == 'Piso Covid' ||  
-              this.loggedUser.sistemaNombre == 'Domicilio' || 
-              this.loggedUser.sistemaNombre == 'Hotel')
+      return (
+        this.loggedUser.sistemaNombre == "Piso Covid" ||
+        this.loggedUser.sistemaNombre == "Domicilio" ||
+        this.loggedUser.sistemaNombre == "Hotel"
+      );
     }
   }
 };

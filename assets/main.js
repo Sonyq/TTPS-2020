@@ -357,28 +357,15 @@ new Vue({
         to.path !== "/logout"
       ) {
         if (
-          
-          ( 
-            !this.loggedUser.roles.includes("ROLE_JEFE") && 
-            (to.name !== "Ver Paciente" || 
-             to.name !== "Nueva Internación" ||
-             to.name !== "Nueva Evolución" ||
-             to.name !== "Paciente"
-            ) 
-          )
-          
-          &&
-
-          ( 
-            to.path === "/sistemas" ||
+          !this.loggedUser.roles.includes("ROLE_JEFE") &&
+          (to.name !== "Ver Paciente" ||
+            to.name !== "Nueva Internación" ||
+            to.name !== "Nueva Evolución" ||
+            to.name !== "Paciente") &&
+          (to.path === "/sistemas" ||
             to.path === "/reglas" ||
-            (
-              to.name === "Pacientes" && 
-              this.$root.loggedUser.sistemaId !== to.params.sistemaId
-            )
-
-          )
-         
+            (to.name === "Pacientes" &&
+              this.$root.loggedUser.sistemaId !== to.params.sistemaId))
         ) {
           //la idea no es tirar ningún error sinó directamente mandarlo al listado de pacientes
           //que es una ruta a la que pueden acceder todos.

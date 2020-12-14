@@ -555,7 +555,7 @@ export default {
     Loading
   },
   created() {
-    this.findEvolucionAnterior()
+    this.findEvolucionAnterior();
   },
   data() {
     return {
@@ -597,23 +597,32 @@ export default {
   },
   methods: {
     async findEvolucionAnterior() {
-      this.isLoading = true
-      const response = await axios.get(this.burl("/api/evolucion/ultima?internacionId=" + this.internacionId));
+      this.isLoading = true;
+      const response = await axios.get(
+        this.burl("/api/evolucion/ultima?internacionId=" + this.internacionId)
+      );
       if (response.data) {
-        let evolucionAnterior = response.data
-        this.requiereO2 = evolucionAnterior.saturacion_oxigeno ? true : false
-        this.tipoAdministracionO2 = evolucionAnterior.mascara_con_reservorio ? "Máscara con reservorio" : "Cánula nasal"
-        this.mascaraReservorioValor = evolucionAnterior.mascara_con_reservorio ? evolucionAnterior.mascara_con_reservorio : null
-        this.canulaNasalValor = evolucionAnterior.canula_nasal_oxigeno ? evolucionAnterior.canula_nasal_oxigeno : null
-        this.satO2 = evolucionAnterior.saturacion_oxigeno
-        this.pafi = evolucionAnterior.pafi ? true : false
-        this.valorPafi = evolucionAnterior.pafi ? evolucionAnterior.pafi : null
-        this.pronoVigil = evolucionAnterior.prono_vigil
-        this.tos = evolucionAnterior.tos
-        this.disnea = evolucionAnterior.disnea
-        this.estabilidadDesaparicion = evolucionAnterior.estabilidad_desaparicion_sintomas_resp
+        let evolucionAnterior = response.data;
+        this.requiereO2 = evolucionAnterior.saturacion_oxigeno ? true : false;
+        this.tipoAdministracionO2 = evolucionAnterior.mascara_con_reservorio
+          ? "Máscara con reservorio"
+          : "Cánula nasal";
+        this.mascaraReservorioValor = evolucionAnterior.mascara_con_reservorio
+          ? evolucionAnterior.mascara_con_reservorio
+          : null;
+        this.canulaNasalValor = evolucionAnterior.canula_nasal_oxigeno
+          ? evolucionAnterior.canula_nasal_oxigeno
+          : null;
+        this.satO2 = evolucionAnterior.saturacion_oxigeno;
+        this.pafi = evolucionAnterior.pafi ? true : false;
+        this.valorPafi = evolucionAnterior.pafi ? evolucionAnterior.pafi : null;
+        this.pronoVigil = evolucionAnterior.prono_vigil;
+        this.tos = evolucionAnterior.tos;
+        this.disnea = evolucionAnterior.disnea;
+        this.estabilidadDesaparicion =
+          evolucionAnterior.estabilidad_desaparicion_sintomas_resp;
       }
-      this.isLoading = false
+      this.isLoading = false;
     },
     async submit() {
       this.isLoading = true;
