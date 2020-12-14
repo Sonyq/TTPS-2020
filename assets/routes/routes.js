@@ -1,5 +1,4 @@
 import DashboardLayout from "@/pages/Layout/DashboardLayout.vue";
-
 import Dashboard from "@/pages/Dashboard.vue";
 import Login from "@/pages/Login.vue";
 import Pacientes from "@/pages/Pacientes/Pacientes.vue";
@@ -12,6 +11,7 @@ import Sistemas from "@/pages/Sistemas/Sistemas.vue";
 import Logout from "@/pages/Logout.vue";
 import Reglas from "@/pages/Reglas/Reglas.vue";
 import NuevaRegla from "@/pages/Reglas/NuevaRegla.vue";
+import Alertas from "@/pages/Alertas/Alertas.vue";
 
 /*
 Si no quiero agregar el footer poner la opcion   hideFooter: true ejemplo: 
@@ -96,6 +96,12 @@ const routes = [
         path: "regla/:reglaId?",
         name: "Nueva Regla",
         component: NuevaRegla,
+        props: true
+      },
+      {
+        path: "alertas",
+        name: "Alertas",
+        component: Alertas,
         props: true
       }
     ]

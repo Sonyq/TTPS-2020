@@ -1,6 +1,5 @@
 <template>
   <div class="wrapper" :class="{ 'nav-open': $sidebar.showSidebar }">
-    <!-- <notifications></notifications> -->
 
     <side-bar :sidebar-item-color="sidebarBackground">
       <mobile-menu slot="content"></mobile-menu>
@@ -28,6 +27,10 @@
       <sidebar-link v-if="jwtToken && esJefe" to="/reglas">
         <md-icon>rule</md-icon>
         <p>Reglas del Sistema</p>
+      </sidebar-link>
+      <sidebar-link v-if="jwtToken" to="/alertas">
+        <md-icon>notification_important</md-icon>
+        <p>Alertas</p>
       </sidebar-link>
       <sidebar-link v-if="jwtToken" to="/logout">
         <md-icon>keyboard_backspace</md-icon>

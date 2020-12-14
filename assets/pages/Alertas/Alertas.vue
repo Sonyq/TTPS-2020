@@ -1,0 +1,132 @@
+<template>
+  <div>
+
+    <loading :active.sync="isLoading"
+      :is-full-page="true"
+      color='#4CAF50'>
+    </loading>
+
+    <md-card>     
+      
+      <md-card-header data-background-color="green">
+        <span class="md-title">Alertas</span>
+      </md-card-header>
+
+      <md-card-content>
+        <div class="md-layout">
+
+          <div class="md-layout-item md-size-50">
+            &nbsp;
+          </div>
+
+          <div
+            class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-100"
+          >
+            <vue-good-table
+              :columns="columnas"
+              :rows="alertas"
+              :lineNumbers="true"
+              :globalSearch="false"
+              :pagination-options="{
+                enabled: true,
+                mode: 'records',
+                perPage: 10,
+                perPageDropdown: [10, 20],
+                position: 'bottom',
+                dropdownAllowAll: false,
+                setCurrentPage: 1,
+                nextLabel: 'siguiente',
+                prevLabel: 'anterior',
+                rowsPerPageLabel: 'Avisos por página',
+                ofLabel: 'de'
+              }"
+              :search-options="{ enabled: true, placeholder: 'Buscar' }"
+              styleClass="vgt-table"
+            >
+              <div slot="emptystate" class="has-text-centered">
+                <h3 class="h3">No hay alertas para mostrar</h3>
+              </div>
+              <template slot="table-row" slot-scope="props">
+                <span v-if="props.column.field == 'acciones'">
+
+                  <md-button
+                    class="md-primary md-just-icon"
+                    style="height: 30px;"
+                    title="Marcar como leída"
+                    @click="marcarComoLeida(props.row.id)"
+                  >
+                    <md-icon>remove_red_eye</md-icon>
+                  </md-button>
+
+                </span>
+              </template>
+            </vue-good-table>
+          </div>
+        </div>
+      </md-card-content>
+    </md-card>
+  </div>
+</template>
+
+<script>
+import "vue-good-table/dist/vue-good-table.css";
+import { VueGoodTable } from "vue-good-table";
+import Loading from 'vue-loading-overlay';
+// Import stylesheet
+import 'vue-loading-overlay/dist/vue-loading.css';
+
+export default {
+  components: {
+    VueGoodTable,
+    Loading
+  },
+  data() {
+    return {
+      isLoading: false,
+      alertas: [],
+      columnas: [
+        {
+          label: "Evento",
+          field: "evento",
+          width: "240px"
+        },
+        {
+          label: "Mensaje",
+          field: "mensaje",
+          width: "400px"
+        },
+        {
+          label: "Detalle",
+          field: "detalle",
+          width: "300px"
+        },
+        {
+          label: "",
+          field: "acciones",
+        }
+      ]
+    };
+  },
+  created() {
+    this.isLoading = true
+    events.$on("loading_user:finish", () => this.getAlertas())
+  },
+  methods: {
+    async getAlertas() {
+      const response = await axios.get(
+        this.burl("/api/alertas/index?usuarioId=" + this.loggedUser.id)
+      );
+      this.alertas = response.data;
+      this.isLoading = false
+    },
+    async marcarComoLeida(alertaId) {
+      this.isLoading = true
+      const response = await axios.get(
+        this.burl("/api/alertas/leida?id=" + alertaId)
+      );
+      this.alertas = response.data;
+      this.getAlertas()
+    }
+  }
+};
+</script>

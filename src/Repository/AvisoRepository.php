@@ -19,32 +19,16 @@ class AvisoRepository extends ServiceEntityRepository
         parent::__construct($registry, Aviso::class);
     }
 
-    // /**
-    //  * @return Aviso[] Returns an array of Aviso objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public function findAllAvisos($usuarioId)
     {
         return $this->createQueryBuilder('a')
-            ->andWhere('a.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('a.id', 'ASC')
-            ->setMaxResults(10)
+            ->select('a.id, a.evento, a.mensaje, a.detalle, a.leido')
+            ->innerJoin('App:User', 'u', 'WITH', 'u.id = a.usuario')
+            ->andWhere('u.id = :usuarioId')
+            ->setParameter('usuarioId', $usuarioId)
+            ->orderBy('a.id', 'DESC')
             ->getQuery()
-            ->getResult()
-        ;
+            ->getResult();
     }
-    */
 
-    /*
-    public function findOneBySomeField($value): ?Aviso
-    {
-        return $this->createQueryBuilder('a')
-            ->andWhere('a.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }
