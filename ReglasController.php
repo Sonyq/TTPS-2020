@@ -26,6 +26,7 @@ use Symfony\Component\Mime\Message;
  */
 class ReglasController extends FOSRestController
 {
+
     /**
      * @Route("/index", name="reglas_index", methods={"GET"})
      * @SWG\Response(response=200, description="Listado de reglas del sistema")
@@ -92,7 +93,10 @@ class ReglasController extends FOSRestController
         $entityManager = $this->getDoctrine()->getManager();
         $entityManager->getConnection()->beginTransaction();
 
-        $regla= new Regla($pf->get('evento'),$pf->get('expresion'),$pf->get('accion'));
+        $regla= new Regla($pf->get('evento'),
+                          $pf->get('expresion'),
+                          $pf->get('accion'),
+                          );
       
         $entityManager->persist($regla);
 
@@ -170,6 +174,5 @@ class ReglasController extends FOSRestController
       return new Response($serializer->serialize($regla, "json"), 200);
      
     }
-
 
 }

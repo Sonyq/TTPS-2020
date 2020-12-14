@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Entity;
+namespace App\Extensions;
 
 use App\Entity\Regla;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;

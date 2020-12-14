@@ -19,7 +19,7 @@ use Nelmio\ApiDocBundle\Annotation\Model;
 use Swagger\Annotations as SWG;
 use Symfony\Component\Validator\Constraints\DateTime;
 use Symfony\Component\Validator\Constraints;
-use App\Entity\SistemaReglas;
+use App\Extensions\SistemaReglas;
 /**
  * Class Evolución Controller
  *

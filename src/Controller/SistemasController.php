@@ -26,7 +26,7 @@ use JMS\Serializer\SerializationContext;
 
 
 /**
- * Class Paciente Controller
+ * Class Sistemas Controller
  *
  * @Route("/api/sistemas")
  */

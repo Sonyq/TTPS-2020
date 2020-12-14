@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Entity;
+namespace App\Extensions;
 
 use App\Entity\Aviso;
 
-class SistemaReglas
+class SistemaAvisos
 {
 
     private $em;
