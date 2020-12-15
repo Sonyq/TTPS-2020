@@ -61,7 +61,6 @@
               </div>
               <template slot="table-row" slot-scope="props">
                 <span v-if="props.column.field == 'acciones'">
-
                   <md-menu md-direction="bottom-start">
                     <md-button
                       class="md-success"
@@ -103,8 +102,10 @@
                       <md-menu-item
                         v-if="
                           puedeDeclararEgreso &&
-                          !(props.row.fecha_obito || props.row.fecha_egreso) &&
-                          nombreSistemaComp == loggedUser.sistemaNombre
+                            !(
+                              props.row.fecha_obito || props.row.fecha_egreso
+                            ) &&
+                            nombreSistemaComp == loggedUser.sistemaNombre
                         "
                         @click="
                           cambiarEstado('egreso', props.row.internacionId)
@@ -114,7 +115,7 @@
                       <md-menu-item
                         v-if="
                           !(props.row.fecha_obito || props.row.fecha_egreso) &&
-                          nombreSistemaComp == loggedUser.sistemaNombre
+                            nombreSistemaComp == loggedUser.sistemaNombre
                         "
                         @click="cambiarEstado('obito', props.row.internacionId)"
                         >Declarar óbito</md-menu-item
@@ -346,7 +347,7 @@ export default {
         });
     },
     async asignarMedico(medicoId) {
-      this.isLoading = true
+      this.isLoading = true;
       let form = {
         pacienteId: this.pacienteSeleccionado,
         medicoId: medicoId
@@ -355,7 +356,7 @@ export default {
         this.burl("/api/paciente/asignarMedico"),
         form
       );
-      this.isLoading = false
+      this.isLoading = false;
       this.getMedicosDelSistema(this.pacienteSeleccionado);
       this.$swal.fire({
         icon: "success",
@@ -364,7 +365,7 @@ export default {
       });
     },
     async desasignarMedico(medicoId) {
-      this.isLoading = true
+      this.isLoading = true;
       let form = {
         pacienteId: this.pacienteSeleccionado,
         medicoId: medicoId
@@ -373,7 +374,7 @@ export default {
         this.burl("/api/paciente/desasignarMedico"),
         form
       );
-      this.isLoading = false
+      this.isLoading = false;
       this.getMedicosDelSistema(this.pacienteSeleccionado);
       this.$swal.fire({
         icon: "success",

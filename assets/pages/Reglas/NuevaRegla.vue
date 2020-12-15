@@ -13,51 +13,58 @@
         <ValidationObserver v-slot="{ invalid }">
           <form @submit.prevent="submit">
             <div class="md-layout">
-              <div class="md-layout-item md-size-20">
-                <md-field>
-                  <ValidationProvider rules="required" v-slot="{ errors }">
+              <div class="md-layout-item md-size-15">
+                <ValidationProvider rules="required" v-slot="{ errors }">
+                  <md-field>
                     <label for="evento">Evento</label>
                     <md-select v-model="evento" name="evento">
-                      <md-option value="Temperatura > 39°"
-                        >Temperatura > 39°</md-option
-                      >
-                      <md-option value="Presión arterial > 140"
-                        >Presión arterial > 140</md-option
+                      <md-option value="NUEVA EVOLUCION"
+                        >NUEVA EVOLUCION</md-option
                       >
                     </md-select>
-                    <span class="field-error">{{ errors[0] }}</span>
-                  </ValidationProvider>
-                </md-field>
+                  </md-field>
+                  <span class="field-error">{{ errors[0] }}</span>
+                </ValidationProvider>
               </div>
 
-              <div class="md-layout-item md-size-20">
-                <md-field>
-                  <ValidationProvider rules="required" v-slot="{ errors }">
+              <div class="md-layout-item">
+                <ValidationProvider rules="required" v-slot="{ errors }">
+                  <md-field>
                     <label>Expresión</label>
-                    <md-textarea v-model="expresion"></md-textarea>
-                    <span class="field-error">{{ errors[0] }}</span>
-                  </ValidationProvider>
-                </md-field>
+                    <md-input v-model="expresion"></md-input>
+                  </md-field>
+                  <span class="field-error">{{ errors[0] }}</span>
+                </ValidationProvider>
               </div>
 
-              <div class="md-layout-item md-size-20">
-                <md-field>
-                  <ValidationProvider rules="required" v-slot="{ errors }">
+              <div class="md-layout-item md-size-15">
+                <ValidationProvider rules="required" v-slot="{ errors }">
+                  <md-field>
                     <label for="accion">Acción</label>
                     <md-select v-model="accion" name="accion">
-                      <md-option value="Alertar a los médicos"
+                      <md-option
+                        value="aviso.alertar(paciente.getUsers(),$mensaje,evento)"
                         >Alertar a los médicos</md-option
                       >
                     </md-select>
-                    <span class="field-error">{{ errors[0] }}</span>
-                  </ValidationProvider>
-                </md-field>
-              </div>        
+                  </md-field>
+                  <span class="field-error">{{ errors[0] }}</span>
+                </ValidationProvider>
+              </div>
+
+              <div class="md-layout-item">
+                <ValidationProvider rules="required" v-slot="{ errors }">
+                  <md-field>
+                    <label>Texto</label>
+                    <md-input v-model="mensaje"></md-input>
+                  </md-field>
+                  <span class="field-error">{{ errors[0] }}</span>
+                </ValidationProvider>
+              </div>
             </div>
 
             <div class="md-layout">
-
-              <div class="md-layout-item md-size-40">
+              <div class="md-layout-item md-size-20">
                 &nbsp;
               </div>
 
@@ -72,7 +79,6 @@
                 </div>
               </div>
             </div>
-
           </form>
         </ValidationObserver>
       </md-card-content>
@@ -94,6 +100,7 @@ export default {
     return {
       evento: null,
       expresion: null,
+      mensaje: "",
       accion: null,
       isLoading: false
     };
@@ -119,7 +126,7 @@ export default {
       let formData = {
         evento: this.evento,
         expresion: this.expresion,
-        accion: this.accion
+        accion: this.accion.replace("$mensaje", '"' + this.mensaje + '"')
       };
       let url = this.reglaId
         ? "/api/reglas/update/" + this.reglaId

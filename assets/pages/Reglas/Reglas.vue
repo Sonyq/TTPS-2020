@@ -47,7 +47,6 @@
                 <span v-if="props.column.field == 'acciones'">
                   <md-button
                     class="md-success md-just-icon"
-                    style="height: 30px"
                     title="Editar"
                     :to="{
                       name: 'Nueva Regla',
@@ -100,7 +99,8 @@ export default {
         },
         {
           label: "",
-          field: "acciones"
+          field: "acciones",
+          width: "50px"
         }
       ]
     };

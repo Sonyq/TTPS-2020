@@ -1,6 +1,5 @@
 <template>
   <div class="wrapper" :class="{ 'nav-open': $sidebar.showSidebar }">
-
     <side-bar :sidebar-item-color="sidebarBackground">
       <mobile-menu slot="content"></mobile-menu>
       <sidebar-link v-if="!jwtToken" to="/login">

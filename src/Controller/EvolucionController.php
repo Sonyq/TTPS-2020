@@ -27,6 +27,7 @@ use App\Extensions\SistemaReglas;
  */
 class EvolucionController extends FOSRestController
 {
+  use SistemaReglas;
 
   /**
    * @Route("/index", name="evoluciones", methods={"GET"})
@@ -40,7 +41,7 @@ class EvolucionController extends FOSRestController
   {
     $evoluciones = $this->getDoctrine()->getRepository(Evolucion::class)->findAllEvoluciones($pf->get('id'));
 
-    $serializer = $this->get('jms_serializer');    
+    $serializer = $this->get('jms_serializer');
     
     $result = $evoluciones ? $serializer->serialize($evoluciones, "json") : null;
     return new Response($result, 200);
@@ -187,8 +188,7 @@ class EvolucionController extends FOSRestController
 
     }
 
-    $sr = new SistemaReglas($entityManager);
-    $sr->evaluar('NUEVA EVOLUCION',['evolucion' => $evolucion]);
+    $this->evaluar('NUEVA EVOLUCION',['evolucion' => $evolucion, 'paciente' => $internacion->getPaciente()]);
     return new Response('Evolución creada', 200);
     
   }

@@ -1,20 +1,15 @@
 <template>
   <div>
-
-    <loading :active.sync="isLoading"
-      :is-full-page="true"
-      color='#4CAF50'>
+    <loading :active.sync="isLoading" :is-full-page="true" color="#4CAF50">
     </loading>
 
-    <md-card>     
-      
+    <md-card>
       <md-card-header data-background-color="green">
         <span class="md-title">Alertas</span>
       </md-card-header>
 
       <md-card-content>
         <div class="md-layout">
-
           <div class="md-layout-item md-size-50">
             &nbsp;
           </div>
@@ -46,8 +41,8 @@
               </div>
               <template slot="table-row" slot-scope="props">
                 <span v-if="props.column.field == 'acciones'">
-
-                  <md-button v-if="!props.row.leido"
+                  <md-button
+                    v-if="!props.row.leido"
                     class="md-success md-just-icon"
                     style="height: 30px;"
                     title="Marcar como leída"
@@ -55,7 +50,6 @@
                   >
                     <md-icon>remove_red_eye</md-icon>
                   </md-button>
-
                 </span>
               </template>
             </vue-good-table>
@@ -69,9 +63,9 @@
 <script>
 import "vue-good-table/dist/vue-good-table.css";
 import { VueGoodTable } from "vue-good-table";
-import Loading from 'vue-loading-overlay';
+import Loading from "vue-loading-overlay";
 // Import stylesheet
-import 'vue-loading-overlay/dist/vue-loading.css';
+import "vue-loading-overlay/dist/vue-loading.css";
 
 export default {
   components: {
@@ -103,14 +97,14 @@ export default {
         },
         {
           label: "",
-          field: "acciones",
+          field: "acciones"
         }
       ]
     };
   },
   created() {
-    this.isLoading = true
-    events.$on("loading_user:finish", () => this.getAlertas())
+    this.isLoading = true;
+    events.$on("loading_user:finish", () => this.getAlertas());
   },
   methods: {
     async getAlertas() {
@@ -118,28 +112,26 @@ export default {
         this.burl("/api/alertas/index?usuarioId=" + this.loggedUser.id)
       );
       this.alertas = response.data;
-      this.isLoading = false
+      this.isLoading = false;
     },
     async marcarComoLeida(alertaId) {
-      this.isLoading = true
+      this.isLoading = true;
       const response = await axios.get(
         this.burl("/api/alertas/leida?id=" + alertaId)
       );
       this.alertas = response.data;
-      this.getAlertas()
+      this.getAlertas();
     },
     tdClassFunc(row) {
-      return row.leido ? '' : 'no-leido'
+      return row.leido ? "" : "no-leido";
     }
   }
 };
 </script>
 
 <style>
-  
 .no-leido {
   background-color: red;
   color: white !important ;
 }
-
 </style>

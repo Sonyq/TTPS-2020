@@ -3,6 +3,7 @@
 namespace App\Extensions;
 
 use App\Entity\Aviso;
+use Symfony\Component\Config\Definition\Exception\Exception;
 
 class SistemaAvisos
 {
@@ -14,6 +15,21 @@ class SistemaAvisos
         $this->em = $entityManager;
     }
 
+    public function alertar(array $usuarios, string $mensaje, string $evento, $detalle = null)
+    {
 
+        foreach ($usuarios as $u){
+            $aviso = new Aviso();
+            $aviso->setUsuario($u);
+            $aviso->setMensaje($mensaje);
+            $aviso->setEvento($evento);
+            $aviso->getDetalle($detalle);
+            $aviso->setLeido(false);
+            $this->em->persist($aviso);
+            $this->em->flush();
+        }
+
+
+    }
 
 }

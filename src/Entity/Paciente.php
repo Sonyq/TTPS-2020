@@ -338,6 +338,17 @@ class Paciente
         return $this;
     }
 
+    /**
+     * @return Array|User[]
+     */
+    public function getUsers(): Array
+    {
+        $userPacientes = $this->getUserPacientes();
+        $users = array();
+        foreach($userPacientes as $up){$users[] = $up->getUser();}
+        return $users;
+    }
+
     public function removeUserPaciente(UserPaciente $userPaciente): self
     {
         if ($this->userPacientes->removeElement($userPaciente)) {
