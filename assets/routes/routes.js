@@ -12,6 +12,7 @@ import Logout from "@/pages/Logout.vue";
 import Reglas from "@/pages/Reglas/Reglas.vue";
 import NuevaRegla from "@/pages/Reglas/NuevaRegla.vue";
 import Alertas from "@/pages/Alertas/Alertas.vue";
+import Salas from "@/pages/Sistemas/Salas.vue";
 
 /*
 Si no quiero agregar el footer poner la opcion   hideFooter: true ejemplo: 
@@ -51,7 +52,7 @@ const routes = [
         component: Sistemas
       },
       {
-        path: "pacientes/:sistemaId?/:sistemaNombre?",
+        path: "pacientes/:sistemaId?/:sistemaNombre?/:salaId?/:salaNombre?",
         name: "Pacientes",
         component: Pacientes,
         props: true
@@ -102,6 +103,12 @@ const routes = [
         path: "alertas",
         name: "Alertas",
         component: Alertas,
+        props: true
+      },
+      {
+        path: "salas/:sistemaNombre/:sistemaId",
+        name: "Salas",
+        component: Salas,
         props: true
       }
     ]

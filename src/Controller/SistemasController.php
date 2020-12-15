@@ -103,4 +103,19 @@ class SistemasController extends FOSRestController
     return new Response($serializer->serialize($sistemasDestino, "json", SerializationContext::create()->enableMaxDepthChecks()));
   }
 
+  /**
+   * @Route("/salas", name="salas", methods={"GET"})
+   * @SWG\Response(response=200, description="Salas de un sistema")
+   * @SWG\Tag(name="Sistemas")
+   * @QueryParam(name="id", strict=true, nullable=false, allowBlank=false, description="Sistema Id")
+   *      
+   * @param ParamFetcher $pf
+   */
+  public function getSalasDeUnSistema(Request $request, ParamFetcher $pf): Response
+  {        
+    $serializer = $this->get('jms_serializer');
+    $salas = $this->getDoctrine()->getRepository(Sala::class)->findSalasBySistema($pf->get('id'));
+    return new Response($serializer->serialize($salas, "json"));
+  }
+
 }

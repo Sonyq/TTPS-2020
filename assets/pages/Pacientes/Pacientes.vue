@@ -5,7 +5,7 @@
 
     <md-card v-if="pacientes">
       <md-card-header data-background-color="green">
-        <span class="md-title">Pacientes en {{ nombreSistemaComp }}</span>
+        <span class="md-title">Pacientes en {{ nombreSistemaComp }} {{ nombreSalaComp }}</span>
       </md-card-header>
 
       <md-card-content>
@@ -196,7 +196,7 @@ export default {
     VueGoodTable,
     Loading
   },
-  props: ["sistemaNombre", "sistemaId"],
+  props: ["sistemaNombre", "sistemaId", "salaId", "salaNombre"],
   data() {
     return {
       isLoading: false,
@@ -264,8 +264,9 @@ export default {
     async getPacientesInternados() {
       this.isLoading = true;
       let sistemaId = this.sistemaId ? "?sistema=" + this.sistemaId : "";
+      let salaId = this.salaId ? "&sala=" + this.salaId: "";
       const pacientes = await axios.get(
-        this.burl("/api/paciente/internados" + sistemaId)
+        this.burl("/api/paciente/internados" + sistemaId + salaId)
       );
       this.pacientes = pacientes.data;
       this.isLoading = false;
@@ -386,6 +387,9 @@ export default {
   computed: {
     nombreSistemaComp() {
       return this.sistemaNombre ? this.sistemaNombre : this.sistemaNombreLocal;
+    },
+    nombreSalaComp() {
+      return this.salaNombre ? ', ' + this.salaNombre : '';
     },
     puedeDeclararEgreso() {
       return (

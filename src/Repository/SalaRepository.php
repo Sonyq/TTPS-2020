@@ -36,15 +36,16 @@ class SalaRepository extends ServiceEntityRepository
     }
     */
 
-    /*
-    public function findOneBySomeField($value): ?Sala
+    
+    public function findSalasBySistema($sistema_id)
     {
         return $this->createQueryBuilder('s')
-            ->andWhere('s.exampleField = :val')
-            ->setParameter('val', $value)
+            ->select('s.id, s.nombre')
+            ->andWhere('s.sistema = :val')
+            ->setParameter('val', $sistema_id)
             ->getQuery()
-            ->getOneOrNullResult()
+            ->getResult()
         ;
     }
-    */
+    
 }

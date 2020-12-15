@@ -132,6 +132,9 @@
               >
 
               <md-button
+                v-if="ultimaInternacion.sistema == loggedUser.sistemaNombre && 
+                      !(ultimaInternacion.fecha_egreso ||
+                      ultimaInternacion.fecha_obito)"
                 class="md-dense md-success"
                 :to="{
                   name: 'Paciente',

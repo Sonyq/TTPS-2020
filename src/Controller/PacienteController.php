@@ -38,6 +38,7 @@ class PacienteController extends FOSRestController
      * @SWG\Response(response=200, description="Listado de pacientes internados")
      * @SWG\Tag(name="Paciente")
      * @QueryParam(name="sistema", strict=false, nullable=true, allowBlank=false, description="Sistema Id")
+     * @QueryParam(name="sala", strict=false, nullable=true, allowBlank=false, description="Sala Id")
      *      
      * @param ParamFetcher $pf
      */
@@ -46,8 +47,9 @@ class PacienteController extends FOSRestController
         //si se recibe un sistemaId como parámetro se utiliza ese, 
         //sinó se utiliza el id del sistema al que pertenece el usuario.
         $sistema = $pf->get('sistema') ? $pf->get('sistema') : $this->getUser()->getSistema()->getId();
+        $sala = $pf->get('sala') ? $pf->get('sala') : null;
+        $pacientes = $this->getDoctrine()->getRepository(Paciente::class)->findAllPacientesInternados($sistema, $sala);       
         
-        $pacientes = $this->getDoctrine()->getRepository(Paciente::class)->findAllPacientesInternados($sistema);        
         return new JsonResponse($pacientes, 200);
     }
 
