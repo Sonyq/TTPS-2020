@@ -45,7 +45,8 @@
               </div>
               <template slot="table-row" slot-scope="props">
                 <span v-if="props.column.field == 'acciones'">
-                  <md-button
+                  
+                  <!-- <md-button
                     class="md-success md-just-icon"
                     title="Editar"
                     :to="{
@@ -54,7 +55,17 @@
                     }"
                   >
                     <md-icon>edit</md-icon>
+                  </md-button> -->
+
+                  <md-button
+                    class="md-success md-just-icon"
+                    style="height: 30px"
+                    title="Eliminar"
+                    @click="eliminar(props.row.id)"
+                  >
+                    <md-icon>delete</md-icon>
                   </md-button>
+                  
                 </span>
               </template>
             </vue-good-table>
@@ -114,6 +125,33 @@ export default {
       const response = await axios.get(this.burl("/api/reglas/index"));
       this.reglas = response.data;
       this.isLoading = false;
+    },
+    eliminar(reglaId) {
+      this.$swal
+        .fire({
+          title: "Está seguro?",
+          text: "Esta acción es irreversible",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#F33527",
+          cancelButtonColor: "#47A44B",
+          confirmButtonText:
+            "Sí, eliminar regla",
+          cancelButtonText: "Cancelar"
+        })
+        .then(result => {
+          if (result.isConfirmed) {
+            this.isLoading = true;
+            axios
+              .post(
+                this.burl("/api/reglas/delete?id=" + reglaId)
+              )
+              .then(response => {
+                this.getReglas();
+              });
+            this.isLoading = false;
+          }
+        });
     }
   }
 };

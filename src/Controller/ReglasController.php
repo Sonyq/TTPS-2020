@@ -73,6 +73,40 @@ class ReglasController extends FOSRestController
     }
 
     /**
+     * @Route("/delete", name="regla_delete", methods={"POST"})
+     * @SWG\Response(response=200, description="Regla del sistema")
+     * @SWG\Tag(name="Regla")
+     * @QueryParam(name="id", strict=true, nullable=false, allowBlank=false, description="Regla Id")
+     *      
+     */
+    public function delete(Request $request, ParamFetcher $pf): Response
+    {        
+
+      $entityManager = $this->getDoctrine()->getManager();
+
+      $regla = $entityManager->getRepository(Regla::class)->find($pf->get('id'));
+
+      if (!$regla) {
+
+        $error = [ 
+          "message" => "No se encontró la regla",
+          "title" => "Regla inexistente",
+        ];
+
+        return new Response($serializer->serialize($error, "json"), 400);
+
+      }
+
+      $entityManager->remove($regla);
+      $entityManager->flush();
+
+      $serializer = $this->get('jms_serializer'); 
+     
+      return new Response($serializer->serialize($regla, "json"), 200);
+
+    }
+
+    /**
      * @Route("/new", name="regla_new", methods={"POST"})
      * @SWG\Response(response=200, description="Regla creada exitosamente")
      * @SWG\Tag(name="Regla")
