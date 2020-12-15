@@ -13,7 +13,7 @@
         <ValidationObserver v-slot="{ invalid }">
           <form @submit.prevent="submit">
             <div class="md-layout">
-              <div class="md-layout-item md-size-15">
+              <div class="md-layout-item md-size-15 md-small-size-50">
                 <ValidationProvider rules="required" v-slot="{ errors }">
                   <md-field>
                     <label for="evento">Evento</label>
@@ -27,7 +27,7 @@
                 </ValidationProvider>
               </div>
 
-              <div class="md-layout-item">
+              <div class="md-layout-item md-small-size-100">
                 <ValidationProvider rules="required" v-slot="{ errors }">
                   <md-field>
                     <label>Expresión</label>
@@ -37,7 +37,7 @@
                 </ValidationProvider>
               </div>
 
-              <div class="md-layout-item md-size-15">
+              <div class="md-layout-item md-size-15 md-small-size-50">
                 <ValidationProvider rules="required" v-slot="{ errors }">
                   <md-field>
                     <label for="accion">Acción</label>
@@ -64,12 +64,8 @@
             </div>
 
             <div class="md-layout">
-              <div class="md-layout-item md-size-20">
-                &nbsp;
-              </div>
-
               <div class="md-layout">
-                <div class="md-layout-item md-size-30 text-right">
+                <div class="md-layout-item md-size-100 text-right">
                   <md-button
                     type="submit"
                     class="md-raised md-success"
@@ -79,6 +75,7 @@
                 </div>
               </div>
             </div>
+
           </form>
         </ValidationObserver>
       </md-card-content>
