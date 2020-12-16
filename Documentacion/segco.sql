@@ -4,7 +4,8 @@
 -- Database  : segco
 -- Version   : PostgreSQL 13.0, compiled by Visual C++ build 1914, 64-bit
 
--- El siguiente script carga los 5 sistemas del hospital, con 2 salas para cada sistema (excepto DOMICILIO el cual registra una sola sala) y 10 camas para cada sala.
+-- El siguiente script carga el esquema inicial del hospital.
+
 -- La siguiente grilla muestra los usuarios cargados en la base de datos una vez finalizada la ejecución de este script:
 
 -- GUARDIA:
@@ -41,6 +42,31 @@
 --      domiciliomedico1@gmail.com	domiciliomedico1	domiciliomedico1
 --      domiciliomedico2@gmail.com	domiciliomedico2	domiciliomedico2
 --      domiciliomedico3@gmail.com	domiciliomedico3	domiciliomedico3
+
+
+-- Cantidad de salas y camas para cada sistema:
+
+-- GUARDIA: 2 SALAS - 20 CAMAS
+-- PISOCOVID: 2 SALAS - 10 CAMAS
+-- UTI: 2 SALAS - 10 CAMAS
+-- HOTEL: 2 SALAS - 10 CAMAS
+-- DOMICILIO: 1 SALA - CAMAS ILIMITADAS
+
+
+-- 12 pacientes, cada  uno con 1 sola internacion
+
+-- Paciente 1: GUARDIA
+-- Paciente 2: GUARDIA
+-- Paciente 3: GUARDIA
+-- Paciente 4: GUARDIA
+-- Paciente 5: GUARDIA
+-- Paciente 6: PISOCOVID
+-- Paciente 7: PISOCOVID
+-- Paciente 8: PISOCOVID
+-- Paciente 9: PISOCOVID
+-- Paciente 10: PISOCOVID
+-- Paciente 11: UTI
+-- Paciente 12: UTI
 
 
 --
@@ -94,7 +120,6 @@ INSERT INTO sala (id, sistema_id, nombre)
 VALUES (9, 5, 'Sala Domicilio');
 
 
-
 --
 -- Data for table public.cama
 --
@@ -113,6 +138,9 @@ VALUES (4, 1, 4, 'ocupada');
 INSERT INTO cama (id, sala_id, numero, estado)
 VALUES (5, 1, 5, 'ocupada');
 
+
+
+
 INSERT INTO cama (id, sala_id, numero, estado)
 VALUES (6, 2, 6, 'ocupada');
 
@@ -126,7 +154,10 @@ INSERT INTO cama (id, sala_id, numero, estado)
 VALUES (9, 2, 9, 'ocupada');
 
 INSERT INTO cama (id, sala_id, numero, estado)
-VALUES (10, 3, 10, 'ocupada');
+VALUES (10, 2, 10, 'ocupada');
+
+
+
 
 INSERT INTO cama (id, sala_id, numero, estado)
 VALUES (11, 3, 11, 'ocupada');
@@ -143,6 +174,9 @@ VALUES (14, 3, 14, 'libre');
 INSERT INTO cama (id, sala_id, numero, estado)
 VALUES (15, 3, 15, 'libre');
 
+
+
+
 INSERT INTO cama (id, sala_id, numero, estado)
 VALUES (16, 4, 16, 'libre');
 
@@ -158,20 +192,23 @@ VALUES (19, 4, 19, 'libre');
 INSERT INTO cama (id, sala_id, numero, estado)
 VALUES (20, 4, 20, 'libre');
 
-INSERT INTO cama (id, sala_id, numero, estado)
-VALUES (21, 5, 21, 'libre');
+
+
 
 INSERT INTO cama (id, sala_id, numero, estado)
-VALUES (22, 5, 22, 'libre');
+VALUES (21, 1, 21, 'libre');
 
 INSERT INTO cama (id, sala_id, numero, estado)
-VALUES (23, 5, 23, 'libre');
+VALUES (22, 1, 22, 'libre');
 
 INSERT INTO cama (id, sala_id, numero, estado)
-VALUES (24, 5, 24, 'libre');
+VALUES (23, 1, 23, 'libre');
 
 INSERT INTO cama (id, sala_id, numero, estado)
-VALUES (25, 5, 25, 'libre');
+VALUES (24, 1, 24, 'libre');
+
+INSERT INTO cama (id, sala_id, numero, estado)
+VALUES (25, 1, 25, 'libre');
 
 INSERT INTO cama (id, sala_id, numero, estado)
 VALUES (26, 1, 26, 'libre');
@@ -188,6 +225,9 @@ VALUES (29, 1, 29, 'libre');
 INSERT INTO cama (id, sala_id, numero, estado)
 VALUES (30, 1, 30, 'libre');
 
+
+
+
 INSERT INTO cama (id, sala_id, numero, estado)
 VALUES (31, 2, 31, 'libre');
 
@@ -202,6 +242,9 @@ VALUES (34, 2, 34, 'libre');
 
 INSERT INTO cama (id, sala_id, numero, estado)
 VALUES (35, 2, 35, 'libre');
+
+
+
 
 INSERT INTO cama (id, sala_id, numero, estado)
 VALUES (36, 3, 36, 'libre');
@@ -218,6 +261,9 @@ VALUES (39, 3, 39, 'libre');
 INSERT INTO cama (id, sala_id, numero, estado)
 VALUES (40, 3, 40, 'libre');
 
+
+
+
 INSERT INTO cama (id, sala_id, numero, estado)
 VALUES (41, 4, 41, 'libre');
 
@@ -233,20 +279,23 @@ VALUES (44, 4, 44, 'libre');
 INSERT INTO cama (id, sala_id, numero, estado)
 VALUES (45, 4, 45, 'libre');
 
-INSERT INTO cama (id, sala_id, numero, estado)
-VALUES (46, 5, 46, 'libre');
+
+
 
 INSERT INTO cama (id, sala_id, numero, estado)
-VALUES (47, 5, 47, 'libre');
+VALUES (46, 1, 46, 'libre');
 
 INSERT INTO cama (id, sala_id, numero, estado)
-VALUES (48, 5, 48, 'libre');
+VALUES (47, 1, 47, 'libre');
 
 INSERT INTO cama (id, sala_id, numero, estado)
-VALUES (49, 5, 49, 'libre');
+VALUES (48, 1, 48, 'libre');
 
 INSERT INTO cama (id, sala_id, numero, estado)
-VALUES (50, 5, 50, 'libre');
+VALUES (49, 1, 49, 'libre');
+
+INSERT INTO cama (id, sala_id, numero, estado)
+VALUES (50, 1, 50, 'libre');
 
 
 
@@ -432,44 +481,4 @@ INSERT INTO internacion_cama (id, internacion_id, cama_id, fecha_desde, fecha_ha
 VALUES (11, 11, 11, '2020-11-08 01:42:20', NULL);
 
 INSERT INTO internacion_cama (id, internacion_id, cama_id, fecha_desde, fecha_hasta)
-VALUES (12, 12, 12, '2020-11-07 21:49:42', NULL);
-
-
---
--- Data for table public.user_paciente
---
-INSERT INTO user_paciente (id, user_id, paciente_id, fecha_desde, fecha_hasta)
-VALUES (1, 1, 1, '2020-11-08 01:42:20', NULL);
-
-INSERT INTO user_paciente (id, user_id, paciente_id, fecha_desde, fecha_hasta)
-VALUES (2, 2, 2, '2020-11-07 21:49:42', NULL);
-
-INSERT INTO user_paciente (id, user_id, paciente_id, fecha_desde, fecha_hasta)
-VALUES (3, 3, 3, '2020-11-08 01:42:20', NULL);
-
-INSERT INTO user_paciente (id, user_id, paciente_id, fecha_desde, fecha_hasta)
-VALUES (4, 4, 4, '2020-11-07 21:49:42', NULL);
-
-INSERT INTO user_paciente (id, user_id, paciente_id, fecha_desde, fecha_hasta)
-VALUES (5, 5, 5, '2020-11-08 01:42:20', NULL);
-
-INSERT INTO user_paciente (id, user_id, paciente_id, fecha_desde, fecha_hasta)
-VALUES (6, 6, 6, '2020-11-07 21:49:42', NULL);
-
-INSERT INTO user_paciente (id, user_id, paciente_id, fecha_desde, fecha_hasta)
-VALUES (7, 7, 7, '2020-11-08 01:42:20', NULL);
-
-INSERT INTO user_paciente (id, user_id, paciente_id, fecha_desde, fecha_hasta)
-VALUES (8, 8, 8, '2020-11-07 21:49:42', NULL);
-
-INSERT INTO user_paciente (id, user_id, paciente_id, fecha_desde, fecha_hasta)
-VALUES (9, 9, 9, '2020-11-08 01:42:20', NULL);
-
-INSERT INTO user_paciente (id, user_id, paciente_id, fecha_desde, fecha_hasta)
-VALUES (10, 10, 10, '2020-11-07 21:49:42', NULL);
-
-INSERT INTO user_paciente (id, user_id, paciente_id, fecha_desde, fecha_hasta)
-VALUES (11, 11, 11, '2020-11-08 01:42:20', NULL);
-
-INSERT INTO user_paciente (id, user_id, paciente_id, fecha_desde, fecha_hasta)
 VALUES (12, 12, 12, '2020-11-07 21:49:42', NULL);
