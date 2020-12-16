@@ -11,7 +11,7 @@
         <p>Sistemas</p>
       </sidebar-link>
       <sidebar-link
-        v-if="jwtToken"
+        v-if="jwtToken && !esAdmin"
         :to="{
           name: 'Pacientes',
           params: {
@@ -23,11 +23,11 @@
         <md-icon>person</md-icon>
         <p>Pacientes</p>
       </sidebar-link>
-      <sidebar-link v-if="jwtToken && esJefe" to="/reglas">
+      <sidebar-link v-if="jwtToken && esAdmin" to="/reglas">
         <md-icon>rule</md-icon>
         <p>Reglas del Sistema</p>
       </sidebar-link>
-      <sidebar-link v-if="jwtToken" to="/alertas">
+      <sidebar-link v-if="jwtToken && !esAdmin" to="/alertas">
         <md-icon>notification_important</md-icon>
         <p>Alertas</p>
       </sidebar-link>
@@ -63,19 +63,26 @@ export default {
   data() {
     return {
       sidebarBackground: "green",
-      usuarioLocalRoles: ""
+      usuarioLocal: ""
     };
   },
   mounted() {
-    events.$on(
-      "loading_user:finish",
-      () => (this.usuarioLocalRoles = this.loggedUser.roles)
-    );
-    events.$on("user:logout", () => (this.usuarioLocal = ""));
+    // events.$on(
+    //   "loading_user:finish",
+    //   () => (this.loggedUser = this.loggedUser.roles)
+    // );
+    // events.$on("user:logout", () => (this.usuarioLocal = ""));
   },
   computed: {
     esJefe() {
-      return this.usuarioLocalRoles.includes("ROLE_JEFE");
+      if (this.loggedUser.roles){
+        return this.loggedUser.roles.includes("ROLE_JEFE");
+      }
+    },
+    esAdmin() {
+      if (this.loggedUser.roles){
+        return this.loggedUser.roles.includes("ROLE_ADMIN");
+      }
     }
   }
 };

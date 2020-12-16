@@ -352,12 +352,12 @@ new Vue({
   watch: {
     $route(to, from) {
       if (
-        this.store_token !== "" &&
-        from.path !== "/login" &&
-        to.path !== "/logout"
+        this.store_token !== "" && // tengo token
+        from.path !== "/login" &&  // no vengo de login
+        to.path !== "/logout"      // no voy a logout
       ) {
         if (
-          !this.loggedUser.roles.includes("ROLE_JEFE") &&
+          !this.loggedUser.roles.includes("ROLE_JEFE") && !this.loggedUser.roles.includes("ROLE_ADMIN") &&
           (to.name !== "Ver Paciente" ||
             to.name !== "Nueva Internación" ||
             to.name !== "Nueva Evolución" ||
@@ -378,6 +378,16 @@ new Vue({
           });
         } else {
           this.fetchLoggedUser();
+        }
+      }else{
+        if(this.loggedUser.roles.includes("ROLE_ADMIN")){
+          this.$router.push({
+            name: "Reglas",
+            // params: {
+            //   sistemaId: this.loggedUser.sistemaId,
+            //   sistemaNombre: this.loggedUser.sistemaNombre
+            // }
+          });
         }
       }
     }

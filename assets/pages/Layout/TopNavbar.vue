@@ -1,9 +1,9 @@
 <template>
   <md-toolbar md-elevation="0" class="md-transparent">
     <div class="md-toolbar-row">
-      <div v-if="usuarioLocal" class="md-toolbar-section-start">
-        <h3 class="md-title">
-          {{ nombreUsuario }}, {{ rolUsuario }} de {{ sistemaUsuario }}
+      <div class="md-toolbar-section-start">
+        <h3 v-if="loggedUser" class="md-title">
+          {{ nombreUsuario }}, {{ rolUsuario }} {{ sistemaUsuario }}
         </h3>
       </div>
       <div class="md-toolbar-section-end">
@@ -68,13 +68,14 @@ export default {
       usuarioLocal: ""
     };
   },
-  mounted() {
-    events.$on(
-      "loading_user:finish",
-      () => (this.usuarioLocal = this.loggedUser)
-    );
-    events.$on("user:logout", () => (this.usuarioLocal = ""));
-  },
+  // created() {
+  //   events.$on(
+  //     //"loading_user:finish",
+  //     "login:finish",
+  //     () => (this.usuarioLocal = this.loggedUser)
+  //   );
+  //   events.$on("user:logout", () => (this.usuarioLocal = ""));
+  // },
   methods: {
     toggleSidebar() {
       this.$sidebar.displaySidebar(!this.$sidebar.showSidebar);
@@ -82,13 +83,28 @@ export default {
   },
   computed: {
     nombreUsuario() {
-      return this.usuarioLocal.first_name + " " + this.usuarioLocal.last_name;
+      return this.loggedUser.first_name + " " + this.loggedUser.last_name;
     },
     rolUsuario() {
-      return this.usuarioLocal.roles.includes("ROLE_JEFE") ? "Jefe" : "Médico";
+      if (this.loggedUser.roles) {
+        if (this.loggedUser.roles.includes("ROLE_JEFE")) {
+          return "Jefe";
+        }else{
+           if (this.loggedUser.roles.includes("ROLE_ADMIN")) {
+             return "Administrador";
+           }else{
+             return "Médico";
+           }
+        }
+        //return this.loggedUser.roles.includes("ROLE_JEFE") ? "Jefe" : "Médico";
+      }
     },
     sistemaUsuario() {
-      return this.usuarioLocal.sistemaNombre;
+      if (this.loggedUser.roles.includes("ROLE_ADMIN")) {
+        return "";
+      }else{
+        return "de " + this.loggedUser.sistemaNombre;
+      }
     }
   }
 };

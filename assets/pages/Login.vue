@@ -35,6 +35,18 @@ export default {
       password: ""
     };
   },
+  created () {
+    events.$on(
+      "loading_user:finish",
+      () => { events.$emit("login:finish")
+              if (this.loggedUser.roles.includes("ROLE_ADMIN")){
+                this.$router.push("/reglas");
+              }else{
+                this.$router.push("/pacientes/" + this.loggedUser.sistemaId + "/" + this.loggedUser.sistemaNombre);
+              }
+            }
+    )
+  },
   methods: {
     login() {
       events.$emit("loading:show");
@@ -49,7 +61,7 @@ export default {
             this.jwtToken = response.data["token"]; //seteo el token
             this.$root.fetchLoggedUser();
             events.$emit("loading:hide");
-            this.$router.push("/pacientes"); // con esto me cambio de vista
+            //this.$router.push("/pacientes"); // con esto me cambio de vista
           }
         })
         .catch(error => {
