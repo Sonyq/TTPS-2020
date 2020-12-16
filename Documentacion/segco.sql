@@ -93,28 +93,28 @@ VALUES (5, 'DOMICILIO', 'Domicilio', -1, -1, -1, '[{"id": 2, "descrip": "Piso Co
 -- Data for table public.sala
 --
 INSERT INTO sala (id, sistema_id, nombre)
-VALUES (1, 1, 'Guardia Sala 1');
+VALUES (1, 1, 'Sala 1');
 
 INSERT INTO sala (id, sistema_id, nombre)
-VALUES (2, 1, 'Guardia Sala 2');
+VALUES (2, 1, 'Sala 2');
 
 INSERT INTO sala (id, sistema_id, nombre)
-VALUES (3, 2, 'Piso-Covid Sala 1');
+VALUES (3, 2, 'Sala 1');
 
 INSERT INTO sala (id, sistema_id, nombre)
-VALUES (4, 2, 'Piso-Covid Sala 2');
+VALUES (4, 2, 'Sala 2');
 
 INSERT INTO sala (id, sistema_id, nombre)
-VALUES (5, 3, 'UTI Sala 1');
+VALUES (5, 3, 'Sala 1');
 
 INSERT INTO sala (id, sistema_id, nombre)
-VALUES (6, 3, 'UTI Sala 2');
+VALUES (6, 3, 'Sala 2');
 
 INSERT INTO sala (id, sistema_id, nombre)
-VALUES (7, 4, 'Hotel Sala 1');
+VALUES (7, 4, 'Sala 1');
 
 INSERT INTO sala (id, sistema_id, nombre)
-VALUES (8, 4, 'Hotel Sala 2');
+VALUES (8, 4, 'Sala 2');
 
 INSERT INTO sala (id, sistema_id, nombre)
 VALUES (9, 5, 'Sala Domicilio');
@@ -123,6 +123,10 @@ VALUES (9, 5, 'Sala Domicilio');
 --
 -- Data for table public.cama
 --
+
+
+-- 20 CAMAS DE GUARDIA
+
 INSERT INTO cama (id, sala_id, numero, estado)
 VALUES (1, 1, 1, 'ocupada');
 
@@ -133,169 +137,160 @@ INSERT INTO cama (id, sala_id, numero, estado)
 VALUES (3, 1, 3, 'ocupada');
 
 INSERT INTO cama (id, sala_id, numero, estado)
-VALUES (4, 1, 4, 'ocupada');
+VALUES (4, 1, 4, 'libre');
 
 INSERT INTO cama (id, sala_id, numero, estado)
-VALUES (5, 1, 5, 'ocupada');
-
-
-
+VALUES (5, 1, 5, 'libre');
 
 INSERT INTO cama (id, sala_id, numero, estado)
-VALUES (6, 2, 6, 'ocupada');
+VALUES (6, 1, 6, 'libre');
 
 INSERT INTO cama (id, sala_id, numero, estado)
-VALUES (7, 2, 7, 'ocupada');
+VALUES (7, 1, 7, 'libre');
 
 INSERT INTO cama (id, sala_id, numero, estado)
-VALUES (8, 2, 8, 'ocupada');
+VALUES (8, 1, 8, 'libre');
 
 INSERT INTO cama (id, sala_id, numero, estado)
-VALUES (9, 2, 9, 'ocupada');
+VALUES (9, 1, 9, 'libre');
 
 INSERT INTO cama (id, sala_id, numero, estado)
-VALUES (10, 2, 10, 'ocupada');
-
-
-
+VALUES (10, 1, 10, 'libre');
 
 INSERT INTO cama (id, sala_id, numero, estado)
-VALUES (11, 3, 11, 'ocupada');
+VALUES (11, 2, 11, 'ocupada');
 
 INSERT INTO cama (id, sala_id, numero, estado)
-VALUES (12, 3, 12, 'ocupada');
+VALUES (12, 2, 12, 'ocupada');
 
 INSERT INTO cama (id, sala_id, numero, estado)
-VALUES (13, 3, 13, 'libre');
+VALUES (13, 2, 13, 'libre');
 
 INSERT INTO cama (id, sala_id, numero, estado)
-VALUES (14, 3, 14, 'libre');
+VALUES (14, 2, 14, 'libre');
 
 INSERT INTO cama (id, sala_id, numero, estado)
-VALUES (15, 3, 15, 'libre');
-
-
-
+VALUES (15, 2, 15, 'libre');
 
 INSERT INTO cama (id, sala_id, numero, estado)
-VALUES (16, 4, 16, 'libre');
+VALUES (16, 2, 16, 'libre');
 
 INSERT INTO cama (id, sala_id, numero, estado)
-VALUES (17, 4, 17, 'libre');
+VALUES (17, 2, 17, 'libre');
 
 INSERT INTO cama (id, sala_id, numero, estado)
-VALUES (18, 4, 18, 'libre');
+VALUES (18, 2, 18, 'libre');
 
 INSERT INTO cama (id, sala_id, numero, estado)
-VALUES (19, 4, 19, 'libre');
+VALUES (19, 2, 19, 'libre');
 
 INSERT INTO cama (id, sala_id, numero, estado)
-VALUES (20, 4, 20, 'libre');
+VALUES (20, 2, 20, 'libre');
 
 
 
 
-INSERT INTO cama (id, sala_id, numero, estado)
-VALUES (21, 1, 21, 'libre');
-
-INSERT INTO cama (id, sala_id, numero, estado)
-VALUES (22, 1, 22, 'libre');
+-- 10 CAMAS DE PISOCOVID
 
 INSERT INTO cama (id, sala_id, numero, estado)
-VALUES (23, 1, 23, 'libre');
+VALUES (21, 3, 21, 'ocupada');
 
 INSERT INTO cama (id, sala_id, numero, estado)
-VALUES (24, 1, 24, 'libre');
+VALUES (22, 3, 22, 'ocupada');
 
 INSERT INTO cama (id, sala_id, numero, estado)
-VALUES (25, 1, 25, 'libre');
+VALUES (23, 3, 23, 'ocupada');
 
 INSERT INTO cama (id, sala_id, numero, estado)
-VALUES (26, 1, 26, 'libre');
+VALUES (24, 3, 24, 'ocupada');
 
 INSERT INTO cama (id, sala_id, numero, estado)
-VALUES (27, 1, 27, 'libre');
+VALUES (25, 3, 25, 'ocupada');
 
 INSERT INTO cama (id, sala_id, numero, estado)
-VALUES (28, 1, 28, 'libre');
+VALUES (26, 4, 26, 'libre');
 
 INSERT INTO cama (id, sala_id, numero, estado)
-VALUES (29, 1, 29, 'libre');
+VALUES (27, 4, 27, 'libre');
 
 INSERT INTO cama (id, sala_id, numero, estado)
-VALUES (30, 1, 30, 'libre');
-
-
-
+VALUES (28, 4, 28, 'libre');
 
 INSERT INTO cama (id, sala_id, numero, estado)
-VALUES (31, 2, 31, 'libre');
+VALUES (29, 4, 29, 'libre');
 
 INSERT INTO cama (id, sala_id, numero, estado)
-VALUES (32, 2, 32, 'libre');
+VALUES (30, 4, 30, 'libre');
+
+
+
+-- 10 CAMAS DE UTI
 
 INSERT INTO cama (id, sala_id, numero, estado)
-VALUES (33, 2, 33, 'libre');
+VALUES (31, 5, 31, 'ocupada');
 
 INSERT INTO cama (id, sala_id, numero, estado)
-VALUES (34, 2, 34, 'libre');
+VALUES (32, 5, 32, 'ocupada');
 
 INSERT INTO cama (id, sala_id, numero, estado)
-VALUES (35, 2, 35, 'libre');
-
-
-
+VALUES (33, 5, 33, 'libre');
 
 INSERT INTO cama (id, sala_id, numero, estado)
-VALUES (36, 3, 36, 'libre');
+VALUES (34, 5, 34, 'libre');
 
 INSERT INTO cama (id, sala_id, numero, estado)
-VALUES (37, 3, 37, 'libre');
+VALUES (35, 5, 35, 'libre');
 
 INSERT INTO cama (id, sala_id, numero, estado)
-VALUES (38, 3, 38, 'libre');
+VALUES (36, 6, 36, 'libre');
 
 INSERT INTO cama (id, sala_id, numero, estado)
-VALUES (39, 3, 39, 'libre');
+VALUES (37, 6, 37, 'libre');
 
 INSERT INTO cama (id, sala_id, numero, estado)
-VALUES (40, 3, 40, 'libre');
-
-
-
+VALUES (38, 6, 38, 'libre');
 
 INSERT INTO cama (id, sala_id, numero, estado)
-VALUES (41, 4, 41, 'libre');
+VALUES (39, 6, 39, 'libre');
 
 INSERT INTO cama (id, sala_id, numero, estado)
-VALUES (42, 4, 42, 'libre');
+VALUES (40, 6, 40, 'libre');
+
+
+
+
+-- 10 CAMAS DE HOTEL
 
 INSERT INTO cama (id, sala_id, numero, estado)
-VALUES (43, 4, 43, 'libre');
+VALUES (41, 7, 41, 'libre');
 
 INSERT INTO cama (id, sala_id, numero, estado)
-VALUES (44, 4, 44, 'libre');
+VALUES (42, 7, 42, 'libre');
 
 INSERT INTO cama (id, sala_id, numero, estado)
-VALUES (45, 4, 45, 'libre');
-
-
-
+VALUES (43, 7, 43, 'libre');
 
 INSERT INTO cama (id, sala_id, numero, estado)
-VALUES (46, 1, 46, 'libre');
+VALUES (44, 7, 44, 'libre');
 
 INSERT INTO cama (id, sala_id, numero, estado)
-VALUES (47, 1, 47, 'libre');
+VALUES (45, 7, 45, 'libre');
 
 INSERT INTO cama (id, sala_id, numero, estado)
-VALUES (48, 1, 48, 'libre');
+VALUES (46, 8, 46, 'libre');
 
 INSERT INTO cama (id, sala_id, numero, estado)
-VALUES (49, 1, 49, 'libre');
+VALUES (47, 8, 47, 'libre');
 
 INSERT INTO cama (id, sala_id, numero, estado)
-VALUES (50, 1, 50, 'libre');
+VALUES (48, 8, 48, 'libre');
+
+INSERT INTO cama (id, sala_id, numero, estado)
+VALUES (49, 8, 49, 'libre');
+
+INSERT INTO cama (id, sala_id, numero, estado)
+VALUES (50, 8, 50, 'libre');
+
 
 
 
@@ -457,28 +452,28 @@ INSERT INTO internacion_cama (id, internacion_id, cama_id, fecha_desde, fecha_ha
 VALUES (3, 3, 3, '2020-11-08 01:42:20', NULL);
 
 INSERT INTO internacion_cama (id, internacion_id, cama_id, fecha_desde, fecha_hasta)
-VALUES (4, 4, 4, '2020-11-07 21:49:42', NULL);
+VALUES (4, 4, 11, '2020-11-07 21:49:42', NULL);
 
 INSERT INTO internacion_cama (id, internacion_id, cama_id, fecha_desde, fecha_hasta)
-VALUES (5, 5, 5, '2020-11-08 01:42:20', NULL);
+VALUES (5, 5, 12, '2020-11-08 01:42:20', NULL);
 
 INSERT INTO internacion_cama (id, internacion_id, cama_id, fecha_desde, fecha_hasta)
-VALUES (6, 6, 6, '2020-11-07 21:49:42', NULL);
+VALUES (6, 6, 21, '2020-11-07 21:49:42', NULL);
 
 INSERT INTO internacion_cama (id, internacion_id, cama_id, fecha_desde, fecha_hasta)
-VALUES (7, 7, 7, '2020-11-08 01:42:20', NULL);
+VALUES (7, 7, 22, '2020-11-08 01:42:20', NULL);
 
 INSERT INTO internacion_cama (id, internacion_id, cama_id, fecha_desde, fecha_hasta)
-VALUES (8, 8, 8, '2020-11-07 21:49:42', NULL);
+VALUES (8, 8, 23, '2020-11-07 21:49:42', NULL);
 
 INSERT INTO internacion_cama (id, internacion_id, cama_id, fecha_desde, fecha_hasta)
-VALUES (9, 9, 9, '2020-11-08 01:42:20', NULL);
+VALUES (9, 9, 24, '2020-11-08 01:42:20', NULL);
 
 INSERT INTO internacion_cama (id, internacion_id, cama_id, fecha_desde, fecha_hasta)
-VALUES (10, 10, 10, '2020-11-07 21:49:42', NULL);
+VALUES (10, 10, 25, '2020-11-07 21:49:42', NULL);
 
 INSERT INTO internacion_cama (id, internacion_id, cama_id, fecha_desde, fecha_hasta)
-VALUES (11, 11, 11, '2020-11-08 01:42:20', NULL);
+VALUES (11, 11, 31, '2020-11-08 01:42:20', NULL);
 
 INSERT INTO internacion_cama (id, internacion_id, cama_id, fecha_desde, fecha_hasta)
-VALUES (12, 12, 12, '2020-11-07 21:49:42', NULL);
+VALUES (12, 12, 32, '2020-11-07 21:49:42', NULL);
