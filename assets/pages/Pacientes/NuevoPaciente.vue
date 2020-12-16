@@ -351,12 +351,17 @@ export default {
       this.$swal
         .fire({
           title: "Por favor ingrese el número de DNI del nuevo paciente",
-          input: "text",
+          input: "number",
+          inputAttributes: {
+            min: 0,
+            max: 99999999
+          },
           confirmButtonText: "Aceptar",
           showLoaderOnConfirm: true,
           showCancelButton: true,
           cancelButtonText: "Volver",
           allowOutsideClick: false,
+          allowEscapeKey: false,
           confirmButtonColor: "#4caf50",
           preConfirm: result => {
             let data = { dni: result };
