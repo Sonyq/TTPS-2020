@@ -73,16 +73,16 @@
 -- Data for table public.sistema
 --
 INSERT INTO sistema (id, nombre, descrip, camas_total, camas_disponibles, camas_ocupadas, sistemas_destino)
-VALUES (1, 'GUARDIA', 'Guardia', 20, 3, 2, '[{"id": 2, "descrip": "Piso Covid"}, {"id": 3, "descrip": "UTI"}]');
+VALUES (1, 'GUARDIA', 'Guardia', 20, 15, 5, '[{"id": 2, "descrip": "Piso Covid"}, {"id": 3, "descrip": "UTI"}]');
 
 INSERT INTO sistema (id, nombre, descrip, camas_total, camas_disponibles, camas_ocupadas, sistemas_destino)
-VALUES (2, 'PISOCOVID', 'Piso Covid', 20, 7, 3, '[{"id": 3, "descrip": "UTI"}, {"id": 4, "descrip": "Hotel"}, {"id": 5, "descrip": "Domicilio"}]');
+VALUES (2, 'PISOCOVID', 'Piso Covid', 10, 5, 5, '[{"id": 3, "descrip": "UTI"}, {"id": 4, "descrip": "Hotel"}, {"id": 5, "descrip": "Domicilio"}]');
 
 INSERT INTO sistema (id, nombre, descrip, camas_total, camas_disponibles, camas_ocupadas, sistemas_destino)
-VALUES (3, 'UTI', 'UTI', 20, 5, 0, '[{"id": 2, "descrip": "Piso Covid"}]');
+VALUES (3, 'UTI', 'UTI', 10, 8, 2, '[{"id": 2, "descrip": "Piso Covid"}]');
 
 INSERT INTO sistema (id, nombre, descrip, camas_total, camas_disponibles, camas_ocupadas, sistemas_destino)
-VALUES (4, 'HOTEL', 'Hotel', 20, 5, 0, '[{"id": 2, "descrip": "Piso Covid"}]');
+VALUES (4, 'HOTEL', 'Hotel', 10, 10, 0, '[{"id": 2, "descrip": "Piso Covid"}]');
 
 INSERT INTO sistema (id, nombre, descrip, camas_total, camas_disponibles, camas_ocupadas, sistemas_destino)
 VALUES (5, 'DOMICILIO', 'Domicilio', -1, -1, -1, '[{"id": 2, "descrip": "Piso Covid"}]');
@@ -411,7 +411,7 @@ INSERT INTO internacion (id, paciente_id, sintomas, fecha_inicio_sintomas, fecha
 VALUES (1, 1, 'Mareos, Vómitos, Dolor de cabeza', '2020-05-30 03:00:00', '2020-05-30 03:00:00', CURRENT_DATE, NULL, NULL);
 
 INSERT INTO internacion (id, paciente_id, sintomas, fecha_inicio_sintomas, fecha_diagnostico, fecha_carga, fecha_egreso, fecha_obito)
-VALUES (2, 2, 'Mareos', '2020-02-28 00:00:00', '2020-02-30 00:00:00', CURRENT_DATE, NULL, NULL);
+VALUES (2, 2, 'Mareos', '2020-02-28 00:00:00', '2020-02-15 00:00:00', CURRENT_DATE, NULL, NULL);
 
 INSERT INTO internacion (id, paciente_id, sintomas, fecha_inicio_sintomas, fecha_diagnostico, fecha_carga, fecha_egreso, fecha_obito)
 VALUES (3, 3, 'Dificultad para respirar', '2020-04-28 00:00:00', '2020-04-30 00:00:00', CURRENT_DATE, NULL, NULL);
