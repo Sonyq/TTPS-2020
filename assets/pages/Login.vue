@@ -1,5 +1,7 @@
 <template>
   <div class="content">
+    <loading :active.sync="isLoading" :is-full-page="false" color="#4CAF50">
+    </loading>
     <div class="md-layout">
       <div
         class="md-layout-item md-medium-size-75 md-xsmall-size-75 md-size-33"
@@ -27,47 +29,48 @@
 </template>
 
 <script>
+import Loading from "vue-loading-overlay";
+// Import stylesheet
+import "vue-loading-overlay/dist/vue-loading.css";
 export default {
-  components: {},
+    components: {
+    Loading
+  },
   data() {
     return {
       username: "",
-      password: ""
+      password: "",
+      isLoading: false,
+      success: false
     };
   },
   created () {
-    events.$on(
-      "loading_user:finish",
-      () => { events.$emit("login:finish")
-              if (this.loggedUser.roles.includes("ROLE_ADMIN")){
-                this.$router.push("/reglas");
-              }else{
-                this.$router.push("/pacientes/" + this.loggedUser.sistemaId + "/" + this.loggedUser.sistemaNombre);
-              }
-            }
-    )
+
   },
   methods: {
-    login() {
-      events.$emit("loading:show");
+    async login() {
+      this.success = false;
+      this.isLoading = true;
       var credentials = {
         _username: this.username,
         _password: this.password
       };
-      axios
+      await axios
         .post(this.burl("/api/login_check"), credentials, { dataType: "text" }) //mando el post
         .then(response => {
           if (response.status === 200) {
             this.jwtToken = response.data["token"]; //seteo el token
-            this.$root.fetchLoggedUser();
-            events.$emit("loading:hide");
-            //this.$router.push("/pacientes"); // con esto me cambio de vista
+            this.success = true
           }
         })
         .catch(error => {
-          events.$emit("loading:hide");
+          this.isLoading = false;
           this.$swal("Usuario o contraseña incorrectos", "", "error");
         });
+        if(this.success){
+            await this.$root.fetchLoggedUser();
+            this.$router.push({name:"Redireccion"}); // con esto me cambio de vista
+        }
     }
   },
   computed: {

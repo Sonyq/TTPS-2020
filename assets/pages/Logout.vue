@@ -15,11 +15,7 @@ export default {
       if (!recursive) {
         events.$emit("user:logout");
       }
-      axios.defaults.headers.common["Authorization"] = null;
-      localStorage.removeItem("token");
-      this.jwtToken.clear;
-      this.loggedUser.clear;
-      this.$router.push("/");
+      this.$router.push("/login");
     }
   }
 };

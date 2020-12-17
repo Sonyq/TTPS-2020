@@ -50,6 +50,7 @@ const router = new VueRouter({
   linkExactActiveClass: "nav-item active"
 });
 
+
 window.axios = axios;
 window.events = new Vue();
 
@@ -99,18 +100,15 @@ Vue.mixin({
     },
     loggedUser: {
       set: function(data) {
+        if(data !== ""){
         this.$root.$data.store_user["id"] = data.id;
         this.$root.$data.store_user["email"] = data.email;
         this.$root.$data.store_user["username"] = data.username;
         this.$root.$data.store_user["roles"] = [];
-        // this.$root.$data.store_user["permisos"] = [];
         this.$root.$data.store_user["sistemaNombre"] = data.sistema.descrip;
         this.$root.$data.store_user["sistemaId"] = data.sistema.id;
         data.roles.forEach(r => {
           this.$root.$data.store_user["roles"].push(r);
-          // r.permisos.forEach(p => {
-          //   this.$root.$data.store_user["permisos"].push(p.nombre); //despues ve de eliminar los repetidos
-          // });
         });
         this.$root.$data.store_user["created_at"] = data.created_at;
         this.$root.$data.store_user["updated_at"] = data.updated_at;
@@ -118,11 +116,14 @@ Vue.mixin({
         this.$root.$data.store_user["last_name"] = data.last_name;
         this.$root.$data.store_user["activo"] = data.activo;
         events.$emit("loading_user:finish");
-      },
+      }else{
+        this.$root.$data.store_user = {}
+      }},
       get: function() {
         return this.$root.$data.store_user;
       },
       clear: function() {
+        this.$root.$data.store_user = "";
         this.$root.$data.store_user = {};
       }
     }
@@ -163,6 +164,13 @@ Vue.mixin({
         return `${name}`;
       }
       return `${url.origin}/${name}`;
+    },
+    logOut() {
+      axios.defaults.headers.common["Authorization"] = null;
+      localStorage.removeItem("token");
+      this.jwtToken = "";
+      this.loggedUser = "";
+      this.$router.push("/login");
     },
 
     /**
@@ -222,16 +230,88 @@ new Vue({
       ? localStorage.getItem("token")
       : "";
 
-    //si abrís la app y tenías sesión te manda al listado de pacientes...
+    //si abrís la app
     if (this.store_token !== "") {
-      this.fetchLoggedUser();
-      this.$router.push("/pacientes");
-    }
+       this.fetchLoggedUser();
+     }
 
     events.$on("change:route", componente => this.cambiarRuta(componente));
-    events.$on("user:logout", () => (this.store_token = ""));
+    events.$on("user:logout", () => (this.logOut()));
     events.$on("loading:show", () => (this.loading = this.$loading.show()));
     events.$on("loading:hide", () => this.loading.hide());
+
+    this.$router.beforeEach((to, from, next) => {
+      if(to.matched.some(record => record.meta.requiresAuth)) {
+          if (this.jwtToken == null) {
+              next({
+                  path: '/login',
+                  params: { nextUrl: to.fullPath }
+              })
+          } else {
+              if(to.matched.some(record => record.meta.role)) {
+                //si el usuario tiene el rol necesario para ingresar
+                  if(to.matched.some(record => this.loggedUser.roles.includes(record.meta.role))){
+                    console.log(to)
+                      next()
+                  }
+              //si no tiene el rol necesario se lo envia a su default
+                  else{
+                    if(!this.loggedUser.roles.includes("ROLE_ADMIN")){
+                      next({
+                        name: "Pacientes",
+                        params: {
+                          sistemaId: this.loggedUser.sistemaId,
+                          sistemaNombre: this.loggedUser.sistemaNombre
+                        }
+                      })
+                    }
+                    else {
+                      next({name: "Reglas"})
+                    }
+                  }
+              }else {
+                  if(to.path !== "/login" && to.path !== "/home"){
+                    
+                      next()
+                  }
+                  else{
+                    console.log(this.loggedUser);
+                    if(!this.loggedUser.roles.includes("ROLE_ADMIN")){
+                      next({
+                        name: "Pacientes",
+                        params: {
+                          sistemaId: this.loggedUser.sistemaId,
+                          sistemaNombre: this.loggedUser.sistemaNombre
+                        }
+                      })
+                    }
+                    else {
+                      next({name: "Reglas"})
+                    }
+                  }
+              }
+          }
+      } else {
+        if(to.path == "/login" && this.jwtToken){                    
+          if(!this.loggedUser.roles.includes("ROLE_ADMIN")){
+            next({
+              name: "Pacientes",
+              params: {
+                sistemaId: this.loggedUser.sistemaId,
+                sistemaNombre: this.loggedUser.sistemaNombre
+              }
+            })
+          }
+          else {
+            next({name: "Reglas"})
+          }
+      }
+      else{
+        next()
+      }
+      } 
+  })
+  
   },
 
   methods: {
@@ -353,42 +433,9 @@ new Vue({
     $route(to, from) {
       if (
         this.store_token !== "" && // tengo token
-        from.path !== "/login" &&  // no vengo de login
         to.path !== "/logout"      // no voy a logout
       ) {
-        if (
-          !this.loggedUser.roles.includes("ROLE_JEFE") && !this.loggedUser.roles.includes("ROLE_ADMIN") &&
-          (to.name !== "Ver Paciente" ||
-            to.name !== "Nueva Internación" ||
-            to.name !== "Nueva Evolución" ||
-            to.name !== "Paciente") &&
-          (to.path === "/sistemas" ||
-            to.path === "/reglas" ||
-            (to.name === "Pacientes" &&
-              this.$root.loggedUser.sistemaId !== to.params.sistemaId))
-        ) {
-          //la idea no es tirar ningún error sinó directamente mandarlo al listado de pacientes
-          //que es una ruta a la que pueden acceder todos.
-          this.$router.push({
-            name: "Pacientes",
-            params: {
-              sistemaId: this.loggedUser.sistemaId,
-              sistemaNombre: this.loggedUser.sistemaNombre
-            }
-          });
-        } else {
-          this.fetchLoggedUser();
-        }
-      }else{
-        if(this.loggedUser.roles.includes("ROLE_ADMIN")){
-          this.$router.push({
-            name: "Reglas",
-            // params: {
-            //   sistemaId: this.loggedUser.sistemaId,
-            //   sistemaNombre: this.loggedUser.sistemaNombre
-            // }
-          });
-        }
+        this.fetchLoggedUser();
       }
     }
   }

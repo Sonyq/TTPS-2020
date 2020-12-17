@@ -2,7 +2,7 @@
   <md-toolbar md-elevation="0" class="md-transparent">
     <div class="md-toolbar-row">
       <div class="md-toolbar-section-start">
-        <h3 v-if="loggedUser" class="md-title">
+        <h3 v-if="jwtToken" class="md-title">
           {{ nombreUsuario }}, {{ rolUsuario }} {{ sistemaUsuario }}
         </h3>
       </div>
@@ -96,15 +96,18 @@ export default {
              return "Médico";
            }
         }
-        //return this.loggedUser.roles.includes("ROLE_JEFE") ? "Jefe" : "Médico";
       }
+      return ""
     },
     sistemaUsuario() {
+      if (this.loggedUser.roles) {
       if (this.loggedUser.roles.includes("ROLE_ADMIN")) {
         return "";
       }else{
         return "de " + this.loggedUser.sistemaNombre;
       }
+      }
+      return ""
     }
   }
 };

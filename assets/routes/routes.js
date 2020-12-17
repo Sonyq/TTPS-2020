@@ -13,6 +13,7 @@ import Reglas from "@/pages/Reglas/Reglas.vue";
 import NuevaRegla from "@/pages/Reglas/NuevaRegla.vue";
 import Alertas from "@/pages/Alertas/Alertas.vue";
 import Salas from "@/pages/Sistemas/Salas.vue";
+import Home from "@/pages/Home.vue";
 
 /*
 Si no quiero agregar el footer poner la opcion   hideFooter: true ejemplo: 
@@ -34,12 +35,24 @@ const routes = [
       {
         path: "dashboard",
         name: "Dashboard",
-        component: Dashboard
+        component: Dashboard,
+        meta: {
+          requiresAuth: true,
+          role : "ROLE_JEFE"
+      }
       },
       {
         path: "login",
         name: "Iniciar sesión",
         component: Login
+      },
+      {
+        path: "home",
+        name: "Redireccion",
+        component: Home,
+        meta: {
+          requiresAuth: true
+        }
       },
       {
         path: "logout",
@@ -49,67 +62,111 @@ const routes = [
       {
         path: "sistemas",
         name: "Sistemas",
-        component: Sistemas
+        component: Sistemas,
+        meta: {
+          requiresAuth: true,
+          role : "ROLE_JEFE"
+      }
       },
       {
         path: "pacientes/:sistemaId?/:sistemaNombre?/:salaId?/:salaNombre?",
         name: "Pacientes",
         component: Pacientes,
-        props: true
+        props: true,
+        meta: {
+          requiresAuth: true,
+          role : "ROLE_JEFE"
+      }
       },
       {
         path: "paciente/:pacienteId?",
         name: "Paciente",
         component: NuevoPaciente,
-        props: true
+        props: true,
+        meta: {
+          requiresAuth: true,
+          role : "ROLE_JEFE"
+      }
       },
       {
         path: "verPaciente/:pacienteId",
         name: "Ver Paciente",
         component: VerPaciente,
-        props: true
+        props: true,
+        meta: {
+          requiresAuth: true,
+          role : "ROLE_JEFE"
+      }
       },
       {
         path: "nuevaEvolucion/:internacionId/:pacienteId",
         name: "Nueva Evolución",
         component: NuevaEvolucion,
-        props: true
+        props: true,
+        meta: {
+          requiresAuth: true,
+          role : "ROLE_JEFE"
+      }
       },
       {
         path: "nuevaInternacion/:pacienteId",
         name: "Nueva Internación",
         component: NuevaInternacion,
-        props: true
+        props: true,
+        meta: {
+          requiresAuth: true,
+          role : "ROLE_JEFE"
+      }
       },
       {
         path: "verInternacion/:internacionId",
         name: "Ver Internación",
         component: VerInternacion,
-        props: true
+        props: true,
+        meta: {
+          requiresAuth: true,
+          role : "ROLE_JEFE"
+      }
       },
       {
         path: "reglas",
         name: "Reglas",
         component: Reglas,
-        props: true
+        props: true,
+        meta: {
+          requiresAuth: true,
+          role : "ROLE_ADMIN"
+      }
       },
       {
         path: "regla/:reglaId?",
         name: "Nueva Regla",
         component: NuevaRegla,
-        props: true
+        props: true,
+        meta: {
+          requiresAuth: true,
+          role : "ROLE_ADMIN"
+      }
       },
       {
         path: "alertas",
         name: "Alertas",
         component: Alertas,
-        props: true
+        props: true,
+        meta: {
+          requiresAuth: true,
+          role : "ROLE_JEFE"
+      }
       },
       {
         path: "salas/:sistemaNombre/:sistemaId",
         name: "Salas",
         component: Salas,
-        props: true
+        props: true,
+        meta: {
+          requiresAuth: true,
+          role : "ROLE_JEFE"
+      }
       }
     ]
   }
