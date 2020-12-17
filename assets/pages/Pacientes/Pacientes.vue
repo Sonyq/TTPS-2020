@@ -5,7 +5,9 @@
 
     <md-card v-if="pacientes">
       <md-card-header data-background-color="green">
-        <span class="md-title">Pacientes en {{ nombreSistemaComp }} {{ nombreSalaComp }}</span>
+        <span class="md-title"
+          >Pacientes en {{ nombreSistemaComp }} {{ nombreSalaComp }}</span
+        >
       </md-card-header>
 
       <md-card-content>
@@ -264,7 +266,7 @@ export default {
     async getPacientesInternados() {
       this.isLoading = true;
       let sistemaId = this.sistemaId ? "?sistema=" + this.sistemaId : "";
-      let salaId = this.salaId ? "&sala=" + this.salaId: "";
+      let salaId = this.salaId ? "&sala=" + this.salaId : "";
       const pacientes = await axios.get(
         this.burl("/api/paciente/internados" + sistemaId + salaId)
       );
@@ -389,7 +391,7 @@ export default {
       return this.sistemaNombre ? this.sistemaNombre : this.sistemaNombreLocal;
     },
     nombreSalaComp() {
-      return this.salaNombre ? ', ' + this.salaNombre : '';
+      return this.salaNombre ? ", " + this.salaNombre : "";
     },
     puedeDeclararEgreso() {
       return (

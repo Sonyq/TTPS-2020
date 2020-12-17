@@ -75,7 +75,6 @@
                 </div>
               </div>
             </div>
-
           </form>
         </ValidationObserver>
       </md-card-content>

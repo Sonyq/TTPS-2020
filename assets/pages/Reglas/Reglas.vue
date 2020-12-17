@@ -45,7 +45,6 @@
               </div>
               <template slot="table-row" slot-scope="props">
                 <span v-if="props.column.field == 'acciones'">
-                  
                   <!-- <md-button
                     class="md-success md-just-icon"
                     title="Editar"
@@ -65,7 +64,6 @@
                   >
                     <md-icon>delete</md-icon>
                   </md-button>
-                  
                 </span>
               </template>
             </vue-good-table>
@@ -135,17 +133,14 @@ export default {
           showCancelButton: true,
           confirmButtonColor: "#F33527",
           cancelButtonColor: "#47A44B",
-          confirmButtonText:
-            "Sí, eliminar regla",
+          confirmButtonText: "Sí, eliminar regla",
           cancelButtonText: "Cancelar"
         })
         .then(result => {
           if (result.isConfirmed) {
             this.isLoading = true;
             axios
-              .post(
-                this.burl("/api/reglas/delete?id=" + reglaId)
-              )
+              .post(this.burl("/api/reglas/delete?id=" + reglaId))
               .then(response => {
                 this.getReglas();
               });

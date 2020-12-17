@@ -13,7 +13,12 @@
           <router-link
             :to="{
               name: 'Pacientes',
-              params: { sistemaNombre: sistemaNombre, sistemaId: sistemaId, salaId: sala.id, salaNombre: sala.nombre }
+              params: {
+                sistemaNombre: sistemaNombre,
+                sistemaId: sistemaId,
+                salaId: sala.id,
+                salaNombre: sala.nombre
+              }
             }"
           >
             <stats-card data-background-color="green">
@@ -43,7 +48,7 @@ export default {
     StatsCard,
     Loading
   },
-  props: ['sistemaNombre', 'sistemaId'],
+  props: ["sistemaNombre", "sistemaId"],
   data() {
     return {
       isLoading: false,
@@ -56,7 +61,9 @@ export default {
   methods: {
     async getSalas() {
       this.isLoading = true;
-      const salas = await axios.get(this.burl("/api/sistemas/salas?id=" + this.sistemaId));
+      const salas = await axios.get(
+        this.burl("/api/sistemas/salas?id=" + this.sistemaId)
+      );
       this.salas = salas.data;
       this.isLoading = false;
     }

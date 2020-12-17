@@ -75,12 +75,12 @@ export default {
   },
   computed: {
     esJefe() {
-      if (this.loggedUser.roles){
+      if (this.loggedUser.roles) {
         return this.loggedUser.roles.includes("ROLE_JEFE");
       }
     },
     esAdmin() {
-      if (this.loggedUser.roles){
+      if (this.loggedUser.roles) {
         return this.loggedUser.roles.includes("ROLE_ADMIN");
       }
     }

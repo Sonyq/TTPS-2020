@@ -33,23 +33,28 @@ import Loading from "vue-loading-overlay";
 // Import stylesheet
 import "vue-loading-overlay/dist/vue-loading.css";
 export default {
-    components: {
+  components: {
     Loading
   },
   data() {
     return {
       username: "",
       password: "",
-      isLoading: false,
-      success: false
+      isLoading: false
     };
   },
-  created () {
-
+  created() {
+    if(this.jwtToken){
+      this.redirect();
+      }
   },
   methods: {
+    async redirect() {
+      this.isLoading = true;
+      await this.$root.fetchLoggedUser();
+      this.$router.push({ name: "Redireccion" }); // con esto me cambio de vista
+    },
     async login() {
-      this.success = false;
       this.isLoading = true;
       var credentials = {
         _username: this.username,
@@ -60,17 +65,13 @@ export default {
         .then(response => {
           if (response.status === 200) {
             this.jwtToken = response.data["token"]; //seteo el token
-            this.success = true
+            this.redirect();
           }
         })
         .catch(error => {
           this.isLoading = false;
           this.$swal("Usuario o contraseña incorrectos", "", "error");
         });
-        if(this.success){
-            await this.$root.fetchLoggedUser();
-            this.$router.push({name:"Redireccion"}); // con esto me cambio de vista
-        }
     }
   },
   computed: {

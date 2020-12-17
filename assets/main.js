@@ -50,7 +50,6 @@ const router = new VueRouter({
   linkExactActiveClass: "nav-item active"
 });
 
-
 window.axios = axios;
 window.events = new Vue();
 
@@ -100,25 +99,26 @@ Vue.mixin({
     },
     loggedUser: {
       set: function(data) {
-        if(data !== ""){
-        this.$root.$data.store_user["id"] = data.id;
-        this.$root.$data.store_user["email"] = data.email;
-        this.$root.$data.store_user["username"] = data.username;
-        this.$root.$data.store_user["roles"] = [];
-        this.$root.$data.store_user["sistemaNombre"] = data.sistema.descrip;
-        this.$root.$data.store_user["sistemaId"] = data.sistema.id;
-        data.roles.forEach(r => {
-          this.$root.$data.store_user["roles"].push(r);
-        });
-        this.$root.$data.store_user["created_at"] = data.created_at;
-        this.$root.$data.store_user["updated_at"] = data.updated_at;
-        this.$root.$data.store_user["first_name"] = data.first_name;
-        this.$root.$data.store_user["last_name"] = data.last_name;
-        this.$root.$data.store_user["activo"] = data.activo;
-        events.$emit("loading_user:finish");
-      }else{
-        this.$root.$data.store_user = {}
-      }},
+        if (data !== "") {
+          this.$root.$data.store_user["id"] = data.id;
+          this.$root.$data.store_user["email"] = data.email;
+          this.$root.$data.store_user["username"] = data.username;
+          this.$root.$data.store_user["roles"] = [];
+          this.$root.$data.store_user["sistemaNombre"] = data.sistema.descrip;
+          this.$root.$data.store_user["sistemaId"] = data.sistema.id;
+          data.roles.forEach(r => {
+            this.$root.$data.store_user["roles"].push(r);
+          });
+          this.$root.$data.store_user["created_at"] = data.created_at;
+          this.$root.$data.store_user["updated_at"] = data.updated_at;
+          this.$root.$data.store_user["first_name"] = data.first_name;
+          this.$root.$data.store_user["last_name"] = data.last_name;
+          this.$root.$data.store_user["activo"] = data.activo;
+          events.$emit("loading_user:finish");
+        } else {
+          this.$root.$data.store_user = {};
+        }
+      },
       get: function() {
         return this.$root.$data.store_user;
       },
@@ -232,86 +232,81 @@ new Vue({
 
     //si abrís la app
     if (this.store_token !== "") {
-       this.fetchLoggedUser();
-     }
+      this.fetchLoggedUser();
+    }
 
     events.$on("change:route", componente => this.cambiarRuta(componente));
-    events.$on("user:logout", () => (this.logOut()));
+    events.$on("user:logout", () => this.logOut());
     events.$on("loading:show", () => (this.loading = this.$loading.show()));
     events.$on("loading:hide", () => this.loading.hide());
 
     this.$router.beforeEach((to, from, next) => {
-      if(to.matched.some(record => record.meta.requiresAuth)) {
-          if (this.jwtToken == null) {
-              next({
-                  path: '/login',
-                  params: { nextUrl: to.fullPath }
-              })
-          } else {
-              if(to.matched.some(record => record.meta.role)) {
-                //si el usuario tiene el rol necesario para ingresar
-                  if(to.matched.some(record => this.loggedUser.roles.includes(record.meta.role))){
-                    console.log(to)
-                      next()
+      if (to.matched.some(record => record.meta.requiresAuth)) {
+        if (this.jwtToken == null) {
+          next({
+            path: "/login",
+            params: { nextUrl: to.fullPath }
+          });
+        } else {
+          if (to.matched.some(record => record.meta.role)) {
+            //si el usuario tiene el rol necesario para ingresar
+            if (
+              to.matched.some(record =>
+                this.loggedUser.roles.includes(record.meta.role)
+              )
+            ) {
+              next();
+            }
+            //si no tiene el rol necesario se lo envia a su default
+            else {
+              if (!this.loggedUser.roles.includes("ROLE_ADMIN")) {
+                next({
+                  name: "Pacientes",
+                  params: {
+                    sistemaId: this.loggedUser.sistemaId,
+                    sistemaNombre: this.loggedUser.sistemaNombre
                   }
-              //si no tiene el rol necesario se lo envia a su default
-                  else{
-                    if(!this.loggedUser.roles.includes("ROLE_ADMIN")){
-                      next({
-                        name: "Pacientes",
-                        params: {
-                          sistemaId: this.loggedUser.sistemaId,
-                          sistemaNombre: this.loggedUser.sistemaNombre
-                        }
-                      })
-                    }
-                    else {
-                      next({name: "Reglas"})
-                    }
-                  }
-              }else {
-                  if(to.path !== "/login" && to.path !== "/home"){
-                    
-                      next()
-                  }
-                  else{
-                    console.log(this.loggedUser);
-                    if(!this.loggedUser.roles.includes("ROLE_ADMIN")){
-                      next({
-                        name: "Pacientes",
-                        params: {
-                          sistemaId: this.loggedUser.sistemaId,
-                          sistemaNombre: this.loggedUser.sistemaNombre
-                        }
-                      })
-                    }
-                    else {
-                      next({name: "Reglas"})
-                    }
-                  }
+                });
+              } else {
+                next({ name: "Reglas" });
               }
+            }
+          } else {
+            if (to.path !== "/login" && to.path !== "/home") {
+              next();
+            } else {
+              if (!this.loggedUser.roles.includes("ROLE_ADMIN")) {
+                next({
+                  name: "Pacientes",
+                  params: {
+                    sistemaId: this.loggedUser.sistemaId,
+                    sistemaNombre: this.loggedUser.sistemaNombre
+                  }
+                });
+              } else {
+                next({ name: "Reglas" });
+              }
+            }
           }
+        }
       } else {
-        if(to.path == "/login" && this.jwtToken){                    
-          if(!this.loggedUser.roles.includes("ROLE_ADMIN")){
+        if ((to.path == "/login" || to.path == "/") && this.jwtToken) {
+          if (!this.loggedUser.roles.includes("ROLE_ADMIN")) {
             next({
               name: "Pacientes",
               params: {
                 sistemaId: this.loggedUser.sistemaId,
                 sistemaNombre: this.loggedUser.sistemaNombre
               }
-            })
+            });
+          } else {
+            next({ name: "Reglas" });
           }
-          else {
-            next({name: "Reglas"})
-          }
+        } else {
+          next();
+        }
       }
-      else{
-        next()
-      }
-      } 
-  })
-  
+    });
   },
 
   methods: {
@@ -433,7 +428,7 @@ new Vue({
     $route(to, from) {
       if (
         this.store_token !== "" && // tengo token
-        to.path !== "/logout"      // no voy a logout
+        to.path !== "/logout" // no voy a logout
       ) {
         this.fetchLoggedUser();
       }

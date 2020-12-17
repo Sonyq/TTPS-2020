@@ -89,25 +89,25 @@ export default {
       if (this.loggedUser.roles) {
         if (this.loggedUser.roles.includes("ROLE_JEFE")) {
           return "Jefe";
-        }else{
-           if (this.loggedUser.roles.includes("ROLE_ADMIN")) {
-             return "Administrador";
-           }else{
-             return "Médico";
-           }
+        } else {
+          if (this.loggedUser.roles.includes("ROLE_ADMIN")) {
+            return "Administrador";
+          } else {
+            return "Médico";
+          }
         }
       }
-      return ""
+      return "";
     },
     sistemaUsuario() {
       if (this.loggedUser.roles) {
-      if (this.loggedUser.roles.includes("ROLE_ADMIN")) {
-        return "";
-      }else{
-        return "de " + this.loggedUser.sistemaNombre;
+        if (this.loggedUser.roles.includes("ROLE_ADMIN")) {
+          return "";
+        } else {
+          return "de " + this.loggedUser.sistemaNombre;
+        }
       }
-      }
-      return ""
+      return "";
     }
   }
 };

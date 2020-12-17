@@ -38,8 +38,8 @@ const routes = [
         component: Dashboard,
         meta: {
           requiresAuth: true,
-          role : "ROLE_JEFE"
-      }
+          role: "ROLE_JEFE"
+        }
       },
       {
         path: "login",
@@ -65,8 +65,8 @@ const routes = [
         component: Sistemas,
         meta: {
           requiresAuth: true,
-          role : "ROLE_JEFE"
-      }
+          role: "ROLE_JEFE"
+        }
       },
       {
         path: "pacientes/:sistemaId?/:sistemaNombre?/:salaId?/:salaNombre?",
@@ -75,8 +75,8 @@ const routes = [
         props: true,
         meta: {
           requiresAuth: true,
-          role : "ROLE_JEFE"
-      }
+          role: "ROLE_JEFE"
+        }
       },
       {
         path: "paciente/:pacienteId?",
@@ -85,8 +85,8 @@ const routes = [
         props: true,
         meta: {
           requiresAuth: true,
-          role : "ROLE_JEFE"
-      }
+          role: "ROLE_JEFE"
+        }
       },
       {
         path: "verPaciente/:pacienteId",
@@ -95,8 +95,8 @@ const routes = [
         props: true,
         meta: {
           requiresAuth: true,
-          role : "ROLE_JEFE"
-      }
+          role: "ROLE_JEFE"
+        }
       },
       {
         path: "nuevaEvolucion/:internacionId/:pacienteId",
@@ -105,8 +105,8 @@ const routes = [
         props: true,
         meta: {
           requiresAuth: true,
-          role : "ROLE_JEFE"
-      }
+          role: "ROLE_JEFE"
+        }
       },
       {
         path: "nuevaInternacion/:pacienteId",
@@ -115,8 +115,8 @@ const routes = [
         props: true,
         meta: {
           requiresAuth: true,
-          role : "ROLE_JEFE"
-      }
+          role: "ROLE_JEFE"
+        }
       },
       {
         path: "verInternacion/:internacionId",
@@ -125,8 +125,8 @@ const routes = [
         props: true,
         meta: {
           requiresAuth: true,
-          role : "ROLE_JEFE"
-      }
+          role: "ROLE_JEFE"
+        }
       },
       {
         path: "reglas",
@@ -135,8 +135,8 @@ const routes = [
         props: true,
         meta: {
           requiresAuth: true,
-          role : "ROLE_ADMIN"
-      }
+          role: "ROLE_ADMIN"
+        }
       },
       {
         path: "regla/:reglaId?",
@@ -145,8 +145,8 @@ const routes = [
         props: true,
         meta: {
           requiresAuth: true,
-          role : "ROLE_ADMIN"
-      }
+          role: "ROLE_ADMIN"
+        }
       },
       {
         path: "alertas",
@@ -155,8 +155,8 @@ const routes = [
         props: true,
         meta: {
           requiresAuth: true,
-          role : "ROLE_JEFE"
-      }
+          role: "ROLE_JEFE"
+        }
       },
       {
         path: "salas/:sistemaNombre/:sistemaId",
@@ -165,8 +165,8 @@ const routes = [
         props: true,
         meta: {
           requiresAuth: true,
-          role : "ROLE_JEFE"
-      }
+          role: "ROLE_JEFE"
+        }
       }
     ]
   }
