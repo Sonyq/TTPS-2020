@@ -207,7 +207,6 @@ new Vue({
     store_user: {},
     Chartist: Chartist,
     cancelSource: null,
-    loading: null
   },
   created() {
     axios.interceptors.response.use(
@@ -216,7 +215,6 @@ new Vue({
         return response;
       },
       error => {
-        events.$emit("loading:hide");
         if (error.name) {
           this.expireJWTcheck(error);
         }
@@ -237,8 +235,6 @@ new Vue({
 
     events.$on("change:route", componente => this.cambiarRuta(componente));
     events.$on("user:logout", () => this.logOut());
-    events.$on("loading:show", () => (this.loading = this.$loading.show()));
-    events.$on("loading:hide", () => this.loading.hide());
 
     this.$router.beforeEach((to, from, next) => {
       if (to.matched.some(record => record.meta.requiresAuth)) {
@@ -345,7 +341,6 @@ new Vue({
       if (window.location.hash != "#/login" && 401 === error.response.status) {
         this.cancelSource.cancel("sesión expiró");
         this.newCancelToken();
-        // events.$emit("loading:hide");
         this.$swal
           .fire({
             title: "La sesión expiró",
