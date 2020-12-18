@@ -38,7 +38,7 @@ const routes = [
         component: Dashboard,
         meta: {
           requiresAuth: true,
-          role: "ROLE_JEFE"
+          role: ["ROLE_JEFE"]
         }
       },
       {
@@ -65,7 +65,7 @@ const routes = [
         component: Sistemas,
         meta: {
           requiresAuth: true,
-          role: "ROLE_JEFE"
+          role: ["ROLE_JEFE"]
         }
       },
       {
@@ -115,7 +115,7 @@ const routes = [
         props: true,
         meta: {
           requiresAuth: true,
-          role: "ROLE_JEFE"
+          role: ["ROLE_JEFE"]
         }
       },
       {
@@ -135,7 +135,7 @@ const routes = [
         props: true,
         meta: {
           requiresAuth: true,
-          role: "ROLE_ADMIN"
+          role: ["ROLE_ADMIN"]
         }
       },
       {
@@ -145,7 +145,7 @@ const routes = [
         props: true,
         meta: {
           requiresAuth: true,
-          role: "ROLE_ADMIN"
+          role: ["ROLE_ADMIN"]
         }
       },
       {
@@ -165,7 +165,7 @@ const routes = [
         props: true,
         meta: {
           requiresAuth: true,
-          role: "ROLE_JEFE"
+          role: ["ROLE_JEFE"]
         }
       }
     ]

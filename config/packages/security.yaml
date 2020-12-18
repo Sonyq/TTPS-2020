@@ -51,7 +51,7 @@ security:
         - { path: ^/api/login_check,    roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/api/login,          roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/api/session,        roles: IS_AUTHENTICATED_FULLY }
-        - { path: ^/api/register,       roles: ROLE_ADMINISTRADOR }
+        - { path: ^/api/register,       roles: IS_AUTHENTICATED_FULLY }
         - { path: ^/app,                roles: IS_AUTHENTICATED_ANONYMOUSLY }
         
 

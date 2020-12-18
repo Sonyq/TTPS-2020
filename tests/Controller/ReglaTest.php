@@ -5,40 +5,43 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 final class ReglaTest extends WebTestCase
 {
-    #{"token":"eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzUxMiJ9.eyJpYXQiOjE2MDgwODY4MzksImV4cCI6MTYwODA5MDQzOSwicm9sZXMiOlsiUk9MR..."}
-    private $token = null;
 
-    public function setUp()
+    /**
+     * Create a client with a default Authorization header.
+     *
+     * @param string $username
+     * @param string $password
+     *
+     * @return \Symfony\Bundle\FrameworkBundle\Client
+     */
+    protected function createAuthenticatedClient($username = 'user', $password = 'password')
     {
-        $this->client = static::createClient();
-        $this->logIn();
-    }
+        $client = static::createClient();
+        $client->request(
+          'POST',
+          '/api/login_check',
+          array(),
+          array(),
+          array('CONTENT_TYPE' => 'application/json'),
+          json_encode(array(
+            '_username' => $username,
+            '_password' => $password,
+            ))
+          );
 
-    private function logIn()
-    {
-        $session = $this->client->getContainer()->get('session');
+        $data = json_decode($client->getResponse()->getContent(), true);
 
-        $firewallName = 'secure_area';
-        // if you don't define multiple connected firewalls, the context defaults to the firewall name
-        // See https://symfony.com/doc/current/reference/configuration/security.html#firewall-context
-        $firewallContext = 'secured_area';
+        $client->setServerParameter('HTTP_Authorization', sprintf('Bearer %s', $data['token']));
 
-        // you may need to use a different token class depending on your application.
-        // for example, when using Guard authentication you must instantiate PostAuthenticationGuardToken
-        $token = new UsernamePasswordToken('admin', null, $firewallName, ['ROLE_ADMIN']);
-        $session->set('_security_'.$firewallContext, serialize($token));
-        $session->save();
-
-        $cookie = new Cookie($session->getName(), $session->getId());
-        $this->client->getCookieJar()->set($cookie);
+        return $client;
     }
 
 
     public function testCrearRegla()
     {
-        $client = static::createClient();
+        $client = $this->createAuthenticatedClient('admin','1234');
 
-        $client->request('GET', '/post/hello-world');
+        $client->request('GET', '/api/session');
 
         $this->assertEquals(200, $client->getResponse()->getStatusCode());
     }
