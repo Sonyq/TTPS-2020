@@ -165,12 +165,12 @@ class PacienteController extends FOSRestController
         $entityManager->flush();
         $entityManager->getConnection()->commit();
         
-      } catch (\Throwable $th) {
+      } catch (\Exception $e) {
 
         $entityManager->getConnection()->rollBack();
 
         $error = [ 
-          "message" => "Se produjo un error al intentar crear el paciente",
+          "message" => "Se produjo un error al intentar crear el paciente: ".$e->getMessage(),
         ];
   
         return new Response($serializer->serialize($error, "json"), 500);
