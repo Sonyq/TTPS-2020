@@ -120,6 +120,7 @@ export default {
         this.burl("/api/alertas/leida?id=" + alertaId)
       );
       this.alertas = response.data;
+      events.$emit('alerta_leida')
       this.getAlertas();
     },
     tdClassFunc(row) {
@@ -131,7 +132,7 @@ export default {
 
 <style>
 .no-leido {
-  background-color: red;
+  background-color: #f7a520;
   color: white !important ;
 }
 </style>

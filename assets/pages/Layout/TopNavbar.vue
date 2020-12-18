@@ -47,7 +47,7 @@ export default {
           return "Jefe";
         } else {
           if (this.loggedUser.roles.includes("ROLE_ADMIN")) {
-            return "Administrador";
+            return "Administrador de reglas";
           } else {
             return "Médico";
           }

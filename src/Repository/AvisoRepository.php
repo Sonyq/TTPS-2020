@@ -31,4 +31,17 @@ class AvisoRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    public function getCantAvisosSinLeer($usuarioId)
+    {
+        return $this->createQueryBuilder('a')
+            ->select('COUNT(a.id)')
+            ->innerJoin('App:User', 'u', 'WITH', 'u.id = a.usuario')
+            ->andWhere('u.id = :usuarioId')
+            ->andWhere('a.leido = :leido')
+            ->setParameter('usuarioId', $usuarioId)
+            ->setParameter('leido', false)
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
 }
