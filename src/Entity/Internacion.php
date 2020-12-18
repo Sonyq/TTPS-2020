@@ -55,6 +55,11 @@ class Internacion
      */
     private $fecha_obito;
 
+     /**
+     * @ORM\Column(type="string", nullable=true)
+     */
+    private $motivo_egreso;
+
     /**
      * @ORM\OneToMany(targetEntity=InternacionCama::class, mappedBy="internacion")
      */
@@ -145,6 +150,18 @@ class Internacion
     public function setFechaEgreso(?\DateTimeInterface $fecha_egreso): self
     {
         $this->fecha_egreso = $fecha_egreso;
+
+        return $this;
+    }
+
+    public function getMotivoEgreso(): ?string
+    {
+        return $this->motivo_egreso;
+    }
+
+    public function setMotivoEgreso(string $motivo_egreso): self
+    {
+        $this->motivo_egreso = $motivo_egreso;
 
         return $this;
     }

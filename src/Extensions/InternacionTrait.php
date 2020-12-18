@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 trait InternacionTrait {
 
-  private function cambiarEstado($internacionId, $estado) {
+  private function cambiarEstado($internacionId, $estado, $motivoEgreso = null) {
 
     $serializer = $this->get('jms_serializer');    
 
@@ -37,6 +37,7 @@ trait InternacionTrait {
         $internacion->setFechaObito(new \DateTime);
       } else {
         $internacion->setFechaEgreso(new \DateTime);
+        $internacion->setMotivoEgreso($motivoEgreso);
       }
   
       $cama = $internacionCamaVigente->getCama();

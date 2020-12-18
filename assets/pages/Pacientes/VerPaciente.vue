@@ -522,22 +522,13 @@ export default {
       this.isLoading = false;
     },
     async getInternacionesPrevias() {
-      this.isLoading = true;
+      this.isLoading = true
       const internaciones = await axios.get(
         this.burl("/api/internacion/previas?pacienteId=" + this.pacienteId)
       );
-      this.internacionesPrevias = internaciones.data;
-      //si hay una internación vigente, a las previas le quito la 1ra (porque es la actual...)
-      // if (
-      //   !(
-      //     this.ultimaInternacion.fecha_obito ||
-      //     this.ultimaInternacion.fecha_egreso
-      //   )
-      // ) {
-      //   this.internacionesPrevias.shift();
-      // }
-      this.mostrarPrevias = true;
-      this.isLoading = false;
+      this.internacionesPrevias = internaciones.data
+      this.mostrarPrevias = true
+      this.isLoading = false
     },
     async getSistemasDestino() {
       const response = await axios.get(
@@ -545,71 +536,111 @@ export default {
       );
       this.sistemasDestino = response.data;
     },
-    declararEgreso() {
-      this.cambiarEstado("egreso");
-    },
-    declararObito() {
-      this.cambiarEstado("obito");
-    },
-    cambiarEstado(estado) {
+    async declararEgreso() {
+      const { value: motivoEgreso } = await 
       this.$swal
-        .fire({
-          title: "Está seguro?",
-          text: "Esta acción es irreversible",
-          icon: "warning",
-          showCancelButton: true,
-          confirmButtonColor: "#F33527",
-          cancelButtonColor: "#47A44B",
-          confirmButtonText:
-            "Sí, declarar " + (estado == "obito" ? "óbito" : "egreso"),
-          cancelButtonText: "Cancelar"
-        })
-        .then(result => {
-          if (result.isConfirmed) {
-            this.isLoading = true;
-            axios
-              .get(
-                this.burl(
-                  "/api/internacion/" +
-                    estado +
-                    "?id=" +
-                    this.ultimaInternacion.id
-                )
-              )
-              .then(response => {
-                this.$router.push("/pacientes");
-              });
-            this.isLoading = false;
+      .fire({
+        title: "Declarar egreso?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#F33527",
+        cancelButtonColor: "#47A44B",
+        confirmButtonText:
+          "Sí, declarar egreso",
+        cancelButtonText: "Cancelar",
+        input: 'select',
+        inputOptions: {
+          'alta_epidemiologica': 'Alta epidemiológica',
+          'curado': 'Curado'
+        },
+        inputPlaceholder: 'Seleccionar motivo',
+        showCancelButton: true,
+        inputValidator: (value) => {
+          return new Promise((resolve) => {
+            if (value !== '') {
+              resolve()
+            } else {
+              resolve('Debe seleccionar un motivo')
+            }
+          })
+        }
+      })
+      if (motivoEgreso) {
+        this.isLoading = true;
+        const response = await axios
+          .get(
+            this.burl("/api/internacion/egreso/" + motivoEgreso + "?id=" + this.ultimaInternacion.id)
+          )
+        this.isLoading = false;
+        this.$router.push({
+          name: 'Pacientes',
+          params: {
+            sistemaNombre: this.loggedUser.sistemaNombre,
+            sistemaId: this.loggedUser.sistemaId
           }
         });
+      }
     },
-    cambiarDeSistema() {
-      this.$swal
-        .fire({
-          title: "Está seguro?",
-          icon: "warning",
-          showCancelButton: true,
-          confirmButtonColor: "#F33527",
-          cancelButtonColor: "#47A44B",
-          confirmButtonText: "Sí, cambiar",
-          cancelButtonText: "Cancelar"
+    async declararObito() {
+      const result = await this.$swal
+      .fire({
+        title: "Está seguro?",
+        text: "Esta acción es irreversible",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#F33527",
+        cancelButtonColor: "#47A44B",
+        confirmButtonText: "Sí, declarar óbito",
+        cancelButtonText: "Cancelar"
+      })
+      
+      if (result.isConfirmed) {
+        this.isLoading = true;
+        const response = await axios.get(
+            this.burl(
+              "/api/internacion/obito?id=" +
+              this.ultimaInternacion.id
+            )
+          )
+        this.isLoading = false;
+        this.$router.push({
+          name: 'Pacientes',
+          params: {
+            sistemaNombre: this.loggedUser.sistemaNombre,
+            sistemaId: this.loggedUser.sistemaId
+          }
         })
-        .then(result => {
-          if (result.isConfirmed) {
-            this.isLoading = true;
-            let form = {
-              sistemaDestinoId: this.sistemaDestinoSelected,
-              pacienteId: this.pacienteId,
-              internacionId: this.ultimaInternacion.id
-            };
-            axios
-              .post(this.burl("/api/paciente/cambiarDeSistema"), form)
-              .then(response => {
-                this.$router.push("/pacientes");
-              });
-            this.isLoading = false;
+      }
+    },
+    async cambiarDeSistema() {
+      const result = await this.$swal
+      .fire({
+        title: "Está seguro?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#F33527",
+        cancelButtonColor: "#47A44B",
+        confirmButtonText: "Sí, cambiar",
+        cancelButtonText: "Cancelar"
+      })
+        
+      if (result.isConfirmed) {
+        this.isLoading = true;
+        let form = {
+          sistemaDestinoId: this.sistemaDestinoSelected,
+          pacienteId: this.pacienteId,
+          internacionId: this.ultimaInternacion.id
+        };
+        const response = await axios.post(this.burl("/api/paciente/cambiarDeSistema"), form)
+        this.isLoading = false;
+        this.$router.push({
+          name: 'Pacientes',
+          params: {
+            sistemaNombre: this.loggedUser.sistemaNombre,
+            sistemaId: this.loggedUser.sistemaId
           }
         });
+      }
     },
     async verEvolucion(evolucionId) {
       this.isLoading = true;

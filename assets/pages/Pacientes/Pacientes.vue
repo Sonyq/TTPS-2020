@@ -110,7 +110,7 @@
                             nombreSistemaComp == loggedUser.sistemaNombre
                         "
                         @click="
-                          cambiarEstado('egreso', props.row.internacionId)
+                          declararEgreso(props.row.internacionId)
                         "
                         >Declarar egreso</md-menu-item
                       >
@@ -119,7 +119,7 @@
                           !(props.row.fecha_obito || props.row.fecha_egreso) &&
                             nombreSistemaComp == loggedUser.sistemaNombre
                         "
-                        @click="cambiarEstado('obito', props.row.internacionId)"
+                        @click="declararObito(props.row.internacionId)"
                         >Declarar óbito</md-menu-item
                       >
                     </md-menu-content>
@@ -208,6 +208,7 @@ export default {
       medicosDelSistema: null,
       medicoAsignado: false,
       pacienteSeleccionado: "",
+      motivoAltaPaciente: null,
       columnas: [
         {
           label: "Dni",
@@ -322,8 +323,46 @@ export default {
       this.mostrarAsignarMedico = true;
       this.isLoading = false;
     },
-    cambiarEstado(estado, internacionId) {
+    async declararEgreso(internacionId) {
+      const { value: motivoEgreso } = await 
       this.$swal
+      .fire({
+        title: "Declarar egreso?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#F33527",
+        cancelButtonColor: "#47A44B",
+        confirmButtonText:
+          "Sí, declarar egreso",
+        cancelButtonText: "Cancelar",
+        input: 'select',
+        inputOptions: {
+          'alta_epidemiologica': 'Alta epidemiológica',
+          'curado': 'Curado'
+        },
+        inputPlaceholder: 'Seleccionar motivo',
+        showCancelButton: true,
+        inputValidator: (value) => {
+          return new Promise((resolve) => {
+            if (value !== '') {
+              resolve()
+            } else {
+              resolve('Debe seleccionar un motivo')
+            }
+          })
+        }
+      })
+      if (motivoEgreso) {
+        this.isLoading = true
+        await axios
+          .get(
+            this.burl("/api/internacion/egreso/" + motivoEgreso + "?id=" + internacionId)
+          )
+        this.getPacientesInternados();
+      }
+    },
+    async declararObito(internacionId) {
+      const result = await this.$swal
         .fire({
           title: "Está seguro?",
           text: "Esta acción es irreversible",
@@ -331,23 +370,18 @@ export default {
           showCancelButton: true,
           confirmButtonColor: "#F33527",
           cancelButtonColor: "#47A44B",
-          confirmButtonText:
-            "Sí, declarar " + (estado == "obito" ? "óbito" : "egreso"),
+          confirmButtonText: "Sí, declarar óbito",
           cancelButtonText: "Cancelar"
         })
-        .then(result => {
-          if (result.isConfirmed) {
-            this.isLoading = true;
-            axios
-              .get(
-                this.burl("/api/internacion/" + estado + "?id=" + internacionId)
-              )
-              .then(response => {
-                this.getPacientes();
-              });
-            this.isLoading = false;
-          }
-        });
+
+      if (result.isConfirmed) {
+        this.isLoading = true;
+        await axios
+          .get(
+            this.burl("/api/internacion/obito?id=" + internacionId)
+          )
+        this.getPacientesInternados();
+      }
     },
     async asignarMedico(medicoId) {
       this.isLoading = true;

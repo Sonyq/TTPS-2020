@@ -186,16 +186,16 @@ class InternacionController extends FOSRestController
   }
 
   /**
-   * @Route("/egreso", name="internacion_egreso", methods={"GET"})
+   * @Route("/egreso/{motivo}", name="internacion_egreso", methods={"GET"})
    * @SWG\Response(response=200, description="Declarar egreso")
    * @SWG\Tag(name="Internación")
    * @QueryParam(name="id", strict=true, nullable=false, allowBlank=false, description="Internación Id")
    *      
    * @param ParamFetcher $pf
    */
-  public function declararEgreso(Request $request, ParamFetcher $pf): Response
+  public function declararEgreso(Request $request, ParamFetcher $pf, $motivo): Response
   {
-    $response = $this->cambiarEstado($pf->get('id'), 'egreso');
+    $response = $this->cambiarEstado($pf->get('id'), 'egreso', $motivo);
     return $response;
   }
 

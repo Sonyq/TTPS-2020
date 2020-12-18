@@ -63,6 +63,16 @@
                     </span>
                   </div>
                 </div>
+
+                <div class="md-layout-item" v-if="internacion.fecha_egreso">
+                  <div class="md-layout">
+                    <span class="md-body-1"
+                      >Motivo:
+                      {{ motivoEgreso }}
+                    </span>
+                  </div>
+                </div>
+
               </div>
             </div>
 
@@ -196,6 +206,11 @@ export default {
         });
       });
       this.evoluciones = evolucionesIntercaladasConCambiosDeSistema;
+    }
+  },
+  computed: {
+    motivoEgreso() {
+      return this.internacion.motivo_egreso == 'alta_epidemiologica' ? 'Alta epidemiológica' : 'Curado'
     }
   }
 };
