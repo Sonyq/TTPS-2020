@@ -40,6 +40,22 @@ class AvisosController extends FOSRestController
     }
 
     /**
+     * @Route("/cantAvisosSinLeer", name="alertas_cant", methods={"GET"})
+     * @SWG\Response(response=200, description="Cantidad de avisos sin leer de un usuario")
+     * @SWG\Tag(name="Alertas")
+     * @QueryParam(name="usuarioId", strict=true, nullable=false, allowBlank=false, description="Usuario Id")
+     *      
+     */
+    public function getCantAvisosSinLeer(Request $request, ParamFetcher $pf): Response
+    {        
+      $avisos = $this->getDoctrine()->getRepository(Aviso::class)->getCantAvisosSinLeer($pf->get('usuarioId'));
+
+      $serializer = $this->get('jms_serializer'); 
+    
+      return new Response($serializer->serialize($avisos, "json"), 200);
+    }
+
+    /**
      * @Route("/leida", name="alertas_leida", methods={"GET"})
      * @SWG\Response(response=200, description="Marcar aviso como leído")
      * @SWG\Tag(name="Alertas")

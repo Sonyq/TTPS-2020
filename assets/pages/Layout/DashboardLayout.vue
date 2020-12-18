@@ -29,7 +29,7 @@
       </sidebar-link>
       <sidebar-link v-if="jwtToken && !esAdmin" to="/alertas">
         <md-icon>notification_important</md-icon>
-        <p>Alertas</p>
+        <p>Alertas {{ cantAvisosSinLeerComp }}</p>
       </sidebar-link>
       <sidebar-link v-if="jwtToken" to="/logout">
         <md-icon>keyboard_backspace</md-icon>
@@ -38,18 +38,17 @@
     </side-bar>
 
     <div class="main-panel">
+
       <top-navbar></top-navbar>
 
       <dashboard-content></dashboard-content>
 
-      <!-- <content-footer v-if="!$route.meta.hideFooter"></content-footer> -->
     </div>
   </div>
 </template>
 
 <script>
 import TopNavbar from "./TopNavbar.vue";
-// import ContentFooter from "./ContentFooter.vue";
 import DashboardContent from "./Content.vue";
 import MobileMenu from "@/pages/Layout/MobileMenu.vue";
 
@@ -63,15 +62,21 @@ export default {
   data() {
     return {
       sidebarBackground: "green",
-      usuarioLocal: ""
+      cantAvisosSinLeer: ""
     };
   },
-  mounted() {
-    // events.$on(
-    //   "loading_user:finish",
-    //   () => (this.loggedUser = this.loggedUser.roles)
-    // );
-    // events.$on("user:logout", () => (this.usuarioLocal = ""));
+  created() {
+    events.$on('loading_user:finish', () => ( this.getCantAvisosSinLeer() ))
+    events.$on('alerta_leida', () => ( this.getCantAvisosSinLeer() ))
+  },
+  methods: {
+    async getCantAvisosSinLeer() {
+      const response = await axios.get(
+        this.burl("/api/alertas/cantAvisosSinLeer?usuarioId=" + this.loggedUser.id)
+      );
+      this.cantAvisosSinLeer = response.data;
+      this.isLoading = false;
+    }
   },
   computed: {
     esJefe() {
@@ -85,6 +90,9 @@ export default {
         return this.loggedUser.roles.includes("ROLE_ADMIN");
       }
       return ""
+    },
+    cantAvisosSinLeerComp() {
+      return this.cantAvisosSinLeer > 0 ? '( ' + this.cantAvisosSinLeer + ' )' : ''
     }
   }
 };
