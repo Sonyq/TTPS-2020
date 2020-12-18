@@ -315,7 +315,7 @@ export default {
       let sistemaId = this.sistemaId ? "?sistema=" + this.sistemaId : "";
       const medicos = await axios.get(
         this.burl(
-          "/api/sistemas/medicos" + sistemaId + "?paciente=" + pacienteId
+          "/api/sistemas/medicos" + sistemaId + "&paciente=" + pacienteId
         )
       );
       this.medicosDelSistema = medicos.data;

@@ -5,7 +5,7 @@ const devMode = process.env.NODE_ENV !== 'production';
 module.exports = {
 
   //path donde se genera el template base
-  indexPath: path.join(__dirname, './templates/base.html.twig'),
+  indexPath: path.join(__dirname, './templates/index.html.twig'),
   //path donde se buildean los assets
   outputDir: path.resolve(__dirname, './public/build/'),
   //path a los assets publicos

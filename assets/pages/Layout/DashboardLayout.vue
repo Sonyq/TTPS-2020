@@ -78,11 +78,13 @@ export default {
       if (this.loggedUser.roles) {
         return this.loggedUser.roles.includes("ROLE_JEFE");
       }
+      return ""
     },
     esAdmin() {
       if (this.loggedUser.roles) {
         return this.loggedUser.roles.includes("ROLE_ADMIN");
       }
+      return ""
     }
   }
 };
