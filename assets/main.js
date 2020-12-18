@@ -236,7 +236,7 @@ new Vue({
     events.$on("change:route", componente => this.cambiarRuta(componente));
     events.$on("user:logout", () => this.logOut());
 
-    this.$router.beforeEach((to, from, next) => {
+    this.$router.beforeEach( async (to, from, next) => {
       if (to.matched.some(record => record.meta.requiresAuth)) {
         if (this.jwtToken == null) {
           next({
@@ -247,57 +247,25 @@ new Vue({
           if (to.matched.some(record => record.meta.role)) {
             //si el usuario tiene el rol necesario para ingresar
             if (
-              to.matched.some(record =>
-                this.loggedUser.roles.includes(record.meta.role)
-              )
+              to.matched.some(record => {if (record.meta.role) { return record.meta.role.some(r => this.loggedUser.roles.includes(r) ) } return false})
             ) {
               next();
             }
             //si no tiene el rol necesario se lo envia a su default
             else {
-              if (!this.loggedUser.roles.includes("ROLE_ADMIN")) {
-                next({
-                  name: "Pacientes",
-                  params: {
-                    sistemaId: this.loggedUser.sistemaId,
-                    sistemaNombre: this.loggedUser.sistemaNombre
-                  }
-                });
-              } else {
-                next({ name: "Reglas" });
-              }
+              next(this.getUserHome());
             }
           } else {
             if (to.path !== "/login" && to.path !== "/home") {
               next();
             } else {
-              if (!this.loggedUser.roles.includes("ROLE_ADMIN")) {
-                next({
-                  name: "Pacientes",
-                  params: {
-                    sistemaId: this.loggedUser.sistemaId,
-                    sistemaNombre: this.loggedUser.sistemaNombre
-                  }
-                });
-              } else {
-                next({ name: "Reglas" });
-              }
+              next(await this.getUserHome());
             }
           }
         }
       } else {
         if ((to.path == "/login" || to.path == "/") && this.jwtToken) {
-          if (!this.loggedUser.roles.includes("ROLE_ADMIN")) {
-            next({
-              name: "Pacientes",
-              params: {
-                sistemaId: this.loggedUser.sistemaId,
-                sistemaNombre: this.loggedUser.sistemaNombre
-              }
-            });
-          } else {
-            next({ name: "Reglas" });
-          }
+          next(this.getUserHome());
         } else {
           next();
         }
@@ -306,6 +274,21 @@ new Vue({
   },
 
   methods: {
+    async getUserHome() {
+      if(this.loggedUser.roles){}
+      else{ await this.fetchLoggedUser() }
+      if (!this.loggedUser.roles.includes("ROLE_ADMIN")) {
+        return {
+          name: "Pacientes",
+          params: {
+            sistemaId: this.loggedUser.sistemaId,
+            sistemaNombre: this.loggedUser.sistemaNombre
+          }
+        };
+      } else {
+        return { name: "Reglas" };
+      }
+    },
     async fetchPageConfig() {
       await axios.get(this.burl("/configuracion/")).then(response => {
         this.config = response.data;

@@ -174,6 +174,7 @@ class EvolucionController extends FOSRestController
       $entityManager->persist($evolucion);
       $entityManager->flush();
 
+      $this->evaluar('NUEVA EVOLUCION',['evolucion' => $evolucion, 'paciente' => $internacion->getPaciente()]);
       $entityManager->getConnection()->commit();
       
     } catch (\Throwable $th) {
@@ -187,8 +188,6 @@ class EvolucionController extends FOSRestController
       return new Response($serializer->serialize($error, "json"), 500);
 
     }
-
-    $this->evaluar('NUEVA EVOLUCION',['evolucion' => $evolucion, 'paciente' => $internacion->getPaciente()]);
     return new Response('Evolución creada', 200);
     
   }

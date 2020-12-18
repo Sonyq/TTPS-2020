@@ -75,7 +75,7 @@ const routes = [
         props: true,
         meta: {
           requiresAuth: true,
-          role: "ROLE_JEFE"
+          role: ["ROLE_JEFE","ROLE_MEDICO"]
         }
       },
       {
@@ -85,7 +85,7 @@ const routes = [
         props: true,
         meta: {
           requiresAuth: true,
-          role: "ROLE_JEFE"
+          role: ["ROLE_JEFE","ROLE_MEDICO"]
         }
       },
       {
@@ -95,7 +95,7 @@ const routes = [
         props: true,
         meta: {
           requiresAuth: true,
-          role: "ROLE_JEFE"
+          role: ["ROLE_JEFE","ROLE_MEDICO"]
         }
       },
       {
@@ -105,7 +105,7 @@ const routes = [
         props: true,
         meta: {
           requiresAuth: true,
-          role: "ROLE_JEFE"
+          role: ["ROLE_JEFE","ROLE_MEDICO"]
         }
       },
       {
@@ -125,7 +125,7 @@ const routes = [
         props: true,
         meta: {
           requiresAuth: true,
-          role: "ROLE_JEFE"
+          role: ["ROLE_JEFE","ROLE_MEDICO"]
         }
       },
       {
@@ -155,7 +155,7 @@ const routes = [
         props: true,
         meta: {
           requiresAuth: true,
-          role: "ROLE_JEFE"
+          role: ["ROLE_JEFE","ROLE_MEDICO"]
         }
       },
       {

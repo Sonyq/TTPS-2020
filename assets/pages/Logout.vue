@@ -15,7 +15,7 @@ export default {
       if (!recursive) {
         events.$emit("user:logout");
       }
-      this.$router.push("/login");
+      //this.$router.push("/login");
     }
   }
 };
