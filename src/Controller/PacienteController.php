@@ -390,7 +390,6 @@ class PacienteController extends FOSRestController
   /**
    * @Route("/cambiarDeSistema", name="sistema_cambiar", methods={"POST"})
    * @SWG\Response(response=200, description="Cambiar de sistema al paciente")
-   * @RequestParam(name="pacienteId", strict=true, nullable=false, allowBlank=false, description="Id del paciente")
    * @RequestParam(name="sistemaDestinoId", strict=true, nullable=false, allowBlank=false, description="Id del sistema destino")
    * @RequestParam(name="internacionId", strict=true, nullable=false, allowBlank=false, description="Id de la internación")
    * @SWG\Tag(name="Cambiar de Sistema")
@@ -401,12 +400,14 @@ class PacienteController extends FOSRestController
   {
     
     $serializer = $this->get('jms_serializer');
+
+    $internacionId = $pf->get('internacionId');
     
-    $paciente = $this->getDoctrine()->getRepository(Paciente::class)->find($pf->get('pacienteId'));
-    if (!$paciente) {
+    $internacionActual = $this->getDoctrine()->getRepository(Internacion::class)->find($internacionId);
+    if (!$internacionActual) {
 
       $error = [ 
-        "message" => "El paciente id '.$pacienteId.' no existe",
+        "message" => "La internación id '.$internacionId.' no existe",
       ];
 
       return new Response($serializer->serialize($error, "json"), 404);
@@ -426,8 +427,6 @@ class PacienteController extends FOSRestController
       
       $entityManager = $this->getDoctrine()->getManager();
       $entityManager->getConnection()->beginTransaction();
-
-      $internacionActual = $this->getDoctrine()->getRepository(Internacion::class)->find($pf->get('internacionId'));
   
       //a partir de acá seteo todo lo del sistema destino
       if ($sistemaDestino->getNombre() == 'DOMICILIO') {
@@ -490,6 +489,7 @@ class PacienteController extends FOSRestController
       $internacionCamaActual->getCama()->setEstado('libre');
       //hasta acá todo lo del Origen
 
+      $paciente = $internacionActual->getPaciente();
       //desasignar todos los médicos para ese paciente en el sistema origen.
       $usersPacientes = $this->getDoctrine()->getRepository(UserPaciente::class)
                              ->findBy(["paciente" => $paciente, "fecha_hasta" => null]);
@@ -519,7 +519,6 @@ class PacienteController extends FOSRestController
   
       $entityManager->flush();
       $entityManager->getConnection()->commit();
-
 
     } catch (\Exception $e) {
 

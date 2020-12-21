@@ -164,9 +164,9 @@
                   <div class="md-layout-item">
                     <span class="md-body-1"
                       >{{
-                        formatDateTime(ultimaInternacion.fecha_inicio_sintomas)
+                        formatDate(ultimaInternacion.fecha_inicio_sintomas)
                       }}
-                      hs.</span
+                      </span
                     >
                   </div>
                 </div>
@@ -175,9 +175,9 @@
                   <div class="md-layout-item">
                     <span class="md-body-1"
                       >{{
-                        formatDateTime(ultimaInternacion.fecha_diagnostico)
+                        formatDate(ultimaInternacion.fecha_diagnostico)
                       }}
-                      hs.</span
+                      </span
                     >
                   </div>
                 </div>
@@ -622,7 +622,6 @@ export default {
         this.isLoading = true;
         let form = {
           sistemaDestinoId: this.sistemaDestinoSelected,
-          pacienteId: this.pacienteId,
           internacionId: this.ultimaInternacion.id
         };
         const response = await axios.post(this.burl("/api/paciente/cambiarDeSistema"), form)

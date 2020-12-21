@@ -4,6 +4,7 @@ namespace App\Extensions;
 
 use App\Entity\Internacion;
 use App\Entity\InternacionCama;
+use App\Entity\UserPaciente;
 use Symfony\Component\HttpFoundation\Response;
 
 trait InternacionTrait {
@@ -45,7 +46,20 @@ trait InternacionTrait {
   
       $sistema = $cama->getSala()->getSistema();
       $sistema->setCamasDisponibles($sistema->getCamasDisponibles() + 1);
-      $sistema->setCamasOcupadas($sistema->getCamasOcupadas() - 1); 
+      $sistema->setCamasOcupadas($sistema->getCamasOcupadas() - 1);
+
+      //desasignar todos los médicos para ese paciente en el sistema origen.
+      $usersPacientes = $this->getDoctrine()->getRepository(UserPaciente::class)
+                             ->findBy(["paciente" => $internacion->getPaciente(), "fecha_hasta" => null]);
+
+      if ($usersPacientes) {
+
+        foreach ($usersPacientes as $userPaciente) {
+          $userPaciente->setFechaHasta(new \DateTime);
+          $entityManager->persist($userPaciente);
+        }
+
+      } 
   
       $entityManager->flush();
       $entityManager->getConnection()->commit(); 
