@@ -10,13 +10,6 @@
           :key="sistema.id"
           class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-33"
         >
-          <!-- <router-link
-            :to="{
-              name: 'Pacientes',
-              params: { sistemaNombre: sistema.descrip, sistemaId: sistema.id }
-            }"
-          > -->
-
           <router-link
             :to="{
               name: 'Salas',

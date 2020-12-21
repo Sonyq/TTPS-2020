@@ -437,12 +437,6 @@
                   </div>
                 </div>
 
-                <!-- <template slot="table-row" slot-scope="props">
-									  <span v-if="props.column.field == 'acciones'">
-                      <md-button @click="verEvolucion(props.row.evolucionId)">Ver</md-button>
-									  </span>
-								  </template> -->
-
                 <ver-evolucion-modal
                   v-if="evolucion"
                   :mostrar="mostrarEvolucion"

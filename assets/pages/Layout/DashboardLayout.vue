@@ -66,11 +66,12 @@ export default {
     };
   },
   created() {
-    events.$on('loading_user:finish', () => ( this.getCantAvisosSinLeer() ))
+    this.getCantAvisosSinLeer()
     events.$on('alerta_leida', () => ( this.getCantAvisosSinLeer() ))
   },
   methods: {
     async getCantAvisosSinLeer() {
+      await this.$root.fetchLoggedUser();
       const response = await axios.get(
         this.burl("/api/alertas/cantAvisosSinLeer?usuarioId=" + this.loggedUser.id)
       );

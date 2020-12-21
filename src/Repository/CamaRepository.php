@@ -45,5 +45,27 @@ class CamaRepository extends ServiceEntityRepository
             ->getQuery()
             ->getOneOrNullResult();
     }
+
+    public function countCamasTotalBySala($sala)
+    {
+        return $this->createQueryBuilder('c')
+            ->select('COUNT(c.id) ')
+            ->where('c.sala = :sala')
+            ->setParameter('sala', $sala)
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
+    public function countCamasDisponiblesBySala($sala)
+    {
+        return $this->createQueryBuilder('c')
+            ->select('COUNT(c.id)')
+            ->where('c.sala = :sala')
+            ->andWhere('c.estado = :estado')
+            ->setParameter('sala', $sala)
+            ->setParameter('estado', 'libre')
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
     
 }

@@ -115,6 +115,15 @@ class SistemasController extends FOSRestController
   {        
     $serializer = $this->get('jms_serializer');
     $salas = $this->getDoctrine()->getRepository(Sala::class)->findSalasBySistema($pf->get('id'));
+
+    foreach ($salas as $key => $value) {     
+      $camasTotal = $this->getDoctrine()->getRepository(Cama::class)->countCamasTotalBySala($value["id"]);
+      $camasDisponibles = $this->getDoctrine()->getRepository(Cama::class)->countCamasDisponiblesBySala($value["id"]);
+      $salas[$key]["camas_total"] = $camasTotal;
+      $salas[$key]["camas_disponibles"] = $camasDisponibles;
+      $salas[$key]["camas_ocupadas"] = $camasTotal - $camasDisponibles;
+    }
+
     return new Response($serializer->serialize($salas, "json"));
   }
 

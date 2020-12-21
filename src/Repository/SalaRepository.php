@@ -18,31 +18,13 @@ class SalaRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Sala::class);
     }
-
-    // /**
-    //  * @return Sala[] Returns an array of Sala objects
-    //  */
-    /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('s')
-            ->andWhere('s.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('s.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
-
     
-    public function findSalasBySistema($sistema_id)
+    public function findSalasBySistema($sistemaId)
     {
         return $this->createQueryBuilder('s')
             ->select('s.id, s.nombre')
             ->andWhere('s.sistema = :val')
-            ->setParameter('val', $sistema_id)
+            ->setParameter('val', $sistemaId)
             ->getQuery()
             ->getResult()
         ;

@@ -275,8 +275,12 @@ new Vue({
 
   methods: {
     async getUserHome() {
-      if(this.loggedUser.roles){}
-      else{ await this.fetchLoggedUser() }
+      if (this.loggedUser.roles) {
+
+      }else { 
+        await this.fetchLoggedUser() 
+      }
+
       if (!this.loggedUser.roles.includes("ROLE_ADMIN")) {
         return {
           name: "Pacientes",
