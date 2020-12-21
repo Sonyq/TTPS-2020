@@ -324,7 +324,7 @@ export default {
         contacto_telefono: this.telefonoContacto,
         contacto_parentesco: this.parentescoContacto
       };
-      let url = this.pacienteId ? "/api/paciente/update" : "/api/paciente/new";
+      let url = this.pacienteId ? "/api/paciente/update/" + this.pacienteId : "/api/paciente/new";
       const response = await axios.post(this.burl(url), formData);
       this.$swal
         .fire({

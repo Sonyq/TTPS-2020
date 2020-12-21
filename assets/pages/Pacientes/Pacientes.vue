@@ -327,7 +327,7 @@ export default {
       const { value: motivoEgreso } = await 
       this.$swal
       .fire({
-        title: "Declarar egreso?",
+        title: "Declarar egreso",
         icon: "warning",
         showCancelButton: true,
         confirmButtonColor: "#F33527",
