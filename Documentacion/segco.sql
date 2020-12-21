@@ -68,7 +68,6 @@
 -- Paciente 11: UTI
 -- Paciente 12: UTI
 
-
 --
 -- Data for table public.sistema
 --
@@ -86,8 +85,6 @@ VALUES (4, 'HOTEL', 'Hotel', 10, 10, 0, '[{"id": 2, "descrip": "Piso Covid"}]');
 
 INSERT INTO sistema (id, nombre, descrip, camas_total, camas_disponibles, camas_ocupadas, sistemas_destino)
 VALUES (5, 'DOMICILIO', 'Domicilio', -1, -1, -1, '[{"id": 2, "descrip": "Piso Covid"}]');
-
-
 
 --
 -- Data for table public.sala
@@ -118,7 +115,6 @@ VALUES (8, 4, 'Sala 2');
 
 INSERT INTO sala (id, sistema_id, nombre)
 VALUES (9, 5, 'Sala Domicilio');
-
 
 --
 -- Data for table public.cama
@@ -187,9 +183,6 @@ VALUES (19, 2, 19, 'libre');
 INSERT INTO cama (id, sala_id, numero, estado)
 VALUES (20, 2, 20, 'libre');
 
-
-
-
 -- 10 CAMAS DE PISOCOVID
 
 INSERT INTO cama (id, sala_id, numero, estado)
@@ -221,8 +214,6 @@ VALUES (29, 4, 29, 'libre');
 
 INSERT INTO cama (id, sala_id, numero, estado)
 VALUES (30, 4, 30, 'libre');
-
-
 
 -- 10 CAMAS DE UTI
 
@@ -256,9 +247,6 @@ VALUES (39, 6, 39, 'libre');
 INSERT INTO cama (id, sala_id, numero, estado)
 VALUES (40, 6, 40, 'libre');
 
-
-
-
 -- 10 CAMAS DE HOTEL
 
 INSERT INTO cama (id, sala_id, numero, estado)
@@ -291,8 +279,7 @@ VALUES (49, 8, 49, 'libre');
 INSERT INTO cama (id, sala_id, numero, estado)
 VALUES (50, 8, 50, 'libre');
 
-
-
+ALTER SEQUENCE cama_id_seq RESTART WITH 51;
 
 --
 -- Data for table public."user"
@@ -359,7 +346,6 @@ INSERT INTO "user" (id, sistema_id, email, username, password, roles, created_at
 VALUES (20, 5, 'domiciliomedico3@gmail.com', 'domiciliomedico3', 'bakN4qMq1GcKk2d7BDKMPqWzI3ji/hEzbvJmcxt93Ekka9udzJNalNkbiaMAAorlOw7DPrIPXaMI4TyxQpRJcw==', '["ROLE_MEDICO"]', CURRENT_DATE, CURRENT_DATE, 'Raúl', 'Fernandez', true, '452191/3');
 
 
-
 --
 -- Data for table public.paciente
 --
@@ -398,6 +384,8 @@ VALUES (11, 234444, 'Raletti', 'Gustavo', '23434', '22154875523', 'gus@gmail.com
 
 INSERT INTO paciente (id, dni, apellido, nombre, direccion, telefono, email, fecha_nacimiento, obra_social, antecedentes, contacto_nombre, contacto_apellido, contacto_telefono, contacto_parentesco)
 VALUES (12, 23423423, 'Roca', 'Martin', '324324', '22154875523', 'martin@gmail.com', '1968-11-16', 'IOMA', 'Diabetes', NULL, NULL, NULL, NULL);
+
+ALTER SEQUENCE paciente_id_seq RESTART WITH 13;
 
 --
 -- Data for table public.internacion
@@ -438,6 +426,7 @@ VALUES (11, 11, 'Dificultad para respirar', '2020-09-15 00:00:00', '2020-09-17 0
 INSERT INTO internacion (id, paciente_id, sintomas, fecha_inicio_sintomas, fecha_diagnostico, fecha_carga, fecha_egreso, fecha_obito)
 VALUES (12, 12, 'Dolor de cabeza', '2020-09-28 00:00:00', '2020-09-30 00:00:00', CURRENT_DATE, NULL, NULL);
 
+ALTER SEQUENCE internacion_id_seq RESTART WITH 13;
 
 --
 -- Data for table public.internacion_cama
@@ -478,8 +467,50 @@ VALUES (11, 11, 31, '2020-11-08 01:42:20', NULL);
 INSERT INTO internacion_cama (id, internacion_id, cama_id, fecha_desde, fecha_hasta)
 VALUES (12, 12, 32, '2020-11-07 21:49:42', NULL);
 
+ALTER SEQUENCE internacion_cama_id_seq RESTART WITH 13;
+
 INSERT INTO regla (id,evento,expresion,accion) VALUES
 	 (1,'NUEVA EVOLUCION','evolucion.getSomnolencia()','aviso.alertar(paciente.getUsers(),"Evaluar pase a UTI",evento)'),
 	 (2,'NUEVA EVOLUCION','evolucion.getMecanicaVentilatoria() matches "regular"  or  evolucion.getMecanicaVentilatoria() matches "mala"','aviso.alertar(paciente.getUsers(),"Evaluar pase a UTI",evento)'),
 	 (3,'NUEVA EVOLUCION','evolucion.getInternacion().getFechaInicioSintomas().diff(evolucion.getFechaCarga()) .days() >= 10','aviso.alertar(paciente.getUsers(),"Evaluar alta",evento)'),
 	 (4,'NUEVA EVOLUCION','evolucion.getFrecuenciaRespiratoria() > 30','aviso.alertar(paciente.getUsers(),"Evaluar pase a UTI",evento)');
+
+ALTER SEQUENCE regla_id_seq RESTART WITH 5;
+
+INSERT INTO user_paciente (id, user_id, paciente_id, fecha_desde, fecha_hasta)
+VALUES (1, 1, 1, '2020-11-07 21:49:42', NULL);
+
+INSERT INTO user_paciente (id, user_id, paciente_id, fecha_desde, fecha_hasta)
+VALUES (2, 1, 2, '2020-11-07 21:49:42', NULL);
+
+INSERT INTO user_paciente (id, user_id, paciente_id, fecha_desde, fecha_hasta)
+VALUES (3, 1, 3, '2020-11-07 21:49:42', NULL);
+
+INSERT INTO user_paciente (id, user_id, paciente_id, fecha_desde, fecha_hasta)
+VALUES (4, 1, 4, '2020-11-07 21:49:42', NULL);
+
+INSERT INTO user_paciente (id, user_id, paciente_id, fecha_desde, fecha_hasta)
+VALUES (5, 1, 5, '2020-11-07 21:49:42', NULL);
+
+INSERT INTO user_paciente (id, user_id, paciente_id, fecha_desde, fecha_hasta)
+VALUES (6, 2, 6, '2020-11-07 21:49:42', NULL);
+
+INSERT INTO user_paciente (id, user_id, paciente_id, fecha_desde, fecha_hasta)
+VALUES (7, 2, 7, '2020-11-07 21:49:42', NULL);
+
+INSERT INTO user_paciente (id, user_id, paciente_id, fecha_desde, fecha_hasta)
+VALUES (8, 2, 8, '2020-11-07 21:49:42', NULL);
+
+INSERT INTO user_paciente (id, user_id, paciente_id, fecha_desde, fecha_hasta)
+VALUES (9, 2, 9, '2020-11-07 21:49:42', NULL);
+
+INSERT INTO user_paciente (id, user_id, paciente_id, fecha_desde, fecha_hasta)
+VALUES (10, 2, 10, '2020-11-07 21:49:42', NULL);
+
+INSERT INTO user_paciente (id, user_id, paciente_id, fecha_desde, fecha_hasta)
+VALUES (11, 3, 11, '2020-11-07 21:49:42', NULL);
+
+INSERT INTO user_paciente (id, user_id, paciente_id, fecha_desde, fecha_hasta)
+VALUES (12, 3, 12, '2020-11-07 21:49:42', NULL);
+
+ALTER SEQUENCE user_paciente_id_seq RESTART WITH 13;
