@@ -74,7 +74,7 @@ class AvisosController extends FOSRestController
 
       $serializer = $this->get('jms_serializer'); 
     
-      return new Response($serializer->serialize($aviso, "json"), 200);
+      return new Response("Alerta marcada como leída", 200);
     }
 
 }

@@ -20,6 +20,8 @@ use Swagger\Annotations as SWG;
 use Symfony\Component\Validator\Constraints\DateTime;
 use Symfony\Component\Validator\Constraints;
 use App\Extensions\SistemaReglas;
+use JMS\Serializer\SerializationContext;
+
 /**
  * Class Evolución Controller
  *
@@ -61,7 +63,7 @@ class EvolucionController extends FOSRestController
 
     $serializer = $this->get('jms_serializer');    
     
-    return new Response($serializer->serialize($evolucion, "json"), 200);
+    return new Response($serializer->serialize($evolucion, "json", SerializationContext::create()->enableMaxDepthChecks()), 200);
   }
 
   /**
@@ -182,7 +184,7 @@ class EvolucionController extends FOSRestController
       $entityManager->getConnection()->rollBack();
 
       $error = [ 
-        "message" => "Se produjo un error al intentar crear la evolución",
+        "message" => "Se produjo un error al intentar crear la evolución".$th->getMessage(),
       ];
 
       return new Response($serializer->serialize($error, "json"), 500);
