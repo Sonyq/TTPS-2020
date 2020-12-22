@@ -252,7 +252,7 @@ class PacienteController extends FOSRestController
 
       }
       
-      return new Response($serializer->serialize($paciente, "json"), 200);
+      return new Response("Paciente actualizado", 200);
      
     }
 
