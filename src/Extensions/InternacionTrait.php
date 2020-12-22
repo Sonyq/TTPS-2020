@@ -69,14 +69,14 @@ trait InternacionTrait {
       $entityManager->getConnection()->rollBack();
 
       $error = [ 
-        "message" => "Se produjo un error al intentar el cambio de sistema",
+        "message" => "Se produjo un error al intentar el cambio de estado".$th->getMessage(),
       ];
 
       return new Response($serializer->serialize($error, "json"), 500);
 
     }
         
-    return new Response($serializer->serialize($internacion, "json"), 200);
+    return new Response("Se efectuó el cambio de estado", 200);
 
   }
 

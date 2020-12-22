@@ -127,7 +127,7 @@ class InternacionController extends FOSRestController
 
     }    
 
-    return new Response($serializer->serialize($internacion, "json"), 200);
+    return new Response("Internación creada", 200);
     
   }
 
