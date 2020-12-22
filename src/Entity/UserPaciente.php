@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\UserPacienteRepository;
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation\MaxDepth;
 
 /**
  * @ORM\Entity(repositoryClass=UserPacienteRepository::class)
@@ -20,12 +21,14 @@ class UserPaciente
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="userPacientes")
      * @ORM\JoinColumn(nullable=false)
+     * @MaxDepth(1)
      */
     private $user;
 
     /**
      * @ORM\ManyToOne(targetEntity=Paciente::class, inversedBy="userPacientes")
      * @ORM\JoinColumn(nullable=false)
+     * @MaxDepth(1)
      */
     private $paciente;
 
