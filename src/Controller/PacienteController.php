@@ -24,6 +24,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use Swagger\Annotations as SWG;
 use Symfony\Component\Mime\Message;
+use JMS\Serializer\SerializationContext;
 
 /**
  * Class Paciente Controller
@@ -308,7 +309,7 @@ class PacienteController extends FOSRestController
       $entityManager->persist($userPaciente);
       $entityManager->flush();
 
-      return new Response($serializer->serialize($userPaciente, "json"), 200);
+      return new Response($serializer->serialize($userPaciente, "json",SerializationContext::create()->enableMaxDepthChecks()), 200);
      
     }
 
@@ -350,7 +351,7 @@ class PacienteController extends FOSRestController
 
       $serializer = $this->get('jms_serializer');
 
-      return new Response($serializer->serialize($userPaciente, "json"), 200);
+      return new Response($serializer->serialize($userPaciente, "json",SerializationContext::create()->enableMaxDepthChecks()), 200);
 
     }
 
@@ -532,7 +533,7 @@ class PacienteController extends FOSRestController
 
     } 
 
-    return new Response($serializer->serialize($internacionCamaActual, "json"), 200);
+    return new Response("Cambio realizado", 200);
 
   }
 
