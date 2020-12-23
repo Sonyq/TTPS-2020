@@ -345,6 +345,8 @@ VALUES (19, 5, 'domiciliomedico2@gmail.com', 'domiciliomedico2', 'xAO4YDDQuwj0i3
 INSERT INTO "user" (id, sistema_id, email, username, password, roles, created_at, updated_at, first_name, last_name, activo, legajo)
 VALUES (20, 5, 'domiciliomedico3@gmail.com', 'domiciliomedico3', 'bakN4qMq1GcKk2d7BDKMPqWzI3ji/hEzbvJmcxt93Ekka9udzJNalNkbiaMAAorlOw7DPrIPXaMI4TyxQpRJcw==', '["ROLE_MEDICO"]', CURRENT_DATE, CURRENT_DATE, 'Raúl', 'Fernandez', true, '452191/3');
 
+INSERT INTO "user" (id, sistema_id, email, username, password, roles, created_at, updated_at, first_name, last_name, activo, legajo)
+VALUES (21, 1, 'admin@segco.com', 'admin', 'Eti36Ru/pWG6WfoIPiDFUBxUuyvgMA4L8+LLuGbGyqV9ATuT9brCWPchBqX5vFTF+DgntacecW+sSGD+GZts2A==', '["ROLE_ADMIN"]', CURRENT_DATE, CURRENT_DATE, 'Raúl', 'Fernandez', true, null);
 
 --
 -- Data for table public.paciente
