@@ -74,6 +74,7 @@ export default {
   },
   data() {
     return {
+      blockCall: false,
       isLoading: false,
       alertas: [],
       columnas: [
@@ -104,7 +105,7 @@ export default {
   },
   created() {
     this.isLoading = true;
-    events.$on("loading_user:finish", () => this.getAlertas());
+    events.$on("loading_user:finish", () => {if(!this.blockCall){this.blockCall = true;this.getAlertas()}});
   },
   methods: {
     async getAlertas() {
@@ -113,6 +114,7 @@ export default {
       );
       this.alertas = response.data;
       this.isLoading = false;
+      this.blockCall = false;
     },
     async marcarComoLeida(alertaId) {
       this.isLoading = true;

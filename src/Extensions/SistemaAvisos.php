@@ -23,7 +23,7 @@ class SistemaAvisos
             $aviso->setUsuario($u);
             $aviso->setMensaje($mensaje);
             $aviso->setEvento($evento);
-            $aviso->getDetalle($detalle);
+            $aviso->setDetalle($detalle);
             $aviso->setLeido(false);
             $this->em->persist($aviso);
             $this->em->flush();

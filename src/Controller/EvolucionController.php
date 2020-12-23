@@ -176,7 +176,7 @@ class EvolucionController extends FOSRestController
       $entityManager->persist($evolucion);
       $entityManager->flush();
 
-      $this->evaluar('NUEVA EVOLUCION',['evolucion' => $evolucion, 'paciente' => $internacion->getPaciente()]);
+      $this->evaluar('NUEVA EVOLUCION',['evolucion' => $evolucion, 'paciente' => $internacion->getPaciente(), 'detalle' => "/"."verPaciente/".$internacion->getPaciente()->getId()]);
       $entityManager->getConnection()->commit();
       
     } catch (\Throwable $th) {
