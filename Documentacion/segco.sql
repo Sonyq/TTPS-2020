@@ -471,9 +471,9 @@ ALTER SEQUENCE internacion_cama_id_seq RESTART WITH 13;
 
 INSERT INTO regla (id,evento,expresion,accion) VALUES
 	 (1,'NUEVA EVOLUCION','evolucion.getSomnolencia()','aviso.alertar(paciente.getUsers(),"Evaluar pase a UTI",evento)'),
-	 (2,'NUEVA EVOLUCION','evolucion.getMecanicaVentilatoria() matches "regular"  or  evolucion.getMecanicaVentilatoria() matches "mala"','aviso.alertar(paciente.getUsers(),"Evaluar pase a UTI",evento)'),
-	 (3,'NUEVA EVOLUCION','evolucion.getInternacion().getFechaInicioSintomas().diff(evolucion.getFechaCarga()) .days() >= 10','aviso.alertar(paciente.getUsers(),"Evaluar alta",evento)'),
-	 (4,'NUEVA EVOLUCION','evolucion.getFrecuenciaRespiratoria() > 30','aviso.alertar(paciente.getUsers(),"Evaluar pase a UTI",evento)');
+	 (4,'NUEVA EVOLUCION','evolucion.getFrecuenciaRespiratoria() > 30','aviso.alertar(paciente.getUsers(),"Evaluar pase a UTI",evento)'),
+	 (2,'NUEVA EVOLUCION','evolucion.getMecanicaVentilatoria() matches "/regular/"  or  evolucion.getMecanicaVentilatoria() matches "/mala/"','aviso.alertar(paciente.getUsers(),"Evaluar pase a UTI",evento)'),
+	 (3,'NUEVA EVOLUCION','evolucion.getInternacion().getFechaInicioSintomas().diff(evolucion.getFechaCarga()) .days >= 10','aviso.alertar(paciente.getUsers(),"Evaluar alta",evento)');
 
 ALTER SEQUENCE regla_id_seq RESTART WITH 5;
 
