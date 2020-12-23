@@ -38,11 +38,9 @@
     </side-bar>
 
     <div class="main-panel">
-
       <top-navbar></top-navbar>
 
       <dashboard-content></dashboard-content>
-
     </div>
   </div>
 </template>
@@ -66,14 +64,16 @@ export default {
     };
   },
   created() {
-    this.getCantAvisosSinLeer()
-    events.$on('alerta_leida', () => ( this.getCantAvisosSinLeer() ))
+    this.getCantAvisosSinLeer();
+    events.$on("alerta_leida", () => this.getCantAvisosSinLeer());
   },
   methods: {
     async getCantAvisosSinLeer() {
       await this.$root.fetchLoggedUser();
       const response = await axios.get(
-        this.burl("/api/alertas/cantAvisosSinLeer?usuarioId=" + this.loggedUser.id)
+        this.burl(
+          "/api/alertas/cantAvisosSinLeer?usuarioId=" + this.loggedUser.id
+        )
       );
       this.cantAvisosSinLeer = response.data;
       this.isLoading = false;
@@ -84,16 +84,18 @@ export default {
       if (this.loggedUser.roles) {
         return this.loggedUser.roles.includes("ROLE_JEFE");
       }
-      return ""
+      return "";
     },
     esAdmin() {
       if (this.loggedUser.roles) {
         return this.loggedUser.roles.includes("ROLE_ADMIN");
       }
-      return ""
+      return "";
     },
     cantAvisosSinLeerComp() {
-      return this.cantAvisosSinLeer > 0 ? '( ' + this.cantAvisosSinLeer + ' )' : ''
+      return this.cantAvisosSinLeer > 0
+        ? "( " + this.cantAvisosSinLeer + " )"
+        : "";
     }
   }
 };

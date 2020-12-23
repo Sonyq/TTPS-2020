@@ -45,7 +45,7 @@ security:
                     - lexik_jwt_authentication.jwt_token_authenticator  #despues agregar una regla de firewall para todo el sistema
 
     role_hierarchy:
-        ROLE_ADMINISTRADOR:     ROLE_USER
+        ROLE_JEFE:     ROLE_MEDICO
 
     access_control:
         - { path: ^/api/login_check,    roles: IS_AUTHENTICATED_ANONYMOUSLY }

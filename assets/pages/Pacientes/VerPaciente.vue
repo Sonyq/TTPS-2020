@@ -163,22 +163,16 @@
                   <span class="md-body-1">Fecha de inicio de síntomas:</span>
                   <div class="md-layout-item">
                     <span class="md-body-1"
-                      >{{
-                        formatDate(ultimaInternacion.fecha_inicio_sintomas)
-                      }}
-                      </span
-                    >
+                      >{{ formatDate(ultimaInternacion.fecha_inicio_sintomas) }}
+                    </span>
                   </div>
                 </div>
                 <div class="md-layout-item">
                   <span class="md-body-1">Fecha de diagnóstico de Covid:</span>
                   <div class="md-layout-item">
                     <span class="md-body-1"
-                      >{{
-                        formatDate(ultimaInternacion.fecha_diagnostico)
-                      }}
-                      </span
-                    >
+                      >{{ formatDate(ultimaInternacion.fecha_diagnostico) }}
+                    </span>
                   </div>
                 </div>
                 <div class="md-layout-item">
@@ -516,13 +510,13 @@ export default {
       this.isLoading = false;
     },
     async getInternacionesPrevias() {
-      this.isLoading = true
+      this.isLoading = true;
       const internaciones = await axios.get(
         this.burl("/api/internacion/previas?pacienteId=" + this.pacienteId)
       );
-      this.internacionesPrevias = internaciones.data
-      this.mostrarPrevias = true
-      this.isLoading = false
+      this.internacionesPrevias = internaciones.data;
+      this.mostrarPrevias = true;
+      this.isLoading = false;
     },
     async getSistemasDestino() {
       const response = await axios.get(
@@ -531,43 +525,44 @@ export default {
       this.sistemasDestino = response.data;
     },
     async declararEgreso() {
-      const { value: motivoEgreso } = await 
-      this.$swal
-      .fire({
+      const { value: motivoEgreso } = await this.$swal.fire({
         title: "Declarar egreso",
         icon: "warning",
         showCancelButton: true,
         confirmButtonColor: "#F33527",
         cancelButtonColor: "#47A44B",
-        confirmButtonText:
-          "Sí, declarar egreso",
+        confirmButtonText: "Sí, declarar egreso",
         cancelButtonText: "Cancelar",
-        input: 'select',
+        input: "select",
         inputOptions: {
-          'alta_epidemiologica': 'Alta epidemiológica',
-          'curado': 'Curado'
+          alta_epidemiologica: "Alta epidemiológica",
+          curado: "Curado"
         },
-        inputPlaceholder: 'Seleccionar motivo',
+        inputPlaceholder: "Seleccionar motivo",
         showCancelButton: true,
-        inputValidator: (value) => {
-          return new Promise((resolve) => {
-            if (value !== '') {
-              resolve()
+        inputValidator: value => {
+          return new Promise(resolve => {
+            if (value !== "") {
+              resolve();
             } else {
-              resolve('Debe seleccionar un motivo')
+              resolve("Debe seleccionar un motivo");
             }
-          })
+          });
         }
-      })
+      });
       if (motivoEgreso) {
         this.isLoading = true;
-        const response = await axios
-          .get(
-            this.burl("/api/internacion/egreso/" + motivoEgreso + "?id=" + this.ultimaInternacion.id)
+        const response = await axios.get(
+          this.burl(
+            "/api/internacion/egreso/" +
+              motivoEgreso +
+              "?id=" +
+              this.ultimaInternacion.id
           )
+        );
         this.isLoading = false;
         this.$router.push({
-          name: 'Pacientes',
+          name: "Pacientes",
           params: {
             sistemaNombre: this.loggedUser.sistemaNombre,
             sistemaId: this.loggedUser.sistemaId
@@ -576,8 +571,7 @@ export default {
       }
     },
     async declararObito() {
-      const result = await this.$swal
-      .fire({
+      const result = await this.$swal.fire({
         title: "Está seguro?",
         text: "Esta acción es irreversible",
         icon: "warning",
@@ -586,29 +580,25 @@ export default {
         cancelButtonColor: "#47A44B",
         confirmButtonText: "Sí, declarar óbito",
         cancelButtonText: "Cancelar"
-      })
-      
+      });
+
       if (result.isConfirmed) {
         this.isLoading = true;
         const response = await axios.get(
-            this.burl(
-              "/api/internacion/obito?id=" +
-              this.ultimaInternacion.id
-            )
-          )
+          this.burl("/api/internacion/obito?id=" + this.ultimaInternacion.id)
+        );
         this.isLoading = false;
         this.$router.push({
-          name: 'Pacientes',
+          name: "Pacientes",
           params: {
             sistemaNombre: this.loggedUser.sistemaNombre,
             sistemaId: this.loggedUser.sistemaId
           }
-        })
+        });
       }
     },
     async cambiarDeSistema() {
-      const result = await this.$swal
-      .fire({
+      const result = await this.$swal.fire({
         title: "Está seguro?",
         icon: "warning",
         showCancelButton: true,
@@ -616,18 +606,21 @@ export default {
         cancelButtonColor: "#47A44B",
         confirmButtonText: "Sí, cambiar",
         cancelButtonText: "Cancelar"
-      })
-        
+      });
+
       if (result.isConfirmed) {
         this.isLoading = true;
         let form = {
           sistemaDestinoId: this.sistemaDestinoSelected,
           internacionId: this.ultimaInternacion.id
         };
-        const response = await axios.post(this.burl("/api/paciente/cambiarDeSistema"), form)
+        const response = await axios.post(
+          this.burl("/api/paciente/cambiarDeSistema"),
+          form
+        );
         this.isLoading = false;
         this.$router.push({
-          name: 'Pacientes',
+          name: "Pacientes",
           params: {
             sistemaNombre: this.loggedUser.sistemaNombre,
             sistemaId: this.loggedUser.sistemaId

@@ -291,18 +291,18 @@ export default {
         this.burl("/api/paciente/getPaciente?id=" + this.pacienteId)
       );
       (this.dni = response.data.dni),
-      (this.apellido = response.data.apellido),
-      (this.nombre = response.data.nombre),
-      (this.fechaNacimiento = new Date(response.data.fecha_nacimiento)),
-      (this.telefono = response.data.telefono),
-      (this.domicilio = response.data.direccion),
-      (this.obraSocial = response.data.obra_social),
-      (this.email = response.data.email),
-      (this.apellidoContacto = response.data.contacto_apellido),
-      (this.nombreContacto = response.data.contacto_nombre),
-      (this.telefonoContacto = response.data.contacto_telefono),
-      (this.relacionContacto = response.data.contacto_parentesco),
-      (this.antecedentesPersonales = response.data.antecedentes);
+        (this.apellido = response.data.apellido),
+        (this.nombre = response.data.nombre),
+        (this.fechaNacimiento = new Date(response.data.fecha_nacimiento)),
+        (this.telefono = response.data.telefono),
+        (this.domicilio = response.data.direccion),
+        (this.obraSocial = response.data.obra_social),
+        (this.email = response.data.email),
+        (this.apellidoContacto = response.data.contacto_apellido),
+        (this.nombreContacto = response.data.contacto_nombre),
+        (this.telefonoContacto = response.data.contacto_telefono),
+        (this.relacionContacto = response.data.contacto_parentesco),
+        (this.antecedentesPersonales = response.data.antecedentes);
       this.isLoading = false;
     },
     async submit() {
@@ -324,7 +324,9 @@ export default {
         contacto_telefono: this.telefonoContacto,
         contacto_parentesco: this.parentescoContacto
       };
-      let url = this.pacienteId ? "/api/paciente/update/" + this.pacienteId : "/api/paciente/new";
+      let url = this.pacienteId
+        ? "/api/paciente/update/" + this.pacienteId
+        : "/api/paciente/new";
       const response = await axios.post(this.burl(url), formData);
       this.$swal
         .fire({

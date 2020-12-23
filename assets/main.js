@@ -206,7 +206,7 @@ new Vue({
     store_token: "",
     store_user: {},
     Chartist: Chartist,
-    cancelSource: null,
+    cancelSource: null
   },
   created() {
     axios.interceptors.response.use(
@@ -236,7 +236,7 @@ new Vue({
     events.$on("change:route", componente => this.cambiarRuta(componente));
     events.$on("user:logout", () => this.logOut());
 
-    this.$router.beforeEach( async (to, from, next) => {
+    this.$router.beforeEach(async (to, from, next) => {
       if (to.matched.some(record => record.meta.requiresAuth)) {
         if (this.jwtToken == null) {
           next({
@@ -247,7 +247,14 @@ new Vue({
           if (to.matched.some(record => record.meta.role)) {
             //si el usuario tiene el rol necesario para ingresar
             if (
-              to.matched.some(record => {if (record.meta.role) { return record.meta.role.some(r => this.loggedUser.roles.includes(r) ) } return false})
+              to.matched.some(record => {
+                if (record.meta.role) {
+                  return record.meta.role.some(r =>
+                    this.loggedUser.roles.includes(r)
+                  );
+                }
+                return false;
+              })
             ) {
               next();
             }
@@ -276,9 +283,8 @@ new Vue({
   methods: {
     async getUserHome() {
       if (this.loggedUser.roles) {
-
-      }else { 
-        await this.fetchLoggedUser() 
+      } else {
+        await this.fetchLoggedUser();
       }
 
       if (!this.loggedUser.roles.includes("ROLE_ADMIN")) {

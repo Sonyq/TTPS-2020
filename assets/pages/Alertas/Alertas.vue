@@ -41,7 +41,6 @@
               </div>
               <template slot="table-row" slot-scope="props">
                 <span v-if="props.column.field == 'acciones'">
-
                   <div class="md-layout">
                     <md-button
                       v-if="props.row.detalle"
@@ -62,7 +61,6 @@
                       <md-icon>done</md-icon>
                     </md-button>
                   </div>
-
                 </span>
               </template>
             </vue-good-table>
@@ -112,7 +110,12 @@ export default {
   },
   created() {
     this.isLoading = true;
-    events.$on("loading_user:finish", () => {if(!this.blockCall){this.blockCall = true;this.getAlertas()}});
+    events.$on("loading_user:finish", () => {
+      if (!this.blockCall) {
+        this.blockCall = true;
+        this.getAlertas();
+      }
+    });
   },
   methods: {
     async getAlertas() {
@@ -120,7 +123,6 @@ export default {
         this.burl("/api/alertas/index?usuarioId=" + this.loggedUser.id)
       );
       this.alertas = response.data;
-      console.log(this.alertas)
       this.isLoading = false;
       this.blockCall = false;
     },
@@ -130,14 +132,14 @@ export default {
         this.burl("/api/alertas/leida?id=" + alertaId)
       );
       this.alertas = response.data;
-      events.$emit('alerta_leida')
+      events.$emit("alerta_leida");
       this.getAlertas();
     },
     tdClassFunc(row) {
       return row.leido ? "" : "no-leido";
     },
     verPaciente(url) {
-      this.$router.push({path: url})
+      this.$router.push({ path: url });
     }
   }
 };

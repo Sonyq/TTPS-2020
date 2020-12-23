@@ -109,9 +109,7 @@
                             ) &&
                             nombreSistemaComp == loggedUser.sistemaNombre
                         "
-                        @click="
-                          declararEgreso(props.row.internacionId)
-                        "
+                        @click="declararEgreso(props.row.internacionId)"
                         >Declarar egreso</md-menu-item
                       >
                       <md-menu-item
@@ -324,62 +322,58 @@ export default {
       this.isLoading = false;
     },
     async declararEgreso(internacionId) {
-      const { value: motivoEgreso } = await 
-      this.$swal
-      .fire({
+      const { value: motivoEgreso } = await this.$swal.fire({
         title: "Declarar egreso",
         icon: "warning",
         showCancelButton: true,
         confirmButtonColor: "#F33527",
         cancelButtonColor: "#47A44B",
-        confirmButtonText:
-          "Sí, declarar egreso",
+        confirmButtonText: "Sí, declarar egreso",
         cancelButtonText: "Cancelar",
-        input: 'select',
+        input: "select",
         inputOptions: {
-          'alta_epidemiologica': 'Alta epidemiológica',
-          'curado': 'Curado'
+          alta_epidemiologica: "Alta epidemiológica",
+          curado: "Curado"
         },
-        inputPlaceholder: 'Seleccionar motivo',
+        inputPlaceholder: "Seleccionar motivo",
         showCancelButton: true,
-        inputValidator: (value) => {
-          return new Promise((resolve) => {
-            if (value !== '') {
-              resolve()
+        inputValidator: value => {
+          return new Promise(resolve => {
+            if (value !== "") {
+              resolve();
             } else {
-              resolve('Debe seleccionar un motivo')
+              resolve("Debe seleccionar un motivo");
             }
-          })
+          });
         }
-      })
+      });
       if (motivoEgreso) {
-        this.isLoading = true
-        await axios
-          .get(
-            this.burl("/api/internacion/egreso/" + motivoEgreso + "?id=" + internacionId)
+        this.isLoading = true;
+        await axios.get(
+          this.burl(
+            "/api/internacion/egreso/" + motivoEgreso + "?id=" + internacionId
           )
+        );
         this.getPacientesInternados();
       }
     },
     async declararObito(internacionId) {
-      const result = await this.$swal
-        .fire({
-          title: "Está seguro?",
-          text: "Esta acción es irreversible",
-          icon: "warning",
-          showCancelButton: true,
-          confirmButtonColor: "#F33527",
-          cancelButtonColor: "#47A44B",
-          confirmButtonText: "Sí, declarar óbito",
-          cancelButtonText: "Cancelar"
-        })
+      const result = await this.$swal.fire({
+        title: "Está seguro?",
+        text: "Esta acción es irreversible",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#F33527",
+        cancelButtonColor: "#47A44B",
+        confirmButtonText: "Sí, declarar óbito",
+        cancelButtonText: "Cancelar"
+      });
 
       if (result.isConfirmed) {
         this.isLoading = true;
-        await axios
-          .get(
-            this.burl("/api/internacion/obito?id=" + internacionId)
-          )
+        await axios.get(
+          this.burl("/api/internacion/obito?id=" + internacionId)
+        );
         this.getPacientesInternados();
       }
     },

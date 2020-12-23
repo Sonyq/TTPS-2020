@@ -72,7 +72,6 @@
                     </span>
                   </div>
                 </div>
-
               </div>
             </div>
 
@@ -210,7 +209,9 @@ export default {
   },
   computed: {
     motivoEgreso() {
-      return this.internacion.motivo_egreso == 'alta_epidemiologica' ? 'Alta epidemiológica' : 'Curado'
+      return this.internacion.motivo_egreso == "alta_epidemiologica"
+        ? "Alta epidemiológica"
+        : "Curado";
     }
   }
 };

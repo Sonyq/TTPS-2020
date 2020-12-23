@@ -16,7 +16,6 @@
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </md-button>
-
       </div>
     </div>
   </md-toolbar>
@@ -25,9 +24,7 @@
 <script>
 export default {
   data() {
-    return {
-
-    }
+    return {};
   },
   methods: {
     toggleSidebar() {
@@ -37,9 +34,11 @@ export default {
   computed: {
     nombreUsuario() {
       if (this.loggedUser.first_name) {
-        return this.loggedUser.first_name + " " + this.loggedUser.last_name + ", "
+        return (
+          this.loggedUser.first_name + " " + this.loggedUser.last_name + ", "
+        );
       }
-      return ""
+      return "";
     },
     rolUsuario() {
       if (this.loggedUser.roles) {

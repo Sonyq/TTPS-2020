@@ -23,6 +23,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use Swagger\Annotations as SWG;
 use Symfony\Component\Validator\Constraints\DateTime;
+use JMS\Serializer\SerializationContext;
 
 /**
  * Class Internación Controller
@@ -145,7 +146,7 @@ class InternacionController extends FOSRestController
 
     $serializer = $this->get('jms_serializer');    
     
-    $result = $internacion ? $serializer->serialize($internacion, "json") : null;
+    $result = $internacion ? $serializer->serialize($internacion, "json",SerializationContext::create()->enableMaxDepthChecks()) : null;
     return new Response($result, 200);
   }
 

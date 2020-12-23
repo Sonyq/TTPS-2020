@@ -29,9 +29,7 @@
               <template slot="content">
                 <h3 class="title">{{ sala.nombre }}</h3>
                 <div v-if="sala.nombre != 'Sala Domicilio'">
-                  <p class="category">
-                    Camas totales:{{ sala.camas_total }}
-                  </p>
+                  <p class="category">Camas totales:{{ sala.camas_total }}</p>
                   <p class="category">
                     Camas ocupadas: {{ sala.camas_ocupadas }}
                   </p>

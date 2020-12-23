@@ -6,7 +6,7 @@ use App\Repository\InternacionRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-
+use JMS\Serializer\Annotation\MaxDepth;
 /**
  * @ORM\Entity(repositoryClass=InternacionRepository::class)
  */
@@ -22,6 +22,7 @@ class Internacion
     /**
      * @ORM\ManyToOne(targetEntity=Paciente::class, inversedBy="internaciones")
      * @ORM\JoinColumn(nullable=false)
+     * @MaxDepth(1)
      */
     private $paciente;
 
@@ -62,11 +63,13 @@ class Internacion
 
     /**
      * @ORM\OneToMany(targetEntity=InternacionCama::class, mappedBy="internacion")
+     * @MaxDepth(1)
      */
     private $internacionCamas;
 
     /**
      * @ORM\OneToMany(targetEntity=Evolucion::class, mappedBy="internacion")
+     * @MaxDepth(1)
      */
     private $evoluciones;
 

@@ -41,7 +41,18 @@ final class ReglaTest extends WebTestCase
     {
         $client = $this->createAuthenticatedClient('admin','1234');
 
-        $client->request('GET', '/api/session');
+        $client->request(
+            'POST',
+            '/api/reglas/new',
+            array(),
+            array(),
+            array('CONTENT_TYPE' => 'application/json'),
+            json_encode(array(
+                "evento" => 'NUEVA EVOLUCION',
+                "expresion" => 'evolucion.getTemperatura() > 38',
+                "accion" => 'aviso.alertar(paciente.getUsers(),"TEST REGLA",evento,detalle)'
+              ))
+            );
 
         $this->assertEquals(200, $client->getResponse()->getStatusCode());
     }

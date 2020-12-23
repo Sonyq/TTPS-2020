@@ -44,9 +44,9 @@ export default {
     };
   },
   created() {
-    if(this.jwtToken){
+    if (this.jwtToken) {
       this.redirect();
-      }
+    }
   },
   methods: {
     async redirect() {

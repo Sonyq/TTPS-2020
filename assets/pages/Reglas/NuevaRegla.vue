@@ -43,7 +43,7 @@
                     <label for="accion">Acción</label>
                     <md-select v-model="accion" name="accion">
                       <md-option
-                        value="aviso.alertar(paciente.getUsers(),$mensaje,evento)"
+                        value="aviso.alertar(paciente.getUsers(),$mensaje,evento,detalle)"
                         >Alertar a los médicos</md-option
                       >
                     </md-select>
