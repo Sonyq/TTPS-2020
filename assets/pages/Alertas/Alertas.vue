@@ -41,15 +41,28 @@
               </div>
               <template slot="table-row" slot-scope="props">
                 <span v-if="props.column.field == 'acciones'">
-                  <md-button
-                    v-if="!props.row.leido"
-                    class="md-success md-just-icon"
-                    style="height: 30px;"
-                    title="Marcar como leída"
-                    @click="marcarComoLeida(props.row.id)"
-                  >
-                    <md-icon>remove_red_eye</md-icon>
-                  </md-button>
+
+                  <div class="md-layout">
+                    <md-button
+                      v-if="props.row.detalle"
+                      class="md-success md-just-icon"
+                      style="height: 30px; margin-right: 10px;"
+                      title="Ver paciente"
+                      @click="verPaciente(props.row.detalle)"
+                    >
+                      <md-icon>pageview</md-icon>
+                    </md-button>
+                    <md-button
+                      v-if="!props.row.leido"
+                      class="md-success md-just-icon"
+                      style="height: 30px;"
+                      title="Marcar como leída"
+                      @click="marcarComoLeida(props.row.id)"
+                    >
+                      <md-icon>done</md-icon>
+                    </md-button>
+                  </div>
+
                 </span>
               </template>
             </vue-good-table>
@@ -81,19 +94,13 @@ export default {
         {
           label: "Evento",
           field: "evento",
-          width: "240px",
+          width: "400px",
           tdClass: this.tdClassFunc
         },
         {
           label: "Mensaje",
           field: "mensaje",
-          width: "400px",
-          tdClass: this.tdClassFunc
-        },
-        {
-          label: "Detalle",
-          field: "detalle",
-          width: "300px",
+          width: "470px",
           tdClass: this.tdClassFunc
         },
         {
@@ -113,6 +120,7 @@ export default {
         this.burl("/api/alertas/index?usuarioId=" + this.loggedUser.id)
       );
       this.alertas = response.data;
+      console.log(this.alertas)
       this.isLoading = false;
       this.blockCall = false;
     },
@@ -127,6 +135,9 @@ export default {
     },
     tdClassFunc(row) {
       return row.leido ? "" : "no-leido";
+    },
+    verPaciente(url) {
+      this.$router.push({path: url})
     }
   }
 };
